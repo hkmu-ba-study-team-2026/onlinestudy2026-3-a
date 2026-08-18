@@ -1,45 +1,45 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
-<script>
-  // 使用相同的 Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
-    authDomain: "online-study-3a.firebaseapp.com",
-    databaseURL: "https://online-study-3a-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "online-study-3a",
-    storageBucket: "online-study-3a.firebasestorage.app",
-    messagingSenderId: "641152608367",
-    appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TripStay - 全球精選酒店預訂平台 (模擬 Agoda / Trip.com)</title>
-  <!-- Google Fonts & Font Awesome for icons -->
+  <title>TripStay - California Hotel Booking (Agoda / Trip.com Style)</title>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
+      authDomain: "online-study-3a.firebaseapp.com",
+      databaseURL: "https://online-study-3a-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "online-study-3a",
+      storageBucket: "online-study-3a.firebasestorage.app",
+      messagingSenderId: "641152608367",
+      appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <style>
     :root {
-      --primary: #2b6cb0;
-      --primary-dark: #1a4971;
-      --primary-light: #ebf8ff;
-      --accent: #ff5e3a;
-      --accent-hover: #e04b28;
-      --secondary: #00a699;
-      --bg: #f5f7fa;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent: #ff5722;
+      --accent-hover: #e64a19;
+      --secondary: #0d9488;
+      --bg: #f8fafc;
       --surface: #ffffff;
-      --text-main: #1e293b;
+      --text-main: #0f172a;
       --text-muted: #64748b;
       --text-light: #94a3b8;
       --border: #e2e8f0;
@@ -60,7 +60,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
 
     body {
@@ -72,7 +72,7 @@
       flex-direction: column;
     }
 
-    /* 頂部導航欄 */
+    /* Top Navbar */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -115,7 +115,7 @@
     .nav-btn {
       background: none;
       border: none;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--text-main);
       cursor: pointer;
@@ -155,9 +155,9 @@
       font-size: 0.8rem;
     }
 
-    /* 頂部搜尋 Bar 區域 */
+    /* Hero Search Bar */
     .hero-search-wrapper {
-      background: linear-gradient(135deg, #1e3a8a 0%, #2b6cb0 60%, #0284c7 100%);
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0284c7 100%);
       padding: 2.2rem 1.5rem 3rem 1.5rem;
       color: white;
     }
@@ -251,7 +251,7 @@
       gap: 0.5rem;
       transition: all 0.2s;
       height: 100%;
-      box-shadow: 0 4px 10px rgba(255,94,58,0.35);
+      box-shadow: 0 4px 10px rgba(255,87,34,0.35);
     }
 
     .btn-search:hover {
@@ -259,7 +259,7 @@
       transform: translateY(-1px);
     }
 
-    /* 主體內容佈局 */
+    /* Main Layout */
     .main-layout {
       max-width: 1280px;
       margin: -1.5rem auto 3rem auto;
@@ -270,7 +270,7 @@
       width: 100%;
     }
 
-    /* 左側篩選器 */
+    /* Sidebar Filters */
     .filters-sidebar {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -292,7 +292,7 @@
     }
 
     .filter-header h3 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
     }
 
@@ -318,7 +318,7 @@
     }
 
     .filter-title {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       margin-bottom: 0.65rem;
       color: var(--text-main);
@@ -364,7 +364,7 @@
       color: var(--text-muted);
     }
 
-    /* 右側結果列表 */
+    /* Results Section */
     .results-section {
       display: flex;
       flex-direction: column;
@@ -411,14 +411,14 @@
       color: var(--text-main);
     }
 
-    /* 酒店卡片 */
+    /* Hotel Card */
     .hotel-card {
       background: var(--surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       overflow: hidden;
       display: grid;
-      grid-template-columns: 310px 1fr 220px;
+      grid-template-columns: 310px 1fr 230px;
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
     }
@@ -479,7 +479,7 @@
     }
 
     .hotel-title {
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.3;
@@ -622,7 +622,7 @@
       background: var(--primary-dark);
     }
 
-    /* 彈出視窗 (Modal) - 房型選擇 */
+    /* Modal - Room Selection */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -699,7 +699,6 @@
       gap: 1.5rem;
     }
 
-    /* 酒店頂部縮略與圖片庫 */
     .hotel-gallery-strip {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
@@ -715,7 +714,7 @@
       object-fit: cover;
     }
 
-    /* 客房列表卡片 */
+    /* Room Cards */
     .room-card-list {
       display: flex;
       flex-direction: column;
@@ -726,7 +725,7 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
       display: grid;
-      grid-template-columns: 220px 1fr 200px;
+      grid-template-columns: 220px 1fr 210px;
       overflow: hidden;
       transition: border-color 0.2s;
     }
@@ -754,7 +753,7 @@
     }
 
     .room-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--text-main);
     }
@@ -835,7 +834,7 @@
       background: var(--accent-hover);
     }
 
-    /* 預訂結帳 Modal */
+    /* Checkout Modal */
     .checkout-grid {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
@@ -910,7 +909,7 @@
       cursor: pointer;
     }
 
-    /* 成功預訂確認 Modal */
+    /* Success Modal */
     .success-modal-content {
       text-align: center;
       padding: 2.5rem 2rem;
@@ -932,7 +931,7 @@
       font-size: 2.2rem;
     }
 
-    /* 動畫 */
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -943,7 +942,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* 響應式佈局 */
+    /* Responsive */
     @media (max-width: 980px) {
       .search-box {
         grid-template-columns: 1fr;
@@ -975,554 +974,510 @@
 </head>
 <body>
 
-  <!-- 頂部導航 -->
-  <header>
-    <div class="navbar">
-      <a href="#" class="logo">
-        <i class="fa-solid fa-hotel"></i> TripStay<span>.com</span>
-      </a>
-      <div class="nav-links">
-        <button class="nav-btn"><i class="fa-solid fa-earth-americas"></i> HKD (HK$)</button>
-        <button class="nav-btn"><i class="fa-regular fa-circle-question"></i> 客服中心</button>
-        <div class="user-profile">
-          <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-          <span>Alex Wong</span>
-        </div>
+<header>
+  <div class="navbar">
+    <a href="#" class="logo">
+      <i class="fa-solid fa-hotel"></i> TripStay<span>.com</span>
+    </a>
+    <div class="nav-links">
+      <button class="nav-btn"><i class="fa-solid fa-earth-americas"></i> USD ($)</button>
+      <button class="nav-btn"><i class="fa-regular fa-circle-question"></i> Help & Support</button>
+      <div class="user-profile">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <span>Alex Wong</span>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- 頂部搜尋條 -->
-  <div class="hero-search-wrapper">
-    <div class="search-container">
-      <h1 class="hero-title">探索全球人氣酒店，享受極致住宿體驗</h1>
-      <p class="hero-subtitle">超過 2,000,000 間酒店、度假村及特色民宿，享會員即時低至 6 折優惠</p>
-      
-      <div class="search-box">
-        <!-- 目的地 -->
-        <div class="search-field">
-          <i class="fa-solid fa-location-dot"></i>
-          <div class="search-field-content">
-            <span class="search-label">目的地 / 酒店名稱</span>
-            <input type="text" id="searchInput" class="search-input" value="香港 (Hong Kong)" placeholder="輸入城市或酒店">
+<div class="hero-search-wrapper">
+  <div class="search-container">
+    <h1 class="hero-title">Explore California's Best Hotels & Luxury Resorts</h1>
+    <p class="hero-subtitle">Over 2,000,000+ stays worldwide. Member special deals with up to 40% off.</p>
+
+    <div class="search-box">
+      <div class="search-field">
+        <i class="fa-solid fa-location-dot"></i>
+        <div class="search-field-content">
+          <span class="search-label">Destination / Property</span>
+          <input type="text" id="searchInput" class="search-input" value="California, United States" placeholder="City, landmark or hotel name">
+        </div>
+      </div>
+
+      <div class="search-field">
+        <i class="fa-regular fa-calendar-days"></i>
+        <div class="search-field-content">
+          <span class="search-label">Check-in — Check-out</span>
+          <input type="text" class="search-input" value="Aug 20, 2026 – Aug 22, 2026 (2 nights)">
+        </div>
+      </div>
+
+      <div class="search-field">
+        <i class="fa-solid fa-user-group"></i>
+        <div class="search-field-content">
+          <span class="search-label">Rooms & Guests</span>
+          <input type="text" class="search-input" value="1 Room, 2 Adults">
+        </div>
+      </div>
+
+      <button class="btn-search" onclick="filterHotels()">
+        <i class="fa-solid fa-magnifying-glass"></i> Search Hotels
+      </button>
+    </div>
+  </div>
+</div>
+
+<main class="main-layout">
+
+  <aside class="filters-sidebar">
+    <div class="filter-header">
+      <h3><i class="fa-solid fa-sliders"></i> Filter Results</h3>
+      <button class="btn-reset-filters" onclick="resetFilters()">Reset All</button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-title">
+        <span>Nightly Budget</span>
+        <span id="priceRangeLabel">Up to $900</span>
+      </div>
+      <input type="range" id="priceRange" class="price-range-slider" min="150" max="1000" step="25" value="900" oninput="updatePriceFilter(this.value)">
+      <div class="price-values">
+        <span>$150</span>
+        <span>$1,000+</span>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-title">Star Rating</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="5" onchange="filterHotels()" checked>
+        <span>⭐⭐⭐⭐⭐ 5 Stars</span>
+        <span class="count">(18)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="4" onchange="filterHotels()" checked>
+        <span>⭐⭐⭐⭐ 4 Stars</span>
+        <span class="count">(32)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="3" onchange="filterHotels()">
+        <span>⭐⭐⭐ 3 Stars</span>
+        <span class="count">(14)</span>
+      </label>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-title">Guest Rating</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="9" onchange="filterHotels()">
+        <span>9.0+ Exceptional</span>
+        <span class="count">(22)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="8" onchange="filterHotels()" checked>
+        <span>8.0+ Very Good</span>
+        <span class="count">(50)</span>
+      </label>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-title">Popular Amenities</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterBreakfast" onchange="filterHotels()">
+        <span>Free Breakfast</span>
+        <span class="count">(26)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterPool" onchange="filterHotels()">
+        <span>Outdoor Swimming Pool</span>
+        <span class="count">(35)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterCancel" onchange="filterHotels()">
+        <span>Free Cancellation</span>
+        <span class="count">(42)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterGym" onchange="filterHotels()">
+        <span>Fitness Center / Spa</span>
+        <span class="count">(38)</span>
+      </label>
+    </div>
+  </aside>
+
+  <section class="results-section">
+
+    <div class="sort-bar">
+      <div>Showing: <span class="results-count" id="hotelCount">4 Properties in California</span></div>
+      <div class="sort-options">
+        <span style="color:var(--text-muted); font-size: 0.82rem; font-weight:600;">Sort By:</span>
+        <button class="sort-btn active" onclick="sortHotels('popular', this)">Recommended</button>
+        <button class="sort-btn" onclick="sortHotels('priceAsc', this)">Price: Low to High</button>
+        <button class="sort-btn" onclick="sortHotels('priceDesc', this)">Price: High to Low</button>
+        <button class="sort-btn" onclick="sortHotels('rating', this)">Top Reviewed</button>
+      </div>
+    </div>
+
+    <div id="hotelListContainer" style="display: flex; flex-direction: column; gap: 1.25rem;">
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="roomModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-header-title" id="modalHotelTitle">The Beverly Hills Hotel</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted);" id="modalHotelSubtitle">9641 Sunset Blvd, Beverly Hills, CA • 0.8 miles to Rodeo Drive</p>
+      </div>
+      <button class="btn-close-modal" onclick="closeRoomModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+
+      <div class="hotel-gallery-strip" id="modalGallery">
+      </div>
+
+      <h3 style="font-size:1.15rem; font-weight:800; margin-top:0.5rem;"><i class="fa-solid fa-bed"></i> Select Your Preferred Room</h3>
+
+      <div class="room-card-list" id="modalRoomList">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-container" style="max-width: 780px;">
+    <div class="modal-header">
+      <h2 class="modal-header-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Secure Booking & Checkout</h2>
+      <button class="btn-close-modal" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="checkout-grid">
+
+        <div>
+          <h4 style="font-weight:700; margin-bottom:1rem;">Primary Guest Details</h4>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="guestName" value="Alex Wong">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address (for instant confirmation)</label>
+            <input type="email" class="form-input" id="guestEmail" value="alex.wong@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact Phone Number</label>
+            <input type="tel" class="form-input" id="guestPhone" value="+1 (415) 555-0199">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Special Requests (Optional)</label>
+            <input type="text" class="form-input" placeholder="e.g. High floor, Quiet room, Late check-in">
+          </div>
+
+          <h4 style="font-weight:700; margin:1.25rem 0 0.8rem 0;">Payment Method (Simulated)</h4>
+          <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+            <div style="border:1.5px solid var(--primary); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:700; background:var(--primary-light); color:var(--primary);">
+              <i class="fa-regular fa-credit-card"></i> Credit / Debit Card
+            </div>
+            <div style="border:1px solid var(--border); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--text-muted);">
+              <i class="fa-brands fa-apple-pay"></i> Apple Pay
+            </div>
           </div>
         </div>
 
-        <!-- 入住退房日期 -->
-        <div class="search-field">
-          <i class="fa-regular fa-calendar-days"></i>
-          <div class="search-field-content">
-            <span class="search-label">入住 - 退房日期</span>
-            <input type="text" class="search-input" value="2026-08-20 至 2026-08-22 (2 晚)">
+        <div>
+          <div class="checkout-summary-card">
+            <h4 style="font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.5rem;" id="checkoutHotelName">Hotel Name</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted);" id="checkoutRoomName">Deluxe King Room</p>
+            <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> Aug 20, 2026 – Aug 22, 2026 (2 nights)</p>
+
+            <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+              <div class="summary-row">
+                <span>Room Rate (2 nights)</span>
+                <span id="checkoutBasePrice">$790</span>
+              </div>
+              <div class="summary-row">
+                <span>State Taxes & Fees (12%)</span>
+                <span id="checkoutTaxPrice">$95</span>
+              </div>
+              <div class="summary-row" style="color:var(--success);" id="couponDiscountRow">
+                <span>Promo Code Discount</span>
+                <span id="checkoutDiscount">- $0</span>
+              </div>
+
+              <div class="coupon-box">
+                <input type="text" id="couponInput" class="form-input" style="padding:0.4rem 0.6rem; font-size:0.8rem;" placeholder="Promo Code: CALI10">
+                <button class="btn-apply-coupon" onclick="applyCoupon()">Apply</button>
+              </div>
+
+              <div class="summary-row total">
+                <span>Total Amount (incl. taxes)</span>
+                <span style="color:var(--accent);" id="checkoutTotalPrice">$885</span>
+              </div>
+            </div>
+
+            <button class="btn-search" style="margin-top:1rem; width:100%; font-size:1rem; padding:0.8rem;" onclick="confirmBooking()">
+              <i class="fa-solid fa-lock"></i> Complete Simulated Booking
+            </button>
+            <p style="font-size:0.7rem; color:var(--text-light); text-align:center;">This is a demonstration sandbox. No actual credit card charge will occur.</p>
           </div>
         </div>
 
-        <!-- 客房與人數 -->
-        <div class="search-field">
-          <i class="fa-solid fa-user-group"></i>
-          <div class="search-field-content">
-            <span class="search-label">客房及房客</span>
-            <input type="text" class="search-input" value="1 間客房, 2 位成人">
-          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal-container" style="max-width: 520px;">
+    <div class="modal-body">
+      <div class="success-modal-content">
+        <div class="success-icon">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main);">Booking Confirmed!</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted);">
+          Your reservation has been confirmed. A receipt and hotel voucher have been sent to <strong id="successEmail">alex.wong@example.com</strong>.
+        </p>
+
+        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1rem; width:100%; text-align:left; font-size:0.85rem;">
+          <p><strong>Booking Reference:</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">CAL-928410</span></p>
+          <p><strong>Hotel:</strong> <span id="successHotel">The Beverly Hills Hotel</span></p>
+          <p><strong>Room Type:</strong> <span id="successRoom">Deluxe California King Room</span></p>
+          <p><strong>Total Paid:</strong> <span style="color:var(--accent); font-weight:700;" id="successPaid">$885</span></p>
         </div>
 
-        <!-- 搜尋按鈕 -->
-        <button class="btn-search" onclick="filterHotels()">
-          <i class="fa-solid fa-magnifying-glass"></i> 搜尋酒店
+        <button class="btn-search" style="width:100%; margin-top:0.5rem;" onclick="closeSuccessModal()">
+          Done & Return to Browsing
         </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 主體區域 -->
-  <main class="main-layout">
-    
-    <!-- 左側篩選欄 -->
-    <aside class="filters-sidebar">
-      <div class="filter-header">
-        <h3><i class="fa-solid fa-sliders"></i> 篩選條件</h3>
-        <button class="btn-reset-filters" onclick="resetFilters()">重設全部</button>
-      </div>
+<script>
+  // California Hotels Dataset
+  const hotelsData = [
+    {
+      id: 1,
+      name: "The Beverly Hills Hotel (Dorchester Collection)",
+      stars: 5,
+      rating: 9.5,
+      reviewCount: 3420,
+      verdict: "Exceptional",
+      location: "9641 Sunset Blvd, Beverly Hills, CA 90210",
+      distance: "0.8 miles to Rodeo Drive, Los Angeles",
+      dealTag: "Iconic Heritage Deal 25% Off",
+      price: 595,
+      originalPrice: 790,
+      hasBreakfast: true,
+      hasPool: true,
+      hasCancel: true,
+      hasGym: true,
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      rooms: [
+        {
+          id: "bhh-101",
+          name: "Superior King Room with Palm Garden View",
+          size: "450 sq ft (42 m²)",
+          bed: "1 King Bed (Signature Luxury Linens)",
+          breakfast: "Free Gourmet Breakfast for 2",
+          cancel: "Free cancellation before Aug 19",
+          price: 595,
+          origPrice: 790,
+          image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "bhh-102",
+          name: "Beverly Hills Deluxe Balcony Suite",
+          size: "620 sq ft (58 m²)",
+          bed: "1 King Bed + Private Garden Patio",
+          breakfast: "Full American Breakfast & Evening Cocktails",
+          cancel: "Free cancellation before Aug 19",
+          price: 850,
+          origPrice: 1100,
+          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "Hotel del Coronado (Curio Collection by Hilton)",
+      stars: 5,
+      rating: 9.2,
+      reviewCount: 4890,
+      verdict: "Superb",
+      location: "1500 Orange Ave, Coronado, San Diego, CA 92118",
+      distance: "Direct Oceanfront Beach Access",
+      dealTag: "Pacific Coast Special",
+      price: 460,
+      originalPrice: 590,
+      hasBreakfast: true,
+      hasPool: true,
+      hasCancel: true,
+      hasGym: true,
+      images: [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      rooms: [
+        {
+          id: "hdc-201",
+          name: "Victorian Ocean View King Guest Room",
+          size: "380 sq ft (35 m²)",
+          bed: "1 King Bed with Coastal Sea Breeze View",
+          breakfast: "Buffet Breakfast included",
+          cancel: "Free cancellation before Aug 18",
+          price: 460,
+          origPrice: 590,
+          image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "hdc-202",
+          name: "Beach Village Oceanfront Luxury Villa",
+          size: "850 sq ft (79 m²)",
+          bed: "Master Suite + Private Terrace & Fire Pit",
+          breakfast: "Champagne Breakfast & Beach Butler Service",
+          cancel: "Free cancellation 48h before check-in",
+          price: 780,
+          origPrice: 990,
+          image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: "Fairmont San Francisco",
+      stars: 5,
+      rating: 9.0,
+      reviewCount: 3120,
+      verdict: "Wonderful",
+      location: "950 Mason St, Nob Hill, San Francisco, CA 94108",
+      distance: "Nob Hill summit, 0.4 miles to Union Square",
+      dealTag: "City Landmark Pick",
+      price: 320,
+      originalPrice: 450,
+      hasBreakfast: false,
+      hasPool: false,
+      hasCancel: true,
+      hasGym: true,
+      images: [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      rooms: [
+        {
+          id: "fsf-301",
+          name: "Nob Hill Classic Queen Room",
+          size: "320 sq ft (30 m²)",
+          bed: "1 Queen Bed / Cable Car & City Skyline View",
+          breakfast: "Breakfast available for purchase",
+          cancel: "Free cancellation before Aug 19",
+          price: 320,
+          origPrice: 450,
+          image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "fsf-302",
+          name: "Golden Gate Bay View King Suite",
+          size: "550 sq ft (51 m²)",
+          bed: "1 King Bed / Panoramic Golden Gate View",
+          breakfast: "Tonga Room Welcome Drinks Included",
+          cancel: "Free cancellation before Aug 18",
+          price: 490,
+          origPrice: 650,
+          image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      id: 4,
+      name: "Napa Valley Lodge & Vineyard Spa",
+      stars: 4,
+      rating: 8.8,
+      reviewCount: 1840,
+      verdict: "Very Good",
+      location: "2230 Madison St, Yountville, Napa Valley, CA 94599",
+      distance: "Heart of Wine Country, steps from Michelin dining",
+      dealTag: "Wine Tasting Included",
+      price: 240,
+      originalPrice: 320,
+      hasBreakfast: true,
+      hasPool: true,
+      hasCancel: true,
+      hasGym: true,
+      images: [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      rooms: [
+        {
+          id: "nvl-401",
+          name: "Vineyard View King Room with Fireplace",
+          size: "400 sq ft (37 m²)",
+          bed: "1 King Bed + Wood-burning Fireplace",
+          breakfast: "Fresh Continental Champagne Breakfast",
+          cancel: "Free cancellation 24h prior",
+          price: 240,
+          origPrice: 320,
+          image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "nvl-402",
+          name: "Courtyard Poolside Queen Double Suite",
+          size: "480 sq ft (45 m²)",
+          bed: "2 Queen Beds / Direct Pool & Spa Walkout",
+          breakfast: "Free Breakfast + Complimentary Wine Tasting",
+          cancel: "Special Non-refundable Rate",
+          price: 290,
+          origPrice: 380,
+          image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    }
+  ];
 
-      <!-- 價格範圍 -->
-      <div class="filter-group">
-        <div class="filter-title">
-          <span>每晚預算</span>
-          <span id="priceRangeLabel">HK$ 500 - HK$ 3,500</span>
-        </div>
-        <input type="range" id="priceRange" class="price-range-slider" min="500" max="4000" step="100" value="3500" oninput="updatePriceFilter(this.value)">
-        <div class="price-values">
-          <span>HK$ 500</span>
-          <span>HK$ 4,000+</span>
-        </div>
-      </div>
+  // Global State
+  let currentHotels = [...hotelsData];
+  let selectedHotel = null;
+  let selectedRoom = null;
+  let discountAmount = 0;
 
-      <!-- 星級等級 -->
-      <div class="filter-group">
-        <div class="filter-title">酒店星級</div>
-        <label class="filter-checkbox">
-          <input type="checkbox" name="star" value="5" onchange="filterHotels()" checked> 
-          <span>⭐⭐⭐⭐⭐ 5星級</span>
-          <span class="count">(12)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" name="star" value="4" onchange="filterHotels()" checked> 
-          <span>⭐⭐⭐⭐ 4星級</span>
-          <span class="count">(28)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" name="star" value="3" onchange="filterHotels()"> 
-          <span>⭐⭐⭐ 3星級</span>
-          <span class="count">(15)</span>
-        </label>
-      </div>
+  // Render Hotel List
+  function renderHotelList(hotels) {
+    const container = document.getElementById("hotelListContainer");
+    document.getElementById("hotelCount").innerText = `${hotels.length} Properties in California`;
 
-      <!-- 住客評分 -->
-      <div class="filter-group">
-        <div class="filter-title">住客評分</div>
-        <label class="filter-checkbox">
-          <input type="checkbox" name="rating" value="9" onchange="filterHotels()"> 
-          <span>9.0+ 超讚極佳</span>
-          <span class="count">(18)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" name="rating" value="8" onchange="filterHotels()" checked> 
-          <span>8.0+ 很好/優質</span>
-          <span class="count">(42)</span>
-        </label>
-      </div>
-
-      <!-- 設施與服務 -->
-      <div class="filter-group">
-        <div class="filter-title">設施與偏好</div>
-        <label class="filter-checkbox">
-          <input type="checkbox" id="filterBreakfast" onchange="filterHotels()"> 
-          <span>含免費早餐</span>
-          <span class="count">(24)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" id="filterPool" onchange="filterHotels()"> 
-          <span>游泳池 / 無邊際泳池</span>
-          <span class="count">(19)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" id="filterCancel" onchange="filterHotels()"> 
-          <span>免費取消政策</span>
-          <span class="count">(35)</span>
-        </label>
-        <label class="filter-checkbox">
-          <input type="checkbox" id="filterGym" onchange="filterHotels()"> 
-          <span>健身中心 / 水療 SPA</span>
-          <span class="count">(31)</span>
-        </label>
-      </div>
-    </aside>
-
-    <!-- 右側酒店列表 -->
-    <section class="results-section">
-      
-      <!-- 排序列 -->
-      <div class="sort-bar">
-        <div>搜尋結果：<span class="results-count" id="hotelCount">4 間精選酒店</span></div>
-        <div class="sort-options">
-          <span style="color:var(--text-muted); font-size: 0.82rem; font-weight:600;">排序方式：</span>
-          <button class="sort-btn active" onclick="sortHotels('popular', this)">推薦熱門</button>
-          <button class="sort-btn" onclick="sortHotels('priceAsc', this)">價格：低至高</button>
-          <button class="sort-btn" onclick="sortHotels('priceDesc', this)">價格：高至低</button>
-          <button class="sort-btn" onclick="sortHotels('rating', this)">評分最高</button>
-        </div>
-      </div>
-
-      <!-- 酒店卡片容器 -->
-      <div id="hotelListContainer" style="display: flex; flex-direction: column; gap: 1.25rem;">
-        <!-- 酒店卡片將由 JS 動態渲染 -->
-      </div>
-    </section>
-  </main>
-
-  <!-- 房型選擇 Modal -->
-  <div class="modal-overlay" id="roomModal">
-    <div class="modal-container">
-      <div class="modal-header">
-        <div>
-          <h2 class="modal-header-title" id="modalHotelTitle">香港唯港薈酒店 (Hotel ICON)</h2>
-          <p style="font-size:0.8rem; color:var(--text-muted);" id="modalHotelSubtitle">尖沙咀東部科學館道 17 號 • 距離尖東站 350 米</p>
-        </div>
-        <button class="btn-close-modal" onclick="closeRoomModal()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="modal-body">
-        
-        <!-- 圖片畫廊縮圖 -->
-        <div class="hotel-gallery-strip" id="modalGallery">
-          <!-- JS 注入 -->
-        </div>
-
-        <h3 style="font-size:1.15rem; font-weight:800; margin-top:0.5rem;"><i class="fa-solid fa-bed"></i> 選擇您的入住客房</h3>
-
-        <!-- 客房清單 -->
-        <div class="room-card-list" id="modalRoomList">
-          <!-- JS 注入房型 -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 預訂結帳 Modal -->
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-container" style="max-width: 780px;">
-      <div class="modal-header">
-        <h2 class="modal-header-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> 安全確認訂單與付款</h2>
-        <button class="btn-close-modal" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="modal-body">
-        <div class="checkout-grid">
-          
-          <!-- 左側填寫資料 -->
-          <div>
-            <h4 style="font-weight:700; margin-bottom:1rem;">入住人資料</h4>
-            <div class="form-group">
-              <label class="form-label">住客姓名 (英文 / 中文)</label>
-              <input type="text" class="form-input" id="guestName" value="Alex Wong (黃家俊)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">電子郵件 (用於接收確認信)</label>
-              <input type="email" class="form-input" id="guestEmail" value="alex.wong@example.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">聯絡電話</label>
-              <input type="tel" class="form-input" id="guestPhone" value="+852 9123 4567">
-            </div>
-            <div class="form-group">
-              <label class="form-label">特別要求 (選填)</label>
-              <input type="text" class="form-input" placeholder="例如：高樓層、相連房、延遲入住">
-            </div>
-
-            <h4 style="font-weight:700; margin:1.25rem 0 0.8rem 0;">付款方式 (模擬)</h4>
-            <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-              <div style="border:1.5px solid var(--primary); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:700; background:var(--primary-light); color:var(--primary);">
-                <i class="fa-regular fa-credit-card"></i> 信用卡 / 簽帳卡
-              </div>
-              <div style="border:1px solid var(--border); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--text-muted);">
-                <i class="fa-brands fa-apple-pay"></i> Apple Pay
-              </div>
-            </div>
-          </div>
-
-          <!-- 右側費用清單 -->
-          <div>
-            <div class="checkout-summary-card">
-              <h4 style="font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.5rem;" id="checkoutHotelName">Hotel Name</h4>
-              <p style="font-size:0.82rem; color:var(--text-muted);" id="checkoutRoomName">ICON 36 城市景觀大床房</p>
-              <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> 2026年8月20日 - 8月22日 (2晚)</p>
-              
-              <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
-                <div class="summary-row">
-                  <span>客房房費 (2 晚)</span>
-                  <span id="checkoutBasePrice">HK$ 2,560</span>
-                </div>
-                <div class="summary-row">
-                  <span>政府稅及服務費 (10%)</span>
-                  <span id="checkoutTaxPrice">HK$ 256</span>
-                </div>
-                <div class="summary-row" style="color:var(--success);" id="couponDiscountRow">
-                  <span>優惠碼折扣</span>
-                  <span id="checkoutDiscount">- HK$ 0</span>
-                </div>
-                
-                <!-- 優惠碼輸入 -->
-                <div class="coupon-box">
-                  <input type="text" id="couponInput" class="form-input" style="padding:0.4rem 0.6rem; font-size:0.8rem;" placeholder="輸入優惠碼: SUMMER10">
-                  <button class="btn-apply-coupon" onclick="applyCoupon()">套用</button>
-                </div>
-
-                <div class="summary-row total">
-                  <span>總金額 (含稅)</span>
-                  <span style="color:var(--accent);" id="checkoutTotalPrice">HK$ 2,816</span>
-                </div>
-              </div>
-
-              <button class="btn-search" style="margin-top:1rem; width:100%; font-size:1rem; padding:0.8rem;" onclick="confirmBooking()">
-                <i class="fa-solid fa-lock"></i> 確認並模擬付款
-              </button>
-              <p style="font-size:0.7rem; color:var(--text-light); text-align:center;">此為模擬預訂系統，不會產生任何真實扣款</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 預訂成功 Modal -->
-  <div class="modal-overlay" id="successModal">
-    <div class="modal-container" style="max-width: 520px;">
-      <div class="modal-body">
-        <div class="success-modal-content">
-          <div class="success-icon">
-            <i class="fa-solid fa-check"></i>
-          </div>
-          <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main);">預訂成功！</h2>
-          <p style="font-size:0.9rem; color:var(--text-muted);">
-            您的訂單已獲得確認。確認郵件與入住憑證已發送至 <strong id="successEmail">alex.wong@example.com</strong>
-          </p>
-          
-          <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1rem; width:100%; text-align:left; font-size:0.85rem;">
-            <p><strong>訂單編號：</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">BK-8829104</span></p>
-            <p><strong>入住酒店：</strong> <span id="successHotel">Hotel ICON</span></p>
-            <p><strong>預訂房型：</strong> <span id="successRoom">豪華海景房</span></p>
-            <p><strong>實付總額：</strong> <span style="color:var(--accent); font-weight:700;" id="successPaid">HK$ 2,816</span></p>
-          </div>
-
-          <button class="btn-search" style="width:100%; margin-top:0.5rem;" onclick="closeSuccessModal()">
-            完成並返回瀏覽
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 數據與邏輯腳本 -->
-  <script>
-    // 模擬數據集
-    const hotelsData = [
-      {
-        id: 1,
-        name: "唯港薈酒店 (Hotel ICON)",
-        enName: "Hotel ICON Hong Kong",
-        stars: 5,
-        rating: 9.3,
-        reviewCount: 3840,
-        verdict: "超讚極佳",
-        location: "尖沙咀東部科學館道 17 號",
-        distance: "距離尖東地鐵站 350 米",
-        dealTag: "限時超值 75 折",
-        price: 1280,
-        originalPrice: 1700,
-        hasBreakfast: true,
-        hasPool: true,
-        hasCancel: true,
-        hasGym: true,
-        images: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
-        ],
-        rooms: [
-          {
-            id: "icon-101",
-            name: "ICON 36 經典城市客房 (ICON 36 City View)",
-            size: "36 平方米",
-            bed: "1 張特大雙人床 (King Bed)",
-            breakfast: "含雙人精緻自助早餐",
-            cancel: "8月19日前可免費取消",
-            price: 1280,
-            origPrice: 1700,
-            image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
-          },
-          {
-            id: "icon-102",
-            name: "CLUB 36 維港海景客房 (含行政酒廊禮遇)",
-            size: "38 平方米",
-            bed: "1 張特大雙人床 / 2 張單人床",
-            breakfast: "含行政酒廊早餐 + 傍晚雞尾酒",
-            cancel: "8月19日前可免費取消",
-            price: 1850,
-            origPrice: 2400,
-            image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
-          },
-          {
-            id: "icon-103",
-            name: "ICON 套房 (Club 65 Suite - 全景維港)",
-            size: "65 平方米",
-            bed: "獨立客廳 + 特大雙人床",
-            breakfast: "尊貴專屬早餐與全天候茶點",
-            cancel: "入住前48小時可免費取消",
-            price: 2980,
-            origPrice: 3800,
-            image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=600&q=80"
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: "香港瑰麗酒店 (Rosewood Hong Kong)",
-        enName: "Rosewood Hong Kong Victoria Dockside",
-        stars: 5,
-        rating: 9.6,
-        reviewCount: 2150,
-        verdict: "傳奇頂級",
-        location: "尖沙咀梳士巴利道 18 號 Victoria Dockside",
-        distance: "坐落尖沙咀海濱長廊，直達K11 MUSEA",
-        dealTag: "奢華尊享禮遇",
-        price: 3200,
-        originalPrice: 4200,
-        hasBreakfast: true,
-        hasPool: true,
-        hasCancel: true,
-        hasGym: true,
-        images: [
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
-        ],
-        rooms: [
-          {
-            id: "rw-201",
-            name: "九龍景觀尊貴大理石客房 (Kowloon View Room)",
-            size: "53 平方米",
-            bed: "1 張特大床 / 雙洗手台及奢華獨立浴缸",
-            breakfast: "不含早餐 (可加購 Holt's Cafe 早餐)",
-            cancel: "8月18日前可免費取消",
-            price: 3200,
-            origPrice: 4200,
-            image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
-          },
-          {
-            id: "rw-202",
-            name: "維港海景尊尚客房 (Grand Harbour View Room)",
-            size: "53 平方米",
-            bed: "180度維港無遮擋全海景 + 特大雙人床",
-            breakfast: "含 Holt's Cafe 雙人精緻半自助早餐",
-            cancel: "8月18日前可免費取消",
-            price: 4100,
-            origPrice: 5300,
-            image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
-          }
-        ]
-      },
-      {
-        id: 3,
-        name: "香港芬名酒店 (The Fleming Hong Kong)",
-        enName: "The Fleming Hong Kong Boutique Hotel",
-        stars: 4,
-        rating: 8.9,
-        reviewCount: 1620,
-        verdict: "極佳復古精品",
-        location: "灣仔菲林明道 41 號",
-        distance: "距離灣仔站步行 3 分鐘，鄰近香港會議展覽中心",
-        dealTag: "設計師精選",
-        price: 880,
-        originalPrice: 1150,
-        hasBreakfast: false,
-        hasPool: false,
-        hasCancel: true,
-        hasGym: true,
-        images: [
-          "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
-        ],
-        rooms: [
-          {
-            id: "fl-301",
-            name: "標準雅緻客房 (Small Room - 渡輪美學風格)",
-            size: "21 平方米",
-            bed: "1 張標準雙人床",
-            breakfast: "不含早餐",
-            cancel: "入住前24小時可免費取消",
-            price: 880,
-            origPrice: 1150,
-            image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
-          },
-          {
-            id: "fl-302",
-            name: "經典中型雙人客房 (Medium Room with Workstation)",
-            size: "25 平方米",
-            bed: "1 張 Queen 大床 / 附工作辦公桌",
-            breakfast: "含 Osteria Marzia 意式早餐",
-            cancel: "不可退款優惠特價",
-            price: 1080,
-            origPrice: 1380,
-            image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
-          }
-        ]
-      },
-      {
-        id: 4,
-        name: "帝苑酒店 (The Royal Garden)",
-        enName: "The Royal Garden Tsim Sha Tsui",
-        stars: 5,
-        rating: 8.8,
-        reviewCount: 4200,
-        verdict: "優質經典",
-        location: "尖沙咀麼地道 69 號",
-        distance: "尖沙咀核心商圈，步行至海濱 5 分鐘",
-        dealTag: "早鳥優惠 8 折",
-        price: 980,
-        originalPrice: 1300,
-        hasBreakfast: true,
-        hasPool: true,
-        hasCancel: true,
-        hasGym: true,
-        images: [
-          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
-        ],
-        rooms: [
-          {
-            id: "rg-401",
-            name: "尊貴客房 (Premier Room - 中庭園林景)",
-            size: "30 平方米",
-            bed: "1 張大床 或 2 張單人床",
-            breakfast: "含 2 客著名帝苑餅店早餐套餐",
-            cancel: "8月19日前可免費取消",
-            price: 980,
-            origPrice: 1300,
-            image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
-          },
-          {
-            id: "rg-402",
-            name: "天際地中海泳池客房 (Sky View Room)",
-            size: "32 平方米",
-            bed: "1 張 King 大床 / 頂樓恆溫泳池專屬通達",
-            breakfast: "含雅苑座國際自助早餐",
-            cancel: "8月18日前可免費取消",
-            price: 1350,
-            origPrice: 1750,
-            image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
-          }
-        ]
-      }
-    ];
-
-    // 全局狀態
-    let currentHotels = [...hotelsData];
-    let selectedHotel = null;
-    let selectedRoom = null;
-    let discountAmount = 0;
-
-    // 渲染酒店列表
-    function renderHotelList(hotels) {
-      const container = document.getElementById("hotelListContainer");
-      document.getElementById("hotelCount").innerText = `${hotels.length} 間精選酒店`;
-
-      if (hotels.length === 0) {
-        container.innerHTML = `
+    if (hotels.length === 0) {
+      container.innerHTML = `
           <div style="background:white; padding:3rem; border-radius:12px; text-align:center; border:1px solid #e2e8f0;">
             <i class="fa-solid fa-hotel" style="font-size:3rem; color:#cbd5e1; margin-bottom:1rem;"></i>
-            <h3 style="font-size:1.2rem; font-weight:700; color:#475569;">找不到符合條件的酒店</h3>
-            <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.4rem;">請嘗試調整價格上限或放寬篩選條件</p>
-            <button class="sort-btn active" style="margin-top:1rem;" onclick="resetFilters()">重設篩選條件</button>
+            <h3 style="font-size:1.2rem; font-weight:700; color:#475569;">No Matching California Hotels Found</h3>
+            <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.4rem;">Try adjusting your price budget or clearing selected filters.</p>
+            <button class="sort-btn active" style="margin-top:1rem;" onclick="resetFilters()">Reset All Filters</button>
           </div>
         `;
-        return;
-      }
+      return;
+    }
 
-      container.innerHTML = hotels.map(hotel => `
+    container.innerHTML = hotels.map(hotel => `
         <div class="hotel-card">
-          <!-- 左側圖片 -->
           <div class="hotel-image-col">
             <img src="${hotel.images[0]}" alt="${hotel.name}">
             <div class="tag-deal">${hotel.dealTag}</div>
           </div>
 
-          <!-- 中間資訊 -->
           <div class="hotel-info-col">
             <div class="hotel-header-info">
               <div class="hotel-stars">
                 ${'⭐'.repeat(hotel.stars)}
-                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars} 星級標準</span>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars}-Star Hotel</span>
               </div>
               <h2 class="hotel-title">${hotel.name}</h2>
               <div class="hotel-location">
@@ -1532,62 +1487,61 @@
             </div>
 
             <div class="hotel-badges">
-              <span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay 嚴選推薦</span>
-              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> 景觀泳池</span>' : ''}
-              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> 健身設施</span>' : ''}
-              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> 自助早餐</span>' : ''}
+              <span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay Recommended</span>
+              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> Outdoor Pool</span>' : ''}
+              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> Fitness Center</span>' : ''}
+              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> Breakfast Included</span>' : ''}
             </div>
 
             <div class="hotel-perks">
-              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> 提供限時免費取消</div>' : ''}
-              <div><i class="fa-solid fa-bolt"></i> 即時確認訂單 • 免收海外手續費</div>
+              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> Free cancellation available</div>' : ''}
+              <div><i class="fa-solid fa-bolt"></i> Instant Confirmation • No Foreign Transaction Fee</div>
             </div>
           </div>
 
-          <!-- 右側評分與價格 -->
           <div class="hotel-pricing-col">
             <div class="review-score-box">
               <div class="review-text">
                 <div class="review-verdict">${hotel.verdict}</div>
-                <div class="review-sub">${hotel.reviewCount} 則真實評論</div>
+                <div class="review-sub">${hotel.reviewCount.toLocaleString()} verified reviews</div>
               </div>
               <div class="score-badge">${hotel.rating}</div>
             </div>
 
             <div class="price-container">
-              <div class="original-price">HK$ ${hotel.originalPrice.toLocaleString()}</div>
+              <div class="original-price">$${hotel.originalPrice.toLocaleString()}</div>
               <div>
-                <span class="currency-symbol">HK$ </span>
+                <span class="currency-symbol">$</span>
                 <span class="main-price">${hotel.price.toLocaleString()}</span>
-                <span style="font-size:0.8rem; color:#64748b;"> /晚</span>
+                <span style="font-size:0.8rem; color:#64748b;"> /night</span>
               </div>
-              <div class="price-note">包含稅項與所有附加服務費</div>
+              <div class="price-note">Excludes local taxes & resort fees</div>
             </div>
 
             <button class="btn-select-room" onclick="openRoomModal(${hotel.id})">
-              <span>查看房型</span>
+              <span>View Rooms</span>
               <i class="fa-solid fa-chevron-right" style="font-size:0.8rem;"></i>
             </button>
           </div>
         </div>
       `).join('');
-    }
+  }
 
-    // 打開房型選擇彈窗
-    function openRoomModal(hotelId) {
-      selectedHotel = hotelsData.find(h => h.id === hotelId);
-      if (!selectedHotel) return;
+  // Open Room Selection Modal
+  function openRoomModal(hotelId) {
+    selectedHotel = hotelsData.find(h => h.id === hotelId);
+    if (!selectedHotel) return;
 
-      document.getElementById("modalHotelTitle").innerText = selectedHotel.name;
-      document.getElementById("modalHotelSubtitle").innerText = `${selectedHotel.location} • ${selectedHotel.distance}`;
+    document.getElementById("modalHotelTitle").innerText = selectedHotel.name;
+    document.getElementById("modalHotelSubtitle").innerText = `${selectedHotel.location} • ${selectedHotel.distance}`;
 
-      // 畫廊
-      const gallery = document.getElementById("modalGallery");
-      gallery.innerHTML = selectedHotel.images.map(img => `<img src="${img}" alt="Hotel View">`).join('');
+    // Gallery Photos
+    const gallery = document.getElementById("modalGallery");
+    gallery.innerHTML = selectedHotel.images.map(img => `<img src="${img}" alt="Hotel View">`).join('');
 
-      // 房型列表
-      const roomList = document.getElementById("modalRoomList");
-      roomList.innerHTML = selectedHotel.rooms.map(room => `
+    // Room Types
+    const roomList = document.getElementById("modalRoomList");
+    roomList.innerHTML = selectedHotel.rooms.map(room => `
         <div class="room-card">
           <div class="room-img-box">
             <img src="${room.image}" alt="${room.name}">
@@ -1597,184 +1551,184 @@
             <div class="room-features">
               <span><i class="fa-solid fa-vector-square"></i> ${room.size}</span>
               <span><i class="fa-solid fa-bed"></i> ${room.bed}</span>
-              <span><i class="fa-solid fa-wifi"></i> 免費高速 Wi-Fi</span>
+              <span><i class="fa-solid fa-wifi"></i> High-Speed Wi-Fi</span>
             </div>
             <div class="room-benefits">
               <div class="room-benefit-item"><i class="fa-solid fa-check"></i> ${room.breakfast}</div>
               <div class="room-benefit-item"><i class="fa-solid fa-shield-halved"></i> ${room.cancel}</div>
-              <div class="room-benefit-item muted"><i class="fa-regular fa-clock"></i> 延遲至下午 2:00 退房 (視供應情況)</div>
+              <div class="room-benefit-item muted"><i class="fa-regular fa-clock"></i> Complimentary 1:00 PM Late Checkout (subject to availability)</div>
             </div>
           </div>
           <div class="room-booking-box">
             <div class="room-price-info">
-              <span class="room-orig-price">HK$ ${(room.origPrice * 2).toLocaleString()}</span>
+              <span class="room-orig-price">$${(room.origPrice * 2).toLocaleString()}</span>
               <div>
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">HK$ </span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">$</span>
                 <span class="room-now-price">${(room.price * 2).toLocaleString()}</span>
               </div>
-              <span style="font-size:0.72rem; color:var(--text-light);">2 晚總價 (含稅)</span>
+              <span style="font-size:0.72rem; color:var(--text-light);">Total for 2 nights</span>
             </div>
             <button class="btn-book-room" onclick="openCheckoutModal('${room.id}')">
-              立即預訂 <i class="fa-solid fa-arrow-right"></i>
+              Reserve Now <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
         </div>
       `).join('');
 
-      document.getElementById("roomModal").classList.add("active");
+    document.getElementById("roomModal").classList.add("active");
+  }
+
+  function closeRoomModal() {
+    document.getElementById("roomModal").classList.remove("active");
+  }
+
+  // Open Checkout Modal
+  function openCheckoutModal(roomId) {
+    selectedRoom = selectedHotel.rooms.find(r => r.id === roomId);
+    if (!selectedRoom) return;
+
+    closeRoomModal();
+
+    document.getElementById("checkoutHotelName").innerText = selectedHotel.name;
+    document.getElementById("checkoutRoomName").innerText = selectedRoom.name;
+
+    const baseTotal = selectedRoom.price * 2;
+    const tax = Math.round(baseTotal * 0.12);
+    discountAmount = 0;
+    document.getElementById("couponInput").value = "";
+    document.getElementById("checkoutDiscount").innerText = `- $0`;
+
+    document.getElementById("checkoutBasePrice").innerText = `$${baseTotal.toLocaleString()}`;
+    document.getElementById("checkoutTaxPrice").innerText = `$${tax.toLocaleString()}`;
+    document.getElementById("checkoutTotalPrice").innerText = `$${(baseTotal + tax).toLocaleString()}`;
+
+    document.getElementById("checkoutModal").classList.add("active");
+  }
+
+  function closeCheckoutModal() {
+    document.getElementById("checkoutModal").classList.remove("active");
+  }
+
+  // Promo Code Application
+  function applyCoupon() {
+    const code = document.getElementById("couponInput").value.trim().toUpperCase();
+    const baseTotal = selectedRoom.price * 2;
+    const tax = Math.round(baseTotal * 0.12);
+
+    if (code === "CALI10" || code === "SUMMER10" || code === "TRIP2026") {
+      discountAmount = Math.round((baseTotal + tax) * 0.1);
+      document.getElementById("checkoutDiscount").innerText = `- $${discountAmount.toLocaleString()}`;
+      const finalPrice = baseTotal + tax - discountAmount;
+      document.getElementById("checkoutTotalPrice").innerText = `$${finalPrice.toLocaleString()}`;
+      alert(`🎉 Promo code [${code}] applied! You saved 10% ($${discountAmount})!`);
+    } else {
+      alert("Invalid promo code. Please try 'CALI10'");
+    }
+  }
+
+  // Confirm Booking
+  function confirmBooking() {
+    const guestName = document.getElementById("guestName").value.trim();
+    const guestEmail = document.getElementById("guestEmail").value.trim();
+
+    if (!guestName || !guestEmail) {
+      alert("Please enter a valid guest name and email address.");
+      return;
     }
 
-    function closeRoomModal() {
-      document.getElementById("roomModal").classList.remove("active");
-    }
+    closeCheckoutModal();
 
-    // 打開結帳彈窗
-    function openCheckoutModal(roomId) {
-      selectedRoom = selectedHotel.rooms.find(r => r.id === roomId);
-      if (!selectedRoom) return;
+    // Generate Random Booking Reference
+    const refNumber = "CAL-" + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById("bookingRef").innerText = refNumber;
+    document.getElementById("successEmail").innerText = guestEmail;
+    document.getElementById("successHotel").innerText = selectedHotel.name;
+    document.getElementById("successRoom").innerText = selectedRoom.name;
+    document.getElementById("successPaid").innerText = document.getElementById("checkoutTotalPrice").innerText;
 
-      closeRoomModal();
+    document.getElementById("successModal").classList.add("active");
+  }
 
-      document.getElementById("checkoutHotelName").innerText = selectedHotel.name;
-      document.getElementById("checkoutRoomName").innerText = selectedRoom.name;
-      
-      const baseTotal = selectedRoom.price * 2;
-      const tax = Math.round(baseTotal * 0.1);
-      discountAmount = 0;
-      document.getElementById("couponInput").value = "";
-      document.getElementById("checkoutDiscount").innerText = `- HK$ 0`;
+  function closeSuccessModal() {
+    document.getElementById("successModal").classList.remove("active");
+  }
 
-      document.getElementById("checkoutBasePrice").innerText = `HK$ ${baseTotal.toLocaleString()}`;
-      document.getElementById("checkoutTaxPrice").innerText = `HK$ ${tax.toLocaleString()}`;
-      document.getElementById("checkoutTotalPrice").innerText = `HK$ ${(baseTotal + tax).toLocaleString()}`;
+  // Budget Slider Filter
+  function updatePriceFilter(val) {
+    document.getElementById("priceRangeLabel").innerText = `Up to $${parseInt(val).toLocaleString()}`;
+    filterHotels();
+  }
 
-      document.getElementById("checkoutModal").classList.add("active");
-    }
+  // Combined Filter Logic
+  function filterHotels() {
+    const maxPrice = parseInt(document.getElementById("priceRange").value);
+    const starCheckboxes = Array.from(document.querySelectorAll('input[name="star"]:checked')).map(cb => parseInt(cb.value));
+    const ratingCheckboxes = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => parseFloat(cb.value));
 
-    function closeCheckoutModal() {
-      document.getElementById("checkoutModal").classList.remove("active");
-    }
+    const filterBreakfast = document.getElementById("filterBreakfast").checked;
+    const filterPool = document.getElementById("filterPool").checked;
+    const filterCancel = document.getElementById("filterCancel").checked;
+    const filterGym = document.getElementById("filterGym").checked;
 
-    // 套用優惠券
-    function applyCoupon() {
-      const code = document.getElementById("couponInput").value.trim().toUpperCase();
-      const baseTotal = selectedRoom.price * 2;
-      const tax = Math.round(baseTotal * 0.1);
-
-      if (code === "SUMMER10" || code === "TRIP2026") {
-        discountAmount = Math.round((baseTotal + tax) * 0.1);
-        document.getElementById("checkoutDiscount").innerText = `- HK$ ${discountAmount.toLocaleString()}`;
-        const finalPrice = baseTotal + tax - discountAmount;
-        document.getElementById("checkoutTotalPrice").innerText = `HK$ ${finalPrice.toLocaleString()}`;
-        alert(`🎉 優惠券 [${code}] 已成功套用！立減 10% 房費 (HK$ ${discountAmount})`);
-      } else {
-        alert("無效的優惠碼。請嘗試輸入：SUMMER10");
+    currentHotels = hotelsData.filter(hotel => {
+      // Price Filter
+      if (hotel.price > maxPrice) return false;
+      // Star Filter
+      if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
+      // Rating Filter
+      if (ratingCheckboxes.length > 0) {
+        const minRating = Math.min(...ratingCheckboxes);
+        if (hotel.rating < minRating) return false;
       }
-    }
+      // Amenities Filter
+      if (filterBreakfast && !hotel.hasBreakfast) return false;
+      if (filterPool && !hotel.hasPool) return false;
+      if (filterCancel && !hotel.hasCancel) return false;
+      if (filterGym && !hotel.hasGym) return false;
 
-    // 確認訂單
-    function confirmBooking() {
-      const guestName = document.getElementById("guestName").value.trim();
-      const guestEmail = document.getElementById("guestEmail").value.trim();
-
-      if (!guestName || !guestEmail) {
-        alert("請完整填寫住客姓名及電子郵件！");
-        return;
-      }
-
-      closeCheckoutModal();
-
-      // 產生隨機訂單編號
-      const refNumber = "TS-" + Math.floor(100000 + Math.random() * 900000);
-      document.getElementById("bookingRef").innerText = refNumber;
-      document.getElementById("successEmail").innerText = guestEmail;
-      document.getElementById("successHotel").innerText = selectedHotel.name;
-      document.getElementById("successRoom").innerText = selectedRoom.name;
-      document.getElementById("successPaid").innerText = document.getElementById("checkoutTotalPrice").innerText;
-
-      document.getElementById("successModal").classList.add("active");
-    }
-
-    function closeSuccessModal() {
-      document.getElementById("successModal").classList.remove("active");
-    }
-
-    // 價格滑桿過濾
-    function updatePriceFilter(val) {
-      document.getElementById("priceRangeLabel").innerText = `最高 HK$ ${parseInt(val).toLocaleString()}`;
-      filterHotels();
-    }
-
-    // 綜合篩選邏輯
-    function filterHotels() {
-      const maxPrice = parseInt(document.getElementById("priceRange").value);
-      const starCheckboxes = Array.from(document.querySelectorAll('input[name="star"]:checked')).map(cb => parseInt(cb.value));
-      const ratingCheckboxes = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => parseFloat(cb.value));
-      
-      const filterBreakfast = document.getElementById("filterBreakfast").checked;
-      const filterPool = document.getElementById("filterPool").checked;
-      const filterCancel = document.getElementById("filterCancel").checked;
-      const filterGym = document.getElementById("filterGym").checked;
-
-      currentHotels = hotelsData.filter(hotel => {
-        // 價格篩選
-        if (hotel.price > maxPrice) return false;
-        // 星級篩選
-        if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
-        // 評分篩選
-        if (ratingCheckboxes.length > 0) {
-          const minRating = Math.min(...ratingCheckboxes);
-          if (hotel.rating < minRating) return false;
-        }
-        // 特色設施
-        if (filterBreakfast && !hotel.hasBreakfast) return false;
-        if (filterPool && !hotel.hasPool) return false;
-        if (filterCancel && !hotel.hasCancel) return false;
-        if (filterGym && !hotel.hasGym) return false;
-
-        return true;
-      });
-
-      renderHotelList(currentHotels);
-    }
-
-    // 重設篩選
-    function resetFilters() {
-      document.getElementById("priceRange").value = 4000;
-      document.getElementById("priceRangeLabel").innerText = "HK$ 500 - HK$ 4,000+";
-      document.querySelectorAll('input[name="star"]').forEach(cb => cb.checked = true);
-      document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = false);
-      document.getElementById("filterBreakfast").checked = false;
-      document.getElementById("filterPool").checked = false;
-      document.getElementById("filterCancel").checked = false;
-      document.getElementById("filterGym").checked = false;
-
-      currentHotels = [...hotelsData];
-      renderHotelList(currentHotels);
-    }
-
-    // 排序
-    function sortHotels(type, btnElement) {
-      document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
-      btnElement.classList.add("active");
-
-      if (type === 'priceAsc') {
-        currentHotels.sort((a, b) => a.price - b.price);
-      } else if (type === 'priceDesc') {
-        currentHotels.sort((a, b) => b.price - a.price);
-      } else if (type === 'rating') {
-        currentHotels.sort((a, b) => b.rating - a.rating);
-      } else {
-        currentHotels.sort((a, b) => a.id - b.id);
-      }
-
-      renderHotelList(currentHotels);
-    }
-
-    // 初始化渲染
-    window.addEventListener("DOMContentLoaded", () => {
-      renderHotelList(hotelsData);
+      return true;
     });
-  </script>
+
+    renderHotelList(currentHotels);
+  }
+
+  // Reset All Filters
+  function resetFilters() {
+    document.getElementById("priceRange").value = 900;
+    document.getElementById("priceRangeLabel").innerText = "Up to $900";
+    document.querySelectorAll('input[name="star"]').forEach(cb => cb.checked = true);
+    document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = false);
+    document.getElementById("filterBreakfast").checked = false;
+    document.getElementById("filterPool").checked = false;
+    document.getElementById("filterCancel").checked = false;
+    document.getElementById("filterGym").checked = false;
+
+    currentHotels = [...hotelsData];
+    renderHotelList(currentHotels);
+  }
+
+  // Sort Hotels
+  function sortHotels(type, btnElement) {
+    document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
+    btnElement.classList.add("active");
+
+    if (type === 'priceAsc') {
+      currentHotels.sort((a, b) => a.price - b.price);
+    } else if (type === 'priceDesc') {
+      currentHotels.sort((a, b) => b.price - a.price);
+    } else if (type === 'rating') {
+      currentHotels.sort((a, b) => b.rating - a.rating);
+    } else {
+      currentHotels.sort((a, b) => a.id - b.id);
+    }
+
+    renderHotelList(currentHotels);
+  }
+
+  // Initialize
+  window.addEventListener("DOMContentLoaded", () => {
+    renderHotelList(hotelsData);
+  });
+</script>
 </body>
 </html>
