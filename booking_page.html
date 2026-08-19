@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TripStay - California Hotel Booking (Agoda / Trip.com Style)</title>
+  <title>TripStay - 全球精选酒店预订平台 (模拟 Agoda / Trip.com)</title>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
   <script>
-    // Firebase Configuration
+    // Firebase 初始化配置
     const firebaseConfig = {
       apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
       authDomain: "online-study-3a.firebaseapp.com",
@@ -20,13 +21,18 @@
       appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    try {
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+    } catch(e) {
+      console.warn("Firebase initialized already or in offline mode", e);
+    }
   </script>
 
+  <!-- Google Fonts & Font Awesome 图标库 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -60,7 +66,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
     }
 
     body {
@@ -72,7 +78,7 @@
       flex-direction: column;
     }
 
-    /* Top Navbar */
+    /* 顶部导航栏 */
     header {
       background-color: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -155,7 +161,7 @@
       font-size: 0.8rem;
     }
 
-    /* Hero Search Bar */
+    /* 顶部搜索 Banner */
     .hero-search-wrapper {
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0284c7 100%);
       padding: 2.2rem 1.5rem 3rem 1.5rem;
@@ -259,7 +265,7 @@
       transform: translateY(-1px);
     }
 
-    /* Main Layout */
+    /* 主体布局 */
     .main-layout {
       max-width: 1280px;
       margin: -1.5rem auto 3rem auto;
@@ -270,7 +276,7 @@
       width: 100%;
     }
 
-    /* Sidebar Filters */
+    /* 左侧筛选侧边栏 */
     .filters-sidebar {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -364,7 +370,7 @@
       color: var(--text-muted);
     }
 
-    /* Results Section */
+    /* 右侧酒店列表 */
     .results-section {
       display: flex;
       flex-direction: column;
@@ -411,14 +417,14 @@
       color: var(--text-main);
     }
 
-    /* Hotel Card */
+    /* 酒店卡片 */
     .hotel-card {
       background: var(--surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       overflow: hidden;
       display: grid;
-      grid-template-columns: 310px 1fr 230px;
+      grid-template-columns: 300px 1fr 220px;
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
     }
@@ -432,6 +438,7 @@
       position: relative;
       background: #e2e8f0;
       overflow: hidden;
+      min-height: 210px;
     }
 
     .hotel-image-col img {
@@ -479,7 +486,7 @@
     }
 
     .hotel-title {
-      font-size: 1.18rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.3;
@@ -590,7 +597,7 @@
     }
 
     .main-price {
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 800;
       color: var(--accent);
       line-height: 1;
@@ -622,7 +629,7 @@
       background: var(--primary-dark);
     }
 
-    /* Modal - Room Selection */
+    /* 弹窗样式 - 房型选择 */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -647,7 +654,7 @@
       background: white;
       border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 960px;
+      max-width: 980px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
@@ -714,24 +721,26 @@
       object-fit: cover;
     }
 
-    /* Room Cards */
+    /* 客房列表与详细元数据卡片 */
     .room-card-list {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
     .room-card {
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
       display: grid;
-      grid-template-columns: 220px 1fr 210px;
+      grid-template-columns: 230px 1fr 210px;
       overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
     }
 
     .room-card:hover {
       border-color: var(--primary);
+      box-shadow: var(--shadow-md);
     }
 
     .room-img-box {
@@ -745,36 +754,51 @@
     }
 
     .room-info-box {
-      padding: 1rem 1.25rem;
+      padding: 1.1rem 1.3rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
       border-right: 1px solid var(--border);
     }
 
     .room-title {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-main);
     }
 
-    .room-features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+    /* Metadata 徽章网格 */
+    .room-metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.45rem;
+      background: #f8fafc;
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid #f1f5f9;
+      font-size: 0.82rem;
+      color: #334155;
     }
 
-    .room-features span {
+    .room-meta-item {
       display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.4rem;
+    }
+
+    .room-meta-item i {
+      color: var(--primary);
+      width: 16px;
+      text-align: center;
+    }
+
+    .room-meta-item strong {
+      color: var(--text-main);
     }
 
     .room-benefits {
-      margin-top: 0.4rem;
-      font-size: 0.8rem;
+      margin-top: 0.2rem;
+      font-size: 0.82rem;
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
@@ -790,10 +814,11 @@
 
     .room-benefit-item.muted {
       color: var(--text-muted);
+      font-weight: normal;
     }
 
     .room-booking-box {
-      padding: 1rem 1.25rem;
+      padding: 1.1rem 1.2rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -813,7 +838,7 @@
     }
 
     .room-now-price {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--accent);
     }
@@ -822,9 +847,9 @@
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.65rem 1rem;
+      padding: 0.7rem 1rem;
       border-radius: var(--radius-md);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       transition: background 0.2s;
@@ -834,15 +859,15 @@
       background: var(--accent-hover);
     }
 
-    /* Checkout Modal */
+    /* 结账 Modal */
     .checkout-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1.4fr 1fr;
       gap: 1.5rem;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     }
 
     .form-label {
@@ -887,7 +912,7 @@
     .summary-row.total {
       border-top: 1.5px solid var(--border);
       padding-top: 0.8rem;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--text-main);
     }
@@ -895,7 +920,7 @@
     .coupon-box {
       display: flex;
       gap: 0.5rem;
-      margin: 0.5rem 0;
+      margin: 0.4rem 0;
     }
 
     .btn-apply-coupon {
@@ -909,7 +934,7 @@
       cursor: pointer;
     }
 
-    /* Success Modal */
+    /* 预订成功 Modal */
     .success-modal-content {
       text-align: center;
       padding: 2.5rem 2rem;
@@ -931,7 +956,7 @@
       font-size: 2.2rem;
     }
 
-    /* Animations */
+    /* 动画 */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -942,7 +967,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* Responsive */
+    /* 响应式 */
     @media (max-width: 980px) {
       .search-box {
         grid-template-columns: 1fr;
@@ -974,251 +999,286 @@
 </head>
 <body>
 
+<!-- 顶部导航栏 -->
 <header>
   <div class="navbar">
     <a href="#" class="logo">
       <i class="fa-solid fa-hotel"></i> TripStay<span>.com</span>
     </a>
     <div class="nav-links">
-      <button class="nav-btn"><i class="fa-solid fa-earth-americas"></i> USD ($)</button>
-      <button class="nav-btn"><i class="fa-regular fa-circle-question"></i> Help & Support</button>
+      <button class="nav-btn"><i class="fa-solid fa-earth-americas"></i> HKD (港币 HK$)</button>
+      <button class="nav-btn"><i class="fa-regular fa-circle-question"></i> 客服帮助中心</button>
       <div class="user-profile">
         <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-        <span>Alex Wong</span>
+        <span>Alex Wong (测试用户)</span>
       </div>
     </div>
   </div>
 </header>
 
+<!-- 顶部搜索 Banner -->
 <div class="hero-search-wrapper">
   <div class="search-container">
-    <h1 class="hero-title">Explore California's Best Hotels & Luxury Resorts</h1>
-    <p class="hero-subtitle">Over 2,000,000+ stays worldwide. Member special deals with up to 40% off.</p>
+    <h1 class="hero-title">探索中国香港精选酒店与品质住宿</h1>
+    <p class="hero-subtitle">覆盖香港中环、尖沙咀、湾仔、铜锣湾及沙田等核心地段，尊享会员低至6折预订特惠</p>
 
     <div class="search-box">
+      <!-- 目的地 -->
       <div class="search-field">
         <i class="fa-solid fa-location-dot"></i>
         <div class="search-field-content">
-          <span class="search-label">Destination / Property</span>
-          <input type="text" id="searchInput" class="search-input" value="California, United States" placeholder="City, landmark or hotel name">
+          <span class="search-label">目的地 / 酒店名称</span>
+          <input type="text" id="searchInput" class="search-input" value="中国香港 (Hong Kong)" placeholder="输入城市、商圈或酒店名称">
         </div>
       </div>
 
+      <!-- 入住退房日期 -->
       <div class="search-field">
         <i class="fa-regular fa-calendar-days"></i>
         <div class="search-field-content">
-          <span class="search-label">Check-in — Check-out</span>
-          <input type="text" class="search-input" value="Aug 20, 2026 – Aug 22, 2026 (2 nights)">
+          <span class="search-label">入住 — 退房日期</span>
+          <input type="text" class="search-input" value="2026年8月20日 - 8月22日 (共2晚)">
         </div>
       </div>
 
+      <!-- 客房与人数 -->
       <div class="search-field">
         <i class="fa-solid fa-user-group"></i>
         <div class="search-field-content">
-          <span class="search-label">Rooms & Guests</span>
-          <input type="text" class="search-input" value="1 Room, 2 Adults">
+          <span class="search-label">客房及入住人数</span>
+          <input type="text" class="search-input" value="1 间客房, 2 位成人">
         </div>
       </div>
 
+      <!-- 搜索按钮 -->
       <button class="btn-search" onclick="filterHotels()">
-        <i class="fa-solid fa-magnifying-glass"></i> Search Hotels
+        <i class="fa-solid fa-magnifying-glass"></i> 搜索酒店
       </button>
     </div>
   </div>
 </div>
 
+<!-- 主体区域 -->
 <main class="main-layout">
 
+  <!-- 左侧筛选栏 -->
   <aside class="filters-sidebar">
     <div class="filter-header">
-      <h3><i class="fa-solid fa-sliders"></i> Filter Results</h3>
-      <button class="btn-reset-filters" onclick="resetFilters()">Reset All</button>
+      <h3><i class="fa-solid fa-sliders"></i> 条件筛选</h3>
+      <button class="btn-reset-filters" onclick="resetFilters()">重置所有</button>
     </div>
 
+    <!-- 价格滑块 -->
     <div class="filter-group">
       <div class="filter-title">
-        <span>Nightly Budget</span>
-        <span id="priceRangeLabel">Up to $900</span>
+        <span>每晚预算上限</span>
+        <span id="priceRangeLabel">最高 HK$ 4,500</span>
       </div>
-      <input type="range" id="priceRange" class="price-range-slider" min="150" max="1000" step="25" value="900" oninput="updatePriceFilter(this.value)">
+      <input type="range" id="priceRange" class="price-range-slider" min="400" max="4500" step="50" value="4500" oninput="updatePriceFilter(this.value)">
       <div class="price-values">
-        <span>$150</span>
-        <span>$1,000+</span>
+        <span>HK$ 400</span>
+        <span>HK$ 4,500+</span>
       </div>
     </div>
 
+    <!-- 酒店星级 -->
     <div class="filter-group">
-      <div class="filter-title">Star Rating</div>
+      <div class="filter-title">酒店星级</div>
       <label class="filter-checkbox">
         <input type="checkbox" name="star" value="5" onchange="filterHotels()" checked>
-        <span>⭐⭐⭐⭐⭐ 5 Stars</span>
-        <span class="count">(18)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="star" value="4" onchange="filterHotels()" checked>
-        <span>⭐⭐⭐⭐ 4 Stars</span>
-        <span class="count">(32)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="star" value="3" onchange="filterHotels()">
-        <span>⭐⭐⭐ 3 Stars</span>
-        <span class="count">(14)</span>
-      </label>
-    </div>
-
-    <div class="filter-group">
-      <div class="filter-title">Guest Rating</div>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="rating" value="9" onchange="filterHotels()">
-        <span>9.0+ Exceptional</span>
-        <span class="count">(22)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="rating" value="8" onchange="filterHotels()" checked>
-        <span>8.0+ Very Good</span>
-        <span class="count">(50)</span>
-      </label>
-    </div>
-
-    <div class="filter-group">
-      <div class="filter-title">Popular Amenities</div>
-      <label class="filter-checkbox">
-        <input type="checkbox" id="filterBreakfast" onchange="filterHotels()">
-        <span>Free Breakfast</span>
+        <span>⭐⭐⭐⭐⭐ 五星级奢华</span>
         <span class="count">(26)</span>
       </label>
       <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="4" onchange="filterHotels()" checked>
+        <span>⭐⭐⭐⭐ 四星级高档</span>
+        <span class="count">(12)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="3" onchange="filterHotels()" checked>
+        <span>⭐⭐⭐ 三星级舒适</span>
+        <span class="count">(3)</span>
+      </label>
+    </div>
+
+    <!-- 住客评分 -->
+    <div class="filter-group">
+      <div class="filter-title">住客综合评分</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="9.2" onchange="filterHotels()">
+        <span>9.2+ 超棒极佳体验</span>
+        <span class="count">(16)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="8.8" onchange="filterHotels()">
+        <span>8.8+ 极高品质好评</span>
+        <span class="count">(32)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="8.0" onchange="filterHotels()" checked>
+        <span>8.0+ 良好推荐</span>
+        <span class="count">(41)</span>
+      </label>
+    </div>
+
+    <!-- 核心客房与设施筛选 (包含独立浴室、早餐等) -->
+    <div class="filter-group">
+      <div class="filter-title">客房服务与设施偏好</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterBreakfast" onchange="filterHotels()">
+        <span>含免费丰盛早餐</span>
+        <span class="count">(34)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" id="filterPrivateBath" onchange="filterHotels()" checked>
+        <span>配备独立卫浴 / 浴缸</span>
+        <span class="count">(41)</span>
+      </label>
+      <label class="filter-checkbox">
         <input type="checkbox" id="filterPool" onchange="filterHotels()">
-        <span>Outdoor Swimming Pool</span>
-        <span class="count">(35)</span>
+        <span>室外泳池 / 景观无边际池</span>
+        <span class="count">(30)</span>
       </label>
       <label class="filter-checkbox">
         <input type="checkbox" id="filterCancel" onchange="filterHotels()">
-        <span>Free Cancellation</span>
-        <span class="count">(42)</span>
+        <span>限时免费取消政策</span>
+        <span class="count">(39)</span>
       </label>
       <label class="filter-checkbox">
         <input type="checkbox" id="filterGym" onchange="filterHotels()">
-        <span>Fitness Center / Spa</span>
+        <span>健身中心 / 水疗 SPA</span>
         <span class="count">(38)</span>
       </label>
     </div>
   </aside>
 
+  <!-- 右侧结果展示 -->
   <section class="results-section">
 
+    <!-- 排序控制栏 -->
     <div class="sort-bar">
-      <div>Showing: <span class="results-count" id="hotelCount">4 Properties in California</span></div>
+      <div>搜索结果：<span class="results-count" id="hotelCount">41 间香港精选酒店</span></div>
       <div class="sort-options">
-        <span style="color:var(--text-muted); font-size: 0.82rem; font-weight:600;">Sort By:</span>
-        <button class="sort-btn active" onclick="sortHotels('popular', this)">Recommended</button>
-        <button class="sort-btn" onclick="sortHotels('priceAsc', this)">Price: Low to High</button>
-        <button class="sort-btn" onclick="sortHotels('priceDesc', this)">Price: High to Low</button>
-        <button class="sort-btn" onclick="sortHotels('rating', this)">Top Reviewed</button>
+        <span style="color:var(--text-muted); font-size: 0.82rem; font-weight:600;">排序方式：</span>
+        <button class="sort-btn active" onclick="sortHotels('popular', this)">热门推荐</button>
+        <button class="sort-btn" onclick="sortHotels('priceAsc', this)">价格：低至高</button>
+        <button class="sort-btn" onclick="sortHotels('priceDesc', this)">价格：高至低</button>
+        <button class="sort-btn" onclick="sortHotels('rating', this)">评分最高</button>
       </div>
     </div>
 
+    <!-- 酒店列表动态容器 -->
     <div id="hotelListContainer" style="display: flex; flex-direction: column; gap: 1.25rem;">
+      <!-- 由 JavaScript 渲染 -->
     </div>
   </section>
 </main>
 
+<!-- 弹窗 1：房型选择与完整 Metadata 详情 -->
 <div class="modal-overlay" id="roomModal">
   <div class="modal-container">
     <div class="modal-header">
       <div>
-        <h2 class="modal-header-title" id="modalHotelTitle">The Beverly Hills Hotel</h2>
-        <p style="font-size:0.8rem; color:var(--text-muted);" id="modalHotelSubtitle">9641 Sunset Blvd, Beverly Hills, CA • 0.8 miles to Rodeo Drive</p>
+        <h2 class="modal-header-title" id="modalHotelTitle">香港唯港荟酒店 (Hotel ICON)</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted);" id="modalHotelSubtitle">九龙尖沙咀东部科学馆道17号 • 距离尖东站步行约4分钟</p>
       </div>
       <button class="btn-close-modal" onclick="closeRoomModal()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="modal-body">
 
+      <!-- 实景相册展示 -->
       <div class="hotel-gallery-strip" id="modalGallery">
+        <!-- JS 注入 -->
       </div>
 
-      <h3 style="font-size:1.15rem; font-weight:800; margin-top:0.5rem;"><i class="fa-solid fa-bed"></i> Select Your Preferred Room</h3>
+      <h3 style="font-size:1.15rem; font-weight:800; margin-top:0.5rem;"><i class="fa-solid fa-bed"></i> 选择您的入住客房与配置</h3>
 
+      <!-- 客房列表及详细元数据 -->
       <div class="room-card-list" id="modalRoomList">
+        <!-- JS 注入房型卡片 -->
       </div>
     </div>
   </div>
 </div>
 
+<!-- 弹窗 2：安全结账与确认 -->
 <div class="modal-overlay" id="checkoutModal">
-  <div class="modal-container" style="max-width: 780px;">
+  <div class="modal-container" style="max-width: 800px;">
     <div class="modal-header">
-      <h2 class="modal-header-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Secure Booking & Checkout</h2>
+      <h2 class="modal-header-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> 安全预订与订单确认</h2>
       <button class="btn-close-modal" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="modal-body">
       <div class="checkout-grid">
 
+        <!-- 左侧住客表单 -->
         <div>
-          <h4 style="font-weight:700; margin-bottom:1rem;">Primary Guest Details</h4>
+          <h4 style="font-weight:700; margin-bottom:0.9rem;">主要入住人信息</h4>
           <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-input" id="guestName" value="Alex Wong">
+            <label class="form-label">住客姓名 (中文 / 英文)</label>
+            <input type="text" class="form-input" id="guestName" value="Alex Wong (黄家俊)">
           </div>
           <div class="form-group">
-            <label class="form-label">Email Address (for instant confirmation)</label>
+            <label class="form-label">电子邮箱 (用于接收预订确认函与凭证)</label>
             <input type="email" class="form-input" id="guestEmail" value="alex.wong@example.com">
           </div>
           <div class="form-group">
-            <label class="form-label">Contact Phone Number</label>
-            <input type="tel" class="form-input" id="guestPhone" value="+1 (415) 555-0199">
+            <label class="form-label">联系电话</label>
+            <input type="tel" class="form-input" id="guestPhone" value="+852 9123 4567">
           </div>
           <div class="form-group">
-            <label class="form-label">Special Requests (Optional)</label>
-            <input type="text" class="form-input" placeholder="e.g. High floor, Quiet room, Late check-in">
+            <label class="form-label">特别要求 (选填)</label>
+            <input type="text" class="form-input" placeholder="例如：高楼层、远离电梯、无烟房、延迟退房">
           </div>
 
-          <h4 style="font-weight:700; margin:1.25rem 0 0.8rem 0;">Payment Method (Simulated)</h4>
+          <h4 style="font-weight:700; margin:1.2rem 0 0.7rem 0;">支付方式 (模拟)</h4>
           <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
             <div style="border:1.5px solid var(--primary); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:700; background:var(--primary-light); color:var(--primary);">
-              <i class="fa-regular fa-credit-card"></i> Credit / Debit Card
+              <i class="fa-regular fa-credit-card"></i> 银联 / Visa / MasterCard
             </div>
             <div style="border:1px solid var(--border); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; font-weight:600; color:var(--text-muted);">
-              <i class="fa-brands fa-apple-pay"></i> Apple Pay
+              <i class="fa-brands fa-alipay"></i> 支付宝 / 微信支付
             </div>
           </div>
         </div>
 
+        <!-- 右侧账单明细 -->
         <div>
           <div class="checkout-summary-card">
-            <h4 style="font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.5rem;" id="checkoutHotelName">Hotel Name</h4>
-            <p style="font-size:0.82rem; color:var(--text-muted);" id="checkoutRoomName">Deluxe King Room</p>
-            <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> Aug 20, 2026 – Aug 22, 2026 (2 nights)</p>
+            <h4 style="font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.5rem;" id="checkoutHotelName">酒店名称</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted);" id="checkoutRoomName">客房类型</p>
+            <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> 2026年8月20日 - 8月22日 (2晚)</p>
 
             <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
               <div class="summary-row">
-                <span>Room Rate (2 nights)</span>
-                <span id="checkoutBasePrice">$790</span>
+                <span>客房总额 (2 晚)</span>
+                <span id="checkoutBasePrice">HK$ 2,760</span>
               </div>
               <div class="summary-row">
-                <span>State Taxes & Fees (12%)</span>
-                <span id="checkoutTaxPrice">$95</span>
+                <span>政府税项与服务费 (10%)</span>
+                <span id="checkoutTaxPrice">HK$ 276</span>
               </div>
               <div class="summary-row" style="color:var(--success);" id="couponDiscountRow">
-                <span>Promo Code Discount</span>
-                <span id="checkoutDiscount">- $0</span>
+                <span>优惠码立减</span>
+                <span id="checkoutDiscount">- HK$ 0</span>
               </div>
 
+              <!-- 优惠券输入 -->
               <div class="coupon-box">
-                <input type="text" id="couponInput" class="form-input" style="padding:0.4rem 0.6rem; font-size:0.8rem;" placeholder="Promo Code: CALI10">
-                <button class="btn-apply-coupon" onclick="applyCoupon()">Apply</button>
+                <input type="text" id="couponInput" class="form-input" style="padding:0.4rem 0.6rem; font-size:0.8rem;" placeholder="输入优惠码: HK2026 或 TRIP10">
+                <button class="btn-apply-coupon" onclick="applyCoupon()">兑换</button>
               </div>
 
               <div class="summary-row total">
-                <span>Total Amount (incl. taxes)</span>
-                <span style="color:var(--accent);" id="checkoutTotalPrice">$885</span>
+                <span>实付总额 (含税)</span>
+                <span style="color:var(--accent);" id="checkoutTotalPrice">HK$ 3,036</span>
               </div>
             </div>
 
-            <button class="btn-search" style="margin-top:1rem; width:100%; font-size:1rem; padding:0.8rem;" onclick="confirmBooking()">
-              <i class="fa-solid fa-lock"></i> Complete Simulated Booking
+            <button class="btn-search" style="margin-top:0.8rem; width:100%; font-size:0.95rem; padding:0.8rem;" onclick="confirmBooking()">
+              <i class="fa-solid fa-lock"></i> 确认并模拟支付
             </button>
-            <p style="font-size:0.7rem; color:var(--text-light); text-align:center;">This is a demonstration sandbox. No actual credit card charge will occur.</p>
+            <p style="font-size:0.7rem; color:var(--text-light); text-align:center;">此页面为实验模拟环境，不会产生任何真实银行扣款。</p>
           </div>
         </div>
 
@@ -1227,6 +1287,7 @@
   </div>
 </div>
 
+<!-- 弹窗 3：预订成功凭证 -->
 <div class="modal-overlay" id="successModal">
   <div class="modal-container" style="max-width: 520px;">
     <div class="modal-body">
@@ -1234,233 +1295,2132 @@
         <div class="success-icon">
           <i class="fa-solid fa-check"></i>
         </div>
-        <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main);">Booking Confirmed!</h2>
-        <p style="font-size:0.9rem; color:var(--text-muted);">
-          Your reservation has been confirmed. A receipt and hotel voucher have been sent to <strong id="successEmail">alex.wong@example.com</strong>.
+        <h2 style="font-size:1.35rem; font-weight:800; color:var(--text-main);">预订成功！</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">
+          您的酒店客房已确认锁定。电子凭证与入住指南已发送至 <strong id="successEmail">alex.wong@example.com</strong>
         </p>
 
-        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1rem; width:100%; text-align:left; font-size:0.85rem;">
-          <p><strong>Booking Reference:</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">CAL-928410</span></p>
-          <p><strong>Hotel:</strong> <span id="successHotel">The Beverly Hills Hotel</span></p>
-          <p><strong>Room Type:</strong> <span id="successRoom">Deluxe California King Room</span></p>
-          <p><strong>Total Paid:</strong> <span style="color:var(--accent); font-weight:700;" id="successPaid">$885</span></p>
+        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1.1rem; width:100%; text-align:left; font-size:0.85rem; line-height:1.6;">
+          <p><strong>订单编号：</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">HK-8829104</span></p>
+          <p><strong>入住酒店：</strong> <span id="successHotel">香港唯港荟酒店</span></p>
+          <p><strong>所选客房：</strong> <span id="successRoom">ICON 36 经典城市客房</span></p>
+          <p><strong>客房面积：</strong> <span id="successSize">36 平方米</span></p>
+          <p><strong>卫浴配置：</strong> <span id="successBath">独立干湿分离卫浴</span></p>
+          <p><strong>早餐礼遇：</strong> <span id="successBfast">含双人自助早餐</span></p>
+          <p><strong>实付总金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">HK$ 3,036</span></p>
         </div>
 
         <button class="btn-search" style="width:100%; margin-top:0.5rem;" onclick="closeSuccessModal()">
-          Done & Return to Browsing
+          完成并返回浏览
         </button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- 数据集与业务逻辑 -->
 <script>
-  // California Hotels Dataset
+  // 41 间香港全境酒店完整数据 (包含完整客房元数据)
   const hotelsData = [
     {
-      id: 1,
-      name: "The Beverly Hills Hotel (Dorchester Collection)",
-      stars: 5,
-      rating: 9.5,
-      reviewCount: 3420,
-      verdict: "Exceptional",
-      location: "9641 Sunset Blvd, Beverly Hills, CA 90210",
-      distance: "0.8 miles to Rodeo Drive, Los Angeles",
-      dealTag: "Iconic Heritage Deal 25% Off",
-      price: 595,
-      originalPrice: 790,
-      hasBreakfast: true,
-      hasPool: true,
-      hasCancel: true,
-      hasGym: true,
-      images: [
+      "id": 1,
+      "name": "香港唯港荟酒店 (Hotel ICON)",
+      "enName": "Hotel ICON Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀东部科学馆道17号",
+      "distance": "距离尖东站步行约4分钟，临近维港海滨",
+      "stars": 5,
+      "rating": 9.4,
+      "reviewCount": 4280,
+      "verdict": "超棒极佳",
+      "dealTag": "限时特惠 78折",
+      "price": 1380,
+      "originalPrice": 1780,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
       ],
-      rooms: [
+      "rooms": [
         {
-          id: "bhh-101",
-          name: "Superior King Room with Palm Garden View",
-          size: "450 sq ft (42 m²)",
-          bed: "1 King Bed (Signature Luxury Linens)",
-          breakfast: "Free Gourmet Breakfast for 2",
-          cancel: "Free cancellation before Aug 19",
-          price: 595,
-          origPrice: 790,
-          image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+          "id": "icon-101",
+          "name": "ICON 36 经典城市客房",
+          "size": "36 平方米",
+          "bed": "1张特大双人床 (King Bed)",
+          "bathroom": "独立干湿分离卫浴 (带步入式淋浴间)",
+          "breakfast": "含双人精致自助早餐",
+          "cancel": "入住前24小时可免费取消",
+          "price": 1380,
+          "origPrice": 1780,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
         },
         {
-          id: "bhh-102",
-          name: "Beverly Hills Deluxe Balcony Suite",
-          size: "620 sq ft (58 m²)",
-          bed: "1 King Bed + Private Garden Patio",
-          breakfast: "Full American Breakfast & Evening Cocktails",
-          cancel: "Free cancellation before Aug 19",
-          price: 850,
-          origPrice: 1100,
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+          "id": "icon-102",
+          "name": "CLUB 36 全海景行政客房",
+          "size": "38 平方米",
+          "bed": "1张特大床 或 2张单人床",
+          "bathroom": "独立大理石卫浴 (带全景浴缸与淋浴)",
+          "breakfast": "含行政酒廊全日礼遇及自助早餐",
+          "cancel": "入住前24小时可免费取消",
+          "price": 1980,
+          "origPrice": 2550,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
         }
       ]
     },
     {
-      id: 2,
-      name: "Hotel del Coronado (Curio Collection by Hilton)",
-      stars: 5,
-      rating: 9.2,
-      reviewCount: 4890,
-      verdict: "Superb",
-      location: "1500 Orange Ave, Coronado, San Diego, CA 92118",
-      distance: "Direct Oceanfront Beach Access",
-      dealTag: "Pacific Coast Special",
-      price: 460,
-      originalPrice: 590,
-      hasBreakfast: true,
-      hasPool: true,
-      hasCancel: true,
-      hasGym: true,
-      images: [
+      "id": 2,
+      "name": "香港瑰丽酒店 (Rosewood Hong Kong)",
+      "enName": "Rosewood Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀梳士巴利道18号 Victoria Dockside",
+      "distance": "坐落尖沙咀海滨核心，直通K11 MUSEA",
+      "stars": 5,
+      "rating": 9.7,
+      "reviewCount": 2680,
+      "verdict": "传奇顶奢",
+      "dealTag": "黑卡尊享礼遇",
+      "price": 3580,
+      "originalPrice": 4600,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
         "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
       ],
-      rooms: [
+      "rooms": [
         {
-          id: "hdc-201",
-          name: "Victorian Ocean View King Guest Room",
-          size: "380 sq ft (35 m²)",
-          bed: "1 King Bed with Coastal Sea Breeze View",
-          breakfast: "Buffet Breakfast included",
-          cancel: "Free cancellation before Aug 18",
-          price: 460,
-          origPrice: 590,
-          image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+          "id": "rw-201",
+          "name": "九龙景观尊贵大理石客房",
+          "size": "53 平方米",
+          "bed": "1张特大双人床 (Custom King)",
+          "bathroom": "独立双台盆奢华大理石卫浴 (带独立浸泡浴缸)",
+          "breakfast": "含 Holt's Cafe 奢华半自助早餐",
+          "cancel": "入住前48小时可免费取消",
+          "price": 3580,
+          "origPrice": 4600,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
         },
         {
-          id: "hdc-202",
-          name: "Beach Village Oceanfront Luxury Villa",
-          size: "850 sq ft (79 m²)",
-          bed: "Master Suite + Private Terrace & Fire Pit",
-          breakfast: "Champagne Breakfast & Beach Butler Service",
-          cancel: "Free cancellation 48h before check-in",
-          price: 780,
-          origPrice: 990,
-          image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+          "id": "rw-202",
+          "name": "尊尚维港海景大套房",
+          "size": "78 平方米",
+          "bed": "1张特大床 / 独立会客起居室",
+          "bathroom": "独立维港景观大理石浴室 (双人水疗浴缸)",
+          "breakfast": "含 Manor Club 贵宾酒廊早餐及香槟茶歇",
+          "cancel": "不可退款优惠特价",
+          "price": 5200,
+          "origPrice": 6800,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
         }
       ]
     },
     {
-      id: 3,
-      name: "Fairmont San Francisco",
-      stars: 5,
-      rating: 9.0,
-      reviewCount: 3120,
-      verdict: "Wonderful",
-      location: "950 Mason St, Nob Hill, San Francisco, CA 94108",
-      distance: "Nob Hill summit, 0.4 miles to Union Square",
-      dealTag: "City Landmark Pick",
-      price: 320,
-      originalPrice: 450,
-      hasBreakfast: false,
-      hasPool: false,
-      hasCancel: true,
-      hasGym: true,
-      images: [
-        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
-      ],
-      rooms: [
-        {
-          id: "fsf-301",
-          name: "Nob Hill Classic Queen Room",
-          size: "320 sq ft (30 m²)",
-          bed: "1 Queen Bed / Cable Car & City Skyline View",
-          breakfast: "Breakfast available for purchase",
-          cancel: "Free cancellation before Aug 19",
-          price: 320,
-          origPrice: 450,
-          image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          id: "fsf-302",
-          name: "Golden Gate Bay View King Suite",
-          size: "550 sq ft (51 m²)",
-          bed: "1 King Bed / Panoramic Golden Gate View",
-          breakfast: "Tonga Room Welcome Drinks Included",
-          cancel: "Free cancellation before Aug 18",
-          price: 490,
-          origPrice: 650,
-          image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
-        }
-      ]
-    },
-    {
-      id: 4,
-      name: "Napa Valley Lodge & Vineyard Spa",
-      stars: 4,
-      rating: 8.8,
-      reviewCount: 1840,
-      verdict: "Very Good",
-      location: "2230 Madison St, Yountville, Napa Valley, CA 94599",
-      distance: "Heart of Wine Country, steps from Michelin dining",
-      dealTag: "Wine Tasting Included",
-      price: 240,
-      originalPrice: 320,
-      hasBreakfast: true,
-      hasPool: true,
-      hasCancel: true,
-      hasGym: true,
-      images: [
+      "id": 3,
+      "name": "香港芬名酒店 (The Fleming Hong Kong)",
+      "enName": "The Fleming Boutique Hotel",
+      "district": "湾仔",
+      "location": "港岛湾仔菲林明道41号",
+      "distance": "距离湾仔地铁站步行约3分钟，近香港会展中心",
+      "stars": 4,
+      "rating": 9.0,
+      "reviewCount": 1820,
+      "verdict": "复古潮流精品",
+      "dealTag": "设计师甄选",
+      "price": 920,
+      "originalPrice": 1200,
+      "hasBreakfast": true,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
         "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
         "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
       ],
-      rooms: [
+      "rooms": [
         {
-          id: "nvl-401",
-          name: "Vineyard View King Room with Fireplace",
-          size: "400 sq ft (37 m²)",
-          bed: "1 King Bed + Wood-burning Fireplace",
-          breakfast: "Fresh Continental Champagne Breakfast",
-          cancel: "Free cancellation 24h prior",
-          price: 240,
-          origPrice: 320,
-          image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+          "id": "fl-301",
+          "name": "雅致小号双人房 (渡轮美学风)",
+          "size": "22 平方米",
+          "bed": "1张标准双人床 (Queen Bed)",
+          "bathroom": "独立复古黄铜卫浴 (配热带雨林花洒)",
+          "breakfast": "不含早餐 (可现场加购意式早餐)",
+          "cancel": "入住前24小时可免费取消",
+          "price": 920,
+          "origPrice": 1200,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
         },
         {
-          id: "nvl-402",
-          name: "Courtyard Poolside Queen Double Suite",
-          size: "480 sq ft (45 m²)",
-          bed: "2 Queen Beds / Direct Pool & Spa Walkout",
-          breakfast: "Free Breakfast + Complimentary Wine Tasting",
-          cancel: "Special Non-refundable Rate",
-          price: 290,
-          origPrice: 380,
-          image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+          "id": "fl-302",
+          "name": "经典中型尊贵房 (附工作吧台)",
+          "size": "26 平方米",
+          "bed": "1张大床 (King Bed)",
+          "bathroom": "独立干湿分离浴室",
+          "breakfast": "含 Osteria Marzia 地道意式双人早餐",
+          "cancel": "入住前24小时可免费取消",
+          "price": 1150,
+          "origPrice": 1480,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "香港帝苑酒店 (The Royal Garden)",
+      "enName": "The Royal Garden Hotel",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀东么地道69号",
+      "distance": "尖东繁华商圈，步行至星光大道约6分钟",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 5120,
+      "verdict": "经典五星",
+      "dealTag": "早鸟特惠 8折",
+      "price": 990,
+      "originalPrice": 1280,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "rg-401",
+          "name": "尊贵豪华客房 (中庭花园景)",
+          "size": "30 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立大理石卫浴 (带独立浴缸)",
+          "breakfast": "含帝苑饼店招牌双人欧陆早餐套餐",
+          "cancel": "入住前24小时可免费取消",
+          "price": 990,
+          "origPrice": 1280,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "香港置地文华东方酒店 (The Landmark Mandarin Oriental)",
+      "enName": "The Landmark Mandarin Oriental",
+      "district": "中环",
+      "location": "港岛中环皇后大道中15号置地广场",
+      "distance": "中环核心金融区，直通中环地铁站",
+      "stars": 5,
+      "rating": 9.6,
+      "reviewCount": 2190,
+      "verdict": "顶级奢华",
+      "dealTag": "热卖推荐",
+      "price": 3800,
+      "originalPrice": 4800,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-5-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "58 平方米",
+          "bed": "1张特大双人床",
+          "bathroom": "独立超大圆形浸泡浴缸及干湿分离卫浴",
+          "breakfast": "含双人米其林星厨定制早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 3800,
+          "origPrice": 4800,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-5-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "66 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 5130,
+          "origPrice": 6480,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "香港四季酒店 (Four Seasons Hotel Hong Kong)",
+      "enName": "Four Seasons Hotel Hong Kong",
+      "district": "中环",
+      "location": "港岛中环金融街8号国际金融中心",
+      "distance": "直通IFC商场与机场快线香港站",
+      "stars": 5,
+      "rating": 9.5,
+      "reviewCount": 3450,
+      "verdict": "卓越尊贵",
+      "dealTag": "会员专享价",
+      "price": 3600,
+      "originalPrice": 4500,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-6-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "45 平方米",
+          "bed": "1张特大双人床 / 全景维港窗景",
+          "bathroom": "独立大理石水疗浴室 (配镜面电视浴缸)",
+          "breakfast": "含双人四季丰盛自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 3600,
+          "origPrice": 4500,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-6-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "53 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 4860,
+          "origPrice": 6075,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "香港半岛酒店 (The Peninsula Hong Kong)",
+      "enName": "The Peninsula Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀梳士巴利道22号",
+      "distance": "百年传奇地标，直面维多利亚港",
+      "stars": 5,
+      "rating": 9.7,
+      "reviewCount": 4800,
+      "verdict": "百年传奇",
+      "dealTag": "热卖推荐",
+      "price": 4200,
+      "originalPrice": 5500,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-7-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "48 平方米",
+          "bed": "1张豪华特大床",
+          "bathroom": "独立大理石卫浴 (配水疗情绪灯光浴缸)",
+          "breakfast": "含半岛经典大堂双人早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 4200,
+          "origPrice": 5500,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-7-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "56 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 5670,
+          "origPrice": 7425,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "香港奕居 (The Upper House)",
+      "enName": "The Upper House",
+      "district": "金钟",
+      "location": "港岛金钟道88号太古广场",
+      "distance": "坐落太古广场高层，俯瞰金钟港湾",
+      "stars": 5,
+      "rating": 9.6,
+      "reviewCount": 1890,
+      "verdict": "都市静谧奢华",
+      "dealTag": "会员专享价",
+      "price": 3400,
+      "originalPrice": 4300,
+      "hasBreakfast": true,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-8-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "68 平方米",
+          "bed": "1张特大双人床 (配全景落地窗)",
+          "bathroom": "独立豪华水疗浴室 (配备无敌海景石灰岩浴缸)",
+          "breakfast": "含 Salisterra 景观餐厅精选早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 3400,
+          "origPrice": 4300,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-8-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "76 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 4590,
+          "origPrice": 5805,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "香港美利酒店 (The Murray, Hong Kong, a Niccolo Hotel)",
+      "enName": "The Murray, Hong Kong, a Niccolo Hotel",
+      "district": "中环",
+      "location": "港岛中环红棉路22号",
+      "distance": "近山顶缆车站与香港公园，历史建筑改造",
+      "stars": 5,
+      "rating": 9.2,
+      "reviewCount": 2760,
+      "verdict": "超棒极佳",
+      "dealTag": "热卖推荐",
+      "price": 2350,
+      "originalPrice": 3100,
+      "hasBreakfast": true,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-9-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "47 平方米",
+          "bed": "1张特大床 / 标志性嵌入式大窗",
+          "bathroom": "独立云石卫浴 (带独立蛋形浴缸与淋浴)",
+          "breakfast": "含 The Tai Pan 双人半自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 2350,
+          "origPrice": 3100,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-9-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "55 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 3172,
+          "origPrice": 4185,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "香港JW万豪酒店 (JW Marriott Hotel Hong Kong)",
+      "enName": "JW Marriott Hotel Hong Kong",
+      "district": "金钟",
+      "location": "港岛金钟道88号太古广场",
+      "distance": "直通金钟四线换乘核心枢纽地铁站",
+      "stars": 5,
+      "rating": 9.1,
+      "reviewCount": 3890,
+      "verdict": "豪华商务",
+      "dealTag": "会员专享价",
+      "price": 1850,
+      "originalPrice": 2400,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-10-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "33 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立干湿分离卫浴",
+          "breakfast": "含双人JW咖啡室国际自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1850,
+          "origPrice": 2400,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-10-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "41 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2497,
+          "origPrice": 3240,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "香港港丽酒店 (Conrad Hong Kong)",
+      "enName": "Conrad Hong Kong",
+      "district": "金钟",
+      "location": "港岛金钟道88号太古广场二座",
+      "distance": "太古广场顶层，视野开阔俯瞰维港",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 3100,
+      "verdict": "优质五星",
+      "dealTag": "热卖推荐",
+      "price": 1750,
+      "originalPrice": 2250,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-11-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "40 平方米",
+          "bed": "1张特大双人床",
+          "bathroom": "独立大理石卫浴 (带独立浴缸)",
+          "breakfast": "含双人丰富自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1750,
+          "origPrice": 2250,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-11-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "48 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2362,
+          "origPrice": 3037,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "香港丽思卡尔顿酒店 (The Ritz-Carlton Hong Kong)",
+      "enName": "The Ritz-Carlton Hong Kong",
+      "district": "西九龙",
+      "location": "九龙柯士甸道西1号环球贸易广场102-118层",
+      "distance": "全球最高酒店之一，九龙站ICC直达",
+      "stars": 5,
+      "rating": 9.6,
+      "reviewCount": 4120,
+      "verdict": "云端奢享",
+      "dealTag": "会员专享价",
+      "price": 3700,
+      "originalPrice": 4800,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-12-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "50 平方米",
+          "bed": "1张特大双人床 / 110层云端天际景",
+          "bathroom": "独立全景大理石卫浴 (配浸泡浴缸)",
+          "breakfast": "含双人云端全景自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 3700,
+          "origPrice": 4800,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-12-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "58 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 4995,
+          "origPrice": 6480,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "香港W酒店 (W Hong Kong)",
+      "enName": "W Hong Kong",
+      "district": "西九龙",
+      "location": "九龙柯士甸道西1号圆方Elements",
+      "distance": "直通九龙站与机场快线，邻近西九文化区",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 3680,
+      "verdict": "时尚潮流",
+      "dealTag": "热卖推荐",
+      "price": 1800,
+      "originalPrice": 2350,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-13-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "40 平方米",
+          "bed": "1张标志性W特色大床",
+          "bathroom": "独立时尚卫浴 (配水疗淋浴及独立浴缸)",
+          "breakfast": "含 Kitchen 餐厅双人活力早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1800,
+          "origPrice": 2350,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-13-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "48 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2430,
+          "origPrice": 3172,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "香港嘉里酒店 (Kerry Hotel Hong Kong)",
+      "enName": "Kerry Hotel Hong Kong",
+      "district": "红磡",
+      "location": "九龙红磡湾红鸾道38号",
+      "distance": "坐拥无遮挡红磡维港海滨，紧邻黄埔站",
+      "stars": 5,
+      "rating": 9.2,
+      "reviewCount": 3340,
+      "verdict": "度假首选",
+      "dealTag": "会员专享价",
+      "price": 1550,
+      "originalPrice": 2050,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-14-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "42 平方米",
+          "bed": "1张特大床 / 超大海景阳台视角",
+          "bathroom": "独立大理石干湿分离卫浴",
+          "breakfast": "含大湾咖啡厅丰富自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1550,
+          "origPrice": 2050,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-14-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "50 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2092,
+          "origPrice": 2767,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "香港朗廷酒店 (The Langham Hong Kong)",
+      "enName": "The Langham Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀北京道8号",
+      "distance": "紧邻海港城与广东道奢品街，地理位置极佳",
+      "stars": 5,
+      "rating": 9.1,
+      "reviewCount": 4100,
+      "verdict": "欧式典雅",
+      "dealTag": "热卖推荐",
+      "price": 1450,
+      "originalPrice": 1900,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-15-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "32 平方米",
+          "bed": "1张特大双人床",
+          "bathroom": "独立大理石浴室 (配经典爪足浴缸)",
+          "breakfast": "含双人 The Food Gallery 早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1450,
+          "origPrice": 1900,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-15-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "40 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1957,
+          "origPrice": 2565,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "香港马哥孛罗香港酒店 (Marco Polo Hongkong Hotel)",
+      "enName": "Marco Polo Hongkong Hotel",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀广东道3号海港城",
+      "distance": "直通海港城商场，天星码头旁",
+      "stars": 5,
+      "rating": 8.7,
+      "reviewCount": 3920,
+      "verdict": "地段优越",
+      "dealTag": "会员专享价",
+      "price": 1100,
+      "originalPrice": 1450,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-16-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "30 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立卫浴 (带淋浴及浴缸)",
+          "breakfast": "含双人马哥孛罗咖啡厅早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1100,
+          "origPrice": 1450,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-16-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "38 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1485,
+          "origPrice": 1957,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "香港九龙香格里拉大酒店 (Kowloon Shangri-La)",
+      "enName": "Kowloon Shangri-La",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀东部么地道64号",
+      "distance": "近尖东站，直面维多利亚港夜景",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 3780,
+      "verdict": "经典典雅",
+      "dealTag": "热卖推荐",
+      "price": 1480,
+      "originalPrice": 1950,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-17-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "42 平方米",
+          "bed": "1张特大床 (超大客房空间)",
+          "bathroom": "独立豪华大理石卫浴",
+          "breakfast": "含双人 Cafe Kool 国际自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1480,
+          "origPrice": 1950,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-17-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "50 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1998,
+          "origPrice": 2632,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "香港君悦酒店 (Grand Hyatt Hong Kong)",
+      "enName": "Grand Hyatt Hong Kong",
+      "district": "湾仔",
+      "location": "港岛湾仔港湾道1号",
+      "distance": "直通香港会议展览中心与会展站",
+      "stars": 5,
+      "rating": 9.3,
+      "reviewCount": 3600,
+      "verdict": "商务奢华",
+      "dealTag": "会员专享价",
+      "price": 2150,
+      "originalPrice": 2800,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-18-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "40 平方米",
+          "bed": "1张豪华特大床",
+          "bathroom": "独立大理石卫浴 (带智能镜及浴缸)",
+          "breakfast": "含 Grand Cafe 丰盛双人早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 2150,
+          "origPrice": 2800,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-18-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "48 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2902,
+          "origPrice": 3780,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "香港铜锣湾皇冠假日酒店 (Crowne Plaza Causeway Bay)",
+      "enName": "Crowne Plaza Causeway Bay",
+      "district": "铜锣湾",
+      "location": "港岛铜锣湾礼顿道8号",
+      "distance": "对望跑马地马场，步行至时代广场3分钟",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 2450,
+      "verdict": "城市核心",
+      "dealTag": "热卖推荐",
+      "price": 1250,
+      "originalPrice": 1600,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-19-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "34 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立玻璃干湿分离卫浴",
+          "breakfast": "含顶楼俱乐部景观自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1250,
+          "origPrice": 1600,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-19-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "42 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1687,
+          "origPrice": 2160,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "香港柏宁铂尔曼酒店 (The Park Lane Hong Kong, a Pullman Hotel)",
+      "enName": "The Park Lane Hong Kong, a Pullman Hotel",
+      "district": "铜锣湾",
+      "location": "港岛铜锣湾告士打道310号",
+      "distance": "正对维多利亚公园，临近铜锣湾地铁站",
+      "stars": 5,
+      "rating": 8.8,
+      "reviewCount": 3850,
+      "verdict": "现代活力",
+      "dealTag": "会员专享价",
+      "price": 1180,
+      "originalPrice": 1550,
+      "hasBreakfast": true,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-20-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "30 平方米",
+          "bed": "1张特大双人床",
+          "bathroom": "独立现代卫浴 (带雨淋花洒)",
+          "breakfast": "含 PLAYT 丰富自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1180,
+          "origPrice": 1550,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-20-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "38 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1593,
+          "origPrice": 2092,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "香港富豪香港酒店 (Regal Hongkong Hotel)",
+      "enName": "Regal Hongkong Hotel",
+      "district": "铜锣湾",
+      "location": "港岛铜锣湾怡和街88号",
+      "distance": "铜锣湾购物商圈核心，欧陆古典风格",
+      "stars": 5,
+      "rating": 8.5,
+      "reviewCount": 2900,
+      "verdict": "经典便利",
+      "dealTag": "热卖推荐",
+      "price": 880,
+      "originalPrice": 1150,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-21-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "28 平方米",
+          "bed": "1张双人床 或 2张单人床",
+          "bathroom": "独立卫浴 (配标准浴缸)",
+          "breakfast": "含双人御花园咖啡室早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 880,
+          "origPrice": 1150,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-21-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "36 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1188,
+          "origPrice": 1552,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "香港旺角康得思酒店 (Cordis, Hong Kong)",
+      "enName": "Cordis, Hong Kong",
+      "district": "旺角",
+      "location": "九龙旺角上海街555号",
+      "distance": "直通朗豪坊商场及旺角地铁站，吃喝极度便利",
+      "stars": 5,
+      "rating": 9.2,
+      "reviewCount": 5400,
+      "verdict": "地标首选",
+      "dealTag": "会员专享价",
+      "price": 1280,
+      "originalPrice": 1680,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-22-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "32 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立大理石卫浴 (配大浴缸与独立淋浴间)",
+          "breakfast": "含 The Place 知名双人自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1280,
+          "origPrice": 1680,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-22-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "40 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1728,
+          "origPrice": 2268,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "香港帝京酒店 (Royal Plaza Hotel)",
+      "enName": "Royal Plaza Hotel",
+      "district": "旺角",
+      "location": "九龙旺角太子道西193号",
+      "distance": "直通新世纪广场商场及旺角东火车站",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 4980,
+      "verdict": "亲子舒适",
+      "dealTag": "热卖推荐",
+      "price": 950,
+      "originalPrice": 1250,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-23-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "33 平方米",
+          "bed": "2张宽敞大床 (适合家庭入住)",
+          "bathroom": "独立干湿分离卫浴 (带浴缸)",
+          "breakfast": "含双人花月庭自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 950,
+          "origPrice": 1250,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-23-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "41 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1282,
+          "origPrice": 1687,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "香港千禧新世界香港酒店 (New World Millennium Hong Kong)",
+      "enName": "New World Millennium Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀东么地道72号",
+      "distance": "尖东海旁，距离红磡站步行约6分钟",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 3200,
+      "verdict": "海滨优选",
+      "dealTag": "会员专享价",
+      "price": 1150,
+      "originalPrice": 1500,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-24-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "35 平方米",
+          "bed": "1张特大双人床",
+          "bathroom": "独立大理石卫浴 (配卫洗丽及浴缸)",
+          "breakfast": "含双人东来顺风格特色早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1150,
+          "origPrice": 1500,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-24-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "43 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1552,
+          "origPrice": 2025,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "香港尖沙咀凯悦酒店 (Hyatt Regency Hong Kong, Tsim Sha Tsui)",
+      "enName": "Hyatt Regency Hong Kong, Tsim Sha Tsui",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀河内道18号 K11",
+      "distance": "直通K11商场与尖沙咀/尖东双地铁站",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 3900,
+      "verdict": "枢纽便利",
+      "dealTag": "热卖推荐",
+      "price": 1350,
+      "originalPrice": 1750,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-25-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "31 平方米",
+          "bed": "1张大床 (King Bed)",
+          "bathroom": "独立干湿分离卫浴",
+          "breakfast": "含咖啡厅双人精选自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1350,
+          "origPrice": 1750,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-25-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "39 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1822,
+          "origPrice": 2362,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "香港沙田凯悦酒店 (Hyatt Regency Hong Kong, Sha Tin)",
+      "enName": "Hyatt Regency Hong Kong, Sha Tin",
+      "district": "沙田",
+      "location": "新界沙田泽祥街18号",
+      "distance": "临近港铁大学站，依山傍海绿意度假风",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 2800,
+      "verdict": "山海度假",
+      "dealTag": "会员专享价",
+      "price": 920,
+      "originalPrice": 1200,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-26-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "38 平方米",
+          "bed": "1张特大床 (九肚山景/吐露港景)",
+          "bathroom": "独立大理石干湿分离卫浴",
+          "breakfast": "含双人沙田咖啡厅自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 920,
+          "origPrice": 1200,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-26-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "46 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1242,
+          "origPrice": 1620,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "香港沙田万怡酒店 (Courtyard by Marriott Hong Kong Sha Tin)",
+      "enName": "Courtyard by Marriott Hong Kong Sha Tin",
+      "district": "沙田",
+      "location": "新界沙田安平街1号",
+      "distance": "城门河畔，临近石门站，性价比极高",
+      "stars": 4,
+      "rating": 8.7,
+      "reviewCount": 3100,
+      "verdict": "舒适商务",
+      "dealTag": "热卖推荐",
+      "price": 680,
+      "originalPrice": 900,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-27-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "27 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立现代淋浴间",
+          "breakfast": "含双人 MoMo Cafe 自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 680,
+          "origPrice": 900,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-27-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "35 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 918,
+          "origPrice": 1215,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "香港沙田帝都酒店 (Royal Park Hotel)",
+      "enName": "Royal Park Hotel",
+      "district": "沙田",
+      "location": "新界沙田白鹤汀街8号",
+      "distance": "直通新城市广场大型购物中心与沙田站",
+      "stars": 4,
+      "rating": 8.8,
+      "reviewCount": 3600,
+      "verdict": "购物便捷",
+      "dealTag": "会员专享价",
+      "price": 780,
+      "originalPrice": 1020,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-28-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "30 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立干湿分离卫浴",
+          "breakfast": "含双人 2+2 Cafe 自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 780,
+          "origPrice": 1020,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-28-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "38 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1053,
+          "origPrice": 1377,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "香港诺富特世纪酒店 (Novotel Century Hong Kong)",
+      "enName": "Novotel Century Hong Kong",
+      "district": "湾仔",
+      "location": "港岛湾仔谢斐道238号",
+      "distance": "湾仔美食区中心，步行至会展中心约8分钟",
+      "stars": 4,
+      "rating": 8.6,
+      "reviewCount": 2900,
+      "verdict": "法式连锁",
+      "dealTag": "热卖推荐",
+      "price": 750,
+      "originalPrice": 980,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-29-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "23 平方米",
+          "bed": "1张标准双人床",
+          "bathroom": "独立现代卫浴",
+          "breakfast": "含 Le Cafe 双人自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 750,
+          "origPrice": 980,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-29-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "31 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1012,
+          "origPrice": 1323,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "香港百乐酒店 (Park Hotel Hong Kong)",
+      "enName": "Park Hotel Hong Kong",
+      "district": "尖沙咀",
+      "location": "九龙尖沙咀漆咸道南61-65号",
+      "distance": "尖沙咀核心区，周边餐饮购物密集",
+      "stars": 4,
+      "rating": 8.6,
+      "reviewCount": 3300,
+      "verdict": "出行便捷",
+      "dealTag": "会员专享价",
+      "price": 720,
+      "originalPrice": 950,
+      "hasBreakfast": false,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-30-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "25 平方米",
+          "bed": "1张大床 或 2张单人床",
+          "bathroom": "独立干湿分离卫浴",
+          "breakfast": "不含早餐 (可于入住时自选加购)",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 720,
+          "origPrice": 950,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-30-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "33 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 972,
+          "origPrice": 1282,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "香港湾仔睿景酒店 (Kew Green Hotel Wanchai)",
+      "enName": "Kew Green Hotel Wanchai",
+      "district": "湾仔",
+      "location": "港岛湾仔轩尼诗道41-49号",
+      "distance": "紧邻太古广场三座与湾仔站，交通四通八达",
+      "stars": 4,
+      "rating": 8.7,
+      "reviewCount": 2400,
+      "verdict": "英伦简约",
+      "dealTag": "热卖推荐",
+      "price": 690,
+      "originalPrice": 890,
+      "hasBreakfast": false,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-31-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "21 平方米",
+          "bed": "1张标准双人床",
+          "bathroom": "独立英伦格调卫浴",
+          "breakfast": "不含早餐 (可于入住时自选加购)",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 690,
+          "origPrice": 890,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-31-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "29 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 931,
+          "origPrice": 1201,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "香港中环荷李活道木的地酒店 (Madera Hollywood)",
+      "enName": "Madera Hollywood",
+      "district": "中环",
+      "location": "港岛中环荷李活道53-55号",
+      "distance": "中环SoHo苏豪区，好莱坞复古精品设计",
+      "stars": 4,
+      "rating": 9.1,
+      "reviewCount": 1420,
+      "verdict": "复古精品套房",
+      "dealTag": "会员专享价",
+      "price": 1450,
+      "originalPrice": 1880,
+      "hasBreakfast": true,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-32-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "54 平方米",
+          "bed": "1房1厅全套房 (配微波炉与客厅)",
+          "bathroom": "独立奢华干湿分离浴室",
+          "breakfast": "含每日欧陆早餐送到客房",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1450,
+          "origPrice": 1880,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-32-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "62 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1957,
+          "origPrice": 2538,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "香港宜必思中上环酒店 (ibis Hong Kong Central & Sheung Wan)",
+      "enName": "ibis Hong Kong Central & Sheung Wan",
+      "district": "上环",
+      "location": "港岛上环德辅道西28号",
+      "distance": "上环码头及电车总站旁，高层开阔海景",
+      "stars": 3,
+      "rating": 8.5,
+      "reviewCount": 4600,
+      "verdict": "超高性价比",
+      "dealTag": "热卖推荐",
+      "price": 520,
+      "originalPrice": 680,
+      "hasBreakfast": false,
+      "hasPool": false,
+      "hasCancel": true,
+      "hasGym": false,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-33-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "17 平方米",
+          "bed": "1张标准大床 (直面维港部分海景)",
+          "bathroom": "独立模块化淋浴卫浴",
+          "breakfast": "不含早餐 (可于入住时自选加购)",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 520,
+          "origPrice": 680,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-33-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "25 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 702,
+          "origPrice": 918,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "香港华丽海景酒店 (Best Western Plus Hotel Hong Kong)",
+      "enName": "Best Western Plus Hotel Hong Kong",
+      "district": "西营盘",
+      "location": "港岛西营盘德辅道西308号",
+      "distance": "港铁西营盘站旁，高楼层视野宽阔",
+      "stars": 4,
+      "rating": 8.2,
+      "reviewCount": 2800,
+      "verdict": "经济实用",
+      "dealTag": "会员专享价",
+      "price": 450,
+      "originalPrice": 600,
+      "hasBreakfast": false,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-34-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "19 平方米",
+          "bed": "1张标准双人床",
+          "bathroom": "独立私人卫浴 (带淋浴间)",
+          "breakfast": "不含早餐 (可于入住时自选加购)",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 450,
+          "origPrice": 600,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-34-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "27 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 607,
+          "origPrice": 810,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "香港北角维港凯悦尚萃酒店 (Hyatt Centric Victoria Harbour)",
+      "enName": "Hyatt Centric Victoria Harbour",
+      "district": "北角",
+      "location": "港岛北角北角邨里1号",
+      "distance": "直面东区维港海景，顶楼无边际泳池超网红",
+      "stars": 5,
+      "rating": 9.3,
+      "reviewCount": 4400,
+      "verdict": "网红无边际海景",
+      "dealTag": "热卖推荐",
+      "price": 1250,
+      "originalPrice": 1650,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-35-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "31 平方米",
+          "bed": "1张特大双人床 / 180度纯海景落地窗",
+          "bathroom": "独立现代卫浴 (配备品牌水疗备品)",
+          "breakfast": "含 The Farmhouse 双人自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1250,
+          "origPrice": 1650,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-35-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "39 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1687,
+          "origPrice": 2227,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "香港东隅酒店 (EAST Hong Kong)",
+      "enName": "EAST Hong Kong",
+      "district": "鲗鱼涌",
+      "location": "港岛太古城太古城道29号",
+      "distance": "直通太古城中心商场与太古站，现代轻奢风",
+      "stars": 4,
+      "rating": 9.1,
+      "reviewCount": 2600,
+      "verdict": "潮流设计",
+      "dealTag": "会员专享价",
+      "price": 1080,
+      "originalPrice": 1400,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-36-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "28 平方米",
+          "bed": "1张特大床 (配恐龙蛋泡澡浴缸)",
+          "bathroom": "独立干湿分离大理石浴室",
+          "breakfast": "含 FEAST 双人活力早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1080,
+          "origPrice": 1400,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-36-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "36 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1458,
+          "origPrice": 1890,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "香港数码港艾美酒店 (Le Meridien Hong Kong, Cyberport)",
+      "enName": "Le Meridien Hong Kong, Cyberport",
+      "district": "薄扶林",
+      "location": "港岛数码港道100号",
+      "distance": "南区海景绿意环抱，远离喧嚣宠物友好",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 1750,
+      "verdict": "南区悠闲",
+      "dealTag": "热卖推荐",
+      "price": 1100,
+      "originalPrice": 1450,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-37-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "35 平方米",
+          "bed": "1张特大双人床 (全智能客房控制)",
+          "bathroom": "独立大理石卫浴 (带深浸泡浴缸)",
+          "breakfast": "含 South Island 双人海景早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1100,
+          "origPrice": 1450,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-37-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "43 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1485,
+          "origPrice": 1957,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "香港海洋公园万豪酒店 (Hong Kong Ocean Park Marriott Hotel)",
+      "enName": "Hong Kong Ocean Park Marriott Hotel",
+      "district": "黄竹坑",
+      "location": "港岛黄竹坑黄竹坑道180号",
+      "distance": "港铁海洋公园站直达，超大礁湖泳池亲子度假",
+      "stars": 5,
+      "rating": 9.2,
+      "reviewCount": 3800,
+      "verdict": "亲子度假首选",
+      "dealTag": "会员专享价",
+      "price": 1380,
+      "originalPrice": 1800,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-38-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "38 平方米",
+          "bed": "2张双人床 / 礁湖泳池景观",
+          "bathroom": "独立干湿分离卫浴 (配儿童洗漱包)",
+          "breakfast": "含海湾餐厅丰富亲子自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1380,
+          "origPrice": 1800,
+          "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-38-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "46 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1863,
+          "origPrice": 2430,
+          "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "香港富丽敦海洋公园酒店 (The Fullerton Ocean Park Hotel)",
+      "enName": "The Fullerton Ocean Park Hotel",
+      "district": "黄竹坑",
+      "location": "港岛香港仔海洋径3号",
+      "distance": "全海景度假五星酒店，无边际海景泳池",
+      "stars": 5,
+      "rating": 9.3,
+      "reviewCount": 2900,
+      "verdict": "南区奢华海滨",
+      "dealTag": "热卖推荐",
+      "price": 1950,
+      "originalPrice": 2600,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-39-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "40 平方米",
+          "bed": "1张特大双人床 / 南中国海壮阔海景",
+          "bathroom": "独立奢华全海景卫浴 (带观景浴缸)",
+          "breakfast": "含星耀厅全海景双人自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1950,
+          "origPrice": 2600,
+          "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-39-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "48 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 2632,
+          "origPrice": 3510,
+          "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "香港东涌世茂喜来登酒店 (Sheraton Hong Kong Tung Chung Hotel)",
+      "enName": "Sheraton Hong Kong Tung Chung Hotel",
+      "district": "东涌",
+      "location": "新界大屿山东涌怡东路9号",
+      "distance": "近香港国际机场与港珠澳大桥，附免费穿梭巴士",
+      "stars": 5,
+      "rating": 9.0,
+      "reviewCount": 3100,
+      "verdict": "机场度假首选",
+      "dealTag": "会员专享价",
+      "price": 1050,
+      "originalPrice": 1380,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-40-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "35 平方米",
+          "bed": "1张特大双人床 (大屿山海景)",
+          "bathroom": "独立大理石干湿分离卫浴",
+          "breakfast": "含屿坊双人丰盛自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1050,
+          "origPrice": 1380,
+          "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-40-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "43 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1417,
+          "origPrice": 1863,
+          "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "香港天际万豪酒店 (Hong Kong SkyCity Marriott Hotel)",
+      "enName": "Hong Kong SkyCity Marriott Hotel",
+      "district": "赤鱲角",
+      "location": "新界赤鱲角香港国际机场航天城东路1号",
+      "distance": "紧邻亚洲国际博览馆与机场，看演唱会首选",
+      "stars": 5,
+      "rating": 8.9,
+      "reviewCount": 3600,
+      "verdict": "博览会与航运",
+      "dealTag": "热卖推荐",
+      "price": 1180,
+      "originalPrice": 1520,
+      "hasBreakfast": true,
+      "hasPool": true,
+      "hasCancel": true,
+      "hasGym": true,
+      "hasPrivateBath": true,
+      "images": [
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
+      ],
+      "rooms": [
+        {
+          "id": "room-41-1",
+          "name": "标准精选客房 (Superior Room)",
+          "size": "35 平方米",
+          "bed": "1张特大双人床 或 2张单人床",
+          "bathroom": "独立大理石干湿分离卫浴",
+          "breakfast": "含天际咖啡厅双人自助早餐",
+          "cancel": "入住前24小时内可免费取消",
+          "price": 1180,
+          "origPrice": 1520,
+          "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "room-41-2",
+          "name": "豪华景观客房 (Deluxe Premier View)",
+          "size": "43 平方米",
+          "bed": "1张特大双人床 (King Bed) / 尊享高楼层视野",
+          "bathroom": "独立干湿分离大理石卫浴 (带独立深浸浴缸)",
+          "breakfast": "含双人特色现做营养早餐",
+          "cancel": "入住前48小时内可免费取消",
+          "price": 1593,
+          "origPrice": 2052,
+          "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80"
         }
       ]
     }
   ];
 
-  // Global State
+  // 全局响应式状态
   let currentHotels = [...hotelsData];
   let selectedHotel = null;
   let selectedRoom = null;
   let discountAmount = 0;
 
-  // Render Hotel List
+  // 渲染酒店列表
   function renderHotelList(hotels) {
     const container = document.getElementById("hotelListContainer");
-    document.getElementById("hotelCount").innerText = `${hotels.length} Properties in California`;
+    document.getElementById("hotelCount").innerText = `${hotels.length} 间香港精选酒店`;
 
     if (hotels.length === 0) {
       container.innerHTML = `
-          <div style="background:white; padding:3rem; border-radius:12px; text-align:center; border:1px solid #e2e8f0;">
+          <div style="background:white; padding:3.5rem 1.5rem; border-radius:12px; text-align:center; border:1px solid #e2e8f0;">
             <i class="fa-solid fa-hotel" style="font-size:3rem; color:#cbd5e1; margin-bottom:1rem;"></i>
-            <h3 style="font-size:1.2rem; font-weight:700; color:#475569;">No Matching California Hotels Found</h3>
-            <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.4rem;">Try adjusting your price budget or clearing selected filters.</p>
-            <button class="sort-btn active" style="margin-top:1rem;" onclick="resetFilters()">Reset All Filters</button>
+            <h3 style="font-size:1.15rem; font-weight:700; color:#475569;">未找到符合当前条件的酒店</h3>
+            <p style="font-size:0.85rem; color:#94a3b8; margin-top:0.4rem;">请尝试调高价格上限或放宽筛选条件查看更多选项</p>
+            <button class="sort-btn active" style="margin-top:1rem;" onclick="resetFilters()">重置所有筛选条件</button>
           </div>
         `;
       return;
@@ -1468,16 +3428,18 @@
 
     container.innerHTML = hotels.map(hotel => `
         <div class="hotel-card">
+          <!-- 酒店首图 -->
           <div class="hotel-image-col">
-            <img src="${hotel.images[0]}" alt="${hotel.name}">
+            <img src="${hotel.images[0]}" alt="${hotel.name}" loading="lazy">
             <div class="tag-deal">${hotel.dealTag}</div>
           </div>
 
+          <!-- 酒店基础信息 -->
           <div class="hotel-info-col">
             <div class="hotel-header-info">
               <div class="hotel-stars">
                 ${'⭐'.repeat(hotel.stars)}
-                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars}-Star Hotel</span>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars} 星级酒店 • ${hotel.district}</span>
               </div>
               <h2 class="hotel-title">${hotel.name}</h2>
               <div class="hotel-location">
@@ -1487,39 +3449,41 @@
             </div>
 
             <div class="hotel-badges">
-              <span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay Recommended</span>
-              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> Outdoor Pool</span>' : ''}
-              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> Fitness Center</span>' : ''}
-              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> Breakfast Included</span>' : ''}
+              <span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay 优选</span>
+              <span class="badge-pill"><i class="fa-solid fa-bath"></i> 独立卫浴</span>
+              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> 含自助早餐</span>' : '<span class="badge-pill"><i class="fa-solid fa-mug-hot"></i> 可加购早餐</span>'}
+              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> 景观泳池</span>' : ''}
+              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> 健身房</span>' : ''}
             </div>
 
             <div class="hotel-perks">
-              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> Free cancellation available</div>' : ''}
-              <div><i class="fa-solid fa-bolt"></i> Instant Confirmation • No Foreign Transaction Fee</div>
+              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> 提供限时免费取消政策</div>' : '<div><i class="fa-solid fa-circle-check"></i> 特惠不可退订保障</div>'}
+              <div><i class="fa-solid fa-bolt"></i> 即时出票确认 • 无跨境交易手续费</div>
             </div>
           </div>
 
+          <!-- 评分与价格操作 -->
           <div class="hotel-pricing-col">
             <div class="review-score-box">
               <div class="review-text">
                 <div class="review-verdict">${hotel.verdict}</div>
-                <div class="review-sub">${hotel.reviewCount.toLocaleString()} verified reviews</div>
+                <div class="review-sub">${hotel.reviewCount.toLocaleString()} 条真实住客评价</div>
               </div>
               <div class="score-badge">${hotel.rating}</div>
             </div>
 
             <div class="price-container">
-              <div class="original-price">$${hotel.originalPrice.toLocaleString()}</div>
+              <div class="original-price">HK$ ${hotel.originalPrice.toLocaleString()}</div>
               <div>
-                <span class="currency-symbol">$</span>
+                <span class="currency-symbol">HK$ </span>
                 <span class="main-price">${hotel.price.toLocaleString()}</span>
-                <span style="font-size:0.8rem; color:#64748b;"> /night</span>
+                <span style="font-size:0.8rem; color:#64748b;"> /每晚起</span>
               </div>
-              <div class="price-note">Excludes local taxes & resort fees</div>
+              <div class="price-note">包含税费与服务附加费</div>
             </div>
 
             <button class="btn-select-room" onclick="openRoomModal(${hotel.id})">
-              <span>View Rooms</span>
+              <span>查看房型</span>
               <i class="fa-solid fa-chevron-right" style="font-size:0.8rem;"></i>
             </button>
           </div>
@@ -1527,7 +3491,7 @@
       `).join('');
   }
 
-  // Open Room Selection Modal
+  // 打开房型选择弹窗 (展示详细 Metadata)
   function openRoomModal(hotelId) {
     selectedHotel = hotelsData.find(h => h.id === hotelId);
     if (!selectedHotel) return;
@@ -1535,11 +3499,11 @@
     document.getElementById("modalHotelTitle").innerText = selectedHotel.name;
     document.getElementById("modalHotelSubtitle").innerText = `${selectedHotel.location} • ${selectedHotel.distance}`;
 
-    // Gallery Photos
+    // 相册展示
     const gallery = document.getElementById("modalGallery");
-    gallery.innerHTML = selectedHotel.images.map(img => `<img src="${img}" alt="Hotel View">`).join('');
+    gallery.innerHTML = selectedHotel.images.map(img => `<img src="${img}" alt="酒店实景">`).join('');
 
-    // Room Types
+    // 房型详细列表与 Metadata
     const roomList = document.getElementById("modalRoomList");
     roomList.innerHTML = selectedHotel.rooms.map(room => `
         <div class="room-card">
@@ -1548,28 +3512,53 @@
           </div>
           <div class="room-info-box">
             <div class="room-title">${room.name}</div>
-            <div class="room-features">
-              <span><i class="fa-solid fa-vector-square"></i> ${room.size}</span>
-              <span><i class="fa-solid fa-bed"></i> ${room.bed}</span>
-              <span><i class="fa-solid fa-wifi"></i> High-Speed Wi-Fi</span>
+
+            <!-- Metadata 核心元数据展示 -->
+            <div class="room-metadata-grid">
+              <div class="room-meta-item">
+                <i class="fa-solid fa-vector-square"></i>
+                <span>面积：<strong>${room.size}</strong></span>
+              </div>
+              <div class="room-meta-item">
+                <i class="fa-solid fa-bed"></i>
+                <span>床型：<strong>${room.bed}</strong></span>
+              </div>
+              <div class="room-meta-item" style="grid-column: span 2;">
+                <i class="fa-solid fa-bath"></i>
+                <span>浴室：<strong>${room.bathroom}</strong></span>
+              </div>
+              <div class="room-meta-item" style="grid-column: span 2;">
+                <i class="fa-solid fa-utensils"></i>
+                <span>早餐礼遇：<strong>${room.breakfast}</strong></span>
+              </div>
+              <div class="room-meta-item">
+                <i class="fa-solid fa-wifi"></i>
+                <span>高速 Wi-Fi：<strong>免费提供</strong></span>
+              </div>
+              <div class="room-meta-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>商圈：<strong>${selectedHotel.district}</strong></span>
+              </div>
             </div>
+
+            <!-- 取消政策与权益 -->
             <div class="room-benefits">
-              <div class="room-benefit-item"><i class="fa-solid fa-check"></i> ${room.breakfast}</div>
-              <div class="room-benefit-item"><i class="fa-solid fa-shield-halved"></i> ${room.cancel}</div>
-              <div class="room-benefit-item muted"><i class="fa-regular fa-clock"></i> Complimentary 1:00 PM Late Checkout (subject to availability)</div>
+              <div class="room-benefit-item"><i class="fa-solid fa-circle-check"></i> ${room.cancel}</div>
+              <div class="room-benefit-item muted"><i class="fa-regular fa-clock"></i> 视房态可享延迟至下午 14:00 退房</div>
             </div>
           </div>
+
           <div class="room-booking-box">
             <div class="room-price-info">
-              <span class="room-orig-price">$${(room.origPrice * 2).toLocaleString()}</span>
+              <span class="room-orig-price">HK$ ${(room.origPrice * 2).toLocaleString()}</span>
               <div>
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">HK$ </span>
                 <span class="room-now-price">${(room.price * 2).toLocaleString()}</span>
               </div>
-              <span style="font-size:0.72rem; color:var(--text-light);">Total for 2 nights</span>
+              <span style="font-size:0.72rem; color:var(--text-light);">2晚总价 (含税费)</span>
             </div>
             <button class="btn-book-room" onclick="openCheckoutModal('${room.id}')">
-              Reserve Now <i class="fa-solid fa-arrow-right"></i>
+              立即预订 <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
         </div>
@@ -1582,7 +3571,7 @@
     document.getElementById("roomModal").classList.remove("active");
   }
 
-  // Open Checkout Modal
+  // 打开结账支付弹窗
   function openCheckoutModal(roomId) {
     selectedRoom = selectedHotel.rooms.find(r => r.id === roomId);
     if (!selectedRoom) return;
@@ -1590,17 +3579,17 @@
     closeRoomModal();
 
     document.getElementById("checkoutHotelName").innerText = selectedHotel.name;
-    document.getElementById("checkoutRoomName").innerText = selectedRoom.name;
+    document.getElementById("checkoutRoomName").innerText = `${selectedRoom.name} (${selectedRoom.size} | ${selectedRoom.breakfast})`;
 
     const baseTotal = selectedRoom.price * 2;
-    const tax = Math.round(baseTotal * 0.12);
+    const tax = Math.round(baseTotal * 0.1);
     discountAmount = 0;
     document.getElementById("couponInput").value = "";
-    document.getElementById("checkoutDiscount").innerText = `- $0`;
+    document.getElementById("checkoutDiscount").innerText = `- HK$ 0`;
 
-    document.getElementById("checkoutBasePrice").innerText = `$${baseTotal.toLocaleString()}`;
-    document.getElementById("checkoutTaxPrice").innerText = `$${tax.toLocaleString()}`;
-    document.getElementById("checkoutTotalPrice").innerText = `$${(baseTotal + tax).toLocaleString()}`;
+    document.getElementById("checkoutBasePrice").innerText = `HK$ ${baseTotal.toLocaleString()}`;
+    document.getElementById("checkoutTaxPrice").innerText = `HK$ ${tax.toLocaleString()}`;
+    document.getElementById("checkoutTotalPrice").innerText = `HK$ ${(baseTotal + tax).toLocaleString()}`;
 
     document.getElementById("checkoutModal").classList.add("active");
   }
@@ -1609,42 +3598,70 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
-  // Promo Code Application
+  // 优惠券核销
   function applyCoupon() {
     const code = document.getElementById("couponInput").value.trim().toUpperCase();
     const baseTotal = selectedRoom.price * 2;
-    const tax = Math.round(baseTotal * 0.12);
+    const tax = Math.round(baseTotal * 0.1);
 
-    if (code === "CALI10" || code === "SUMMER10" || code === "TRIP2026") {
+    if (code === "HK2026" || code === "TRIP10" || code === "SUMMER10") {
       discountAmount = Math.round((baseTotal + tax) * 0.1);
-      document.getElementById("checkoutDiscount").innerText = `- $${discountAmount.toLocaleString()}`;
+      document.getElementById("checkoutDiscount").innerText = `- HK$ ${discountAmount.toLocaleString()}`;
       const finalPrice = baseTotal + tax - discountAmount;
-      document.getElementById("checkoutTotalPrice").innerText = `$${finalPrice.toLocaleString()}`;
-      alert(`🎉 Promo code [${code}] applied! You saved 10% ($${discountAmount})!`);
+      document.getElementById("checkoutTotalPrice").innerText = `HK$ ${finalPrice.toLocaleString()}`;
+      alert(`🎉 优惠券 [${code}] 已成功套用！已为您立减 10% 房费 (HK$ ${discountAmount})`);
     } else {
-      alert("Invalid promo code. Please try 'CALI10'");
+      alert("无效或已过期的优惠码。请尝试输入：HK2026 或 TRIP10");
     }
   }
 
-  // Confirm Booking
+  // 确认预订并将数据同步至 Firebase (若已连接)
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
+    const guestPhone = document.getElementById("guestPhone").value.trim();
 
     if (!guestName || !guestEmail) {
-      alert("Please enter a valid guest name and email address.");
+      alert("请完整填写住客姓名及电子邮箱！");
       return;
     }
 
     closeCheckoutModal();
 
-    // Generate Random Booking Reference
-    const refNumber = "CAL-" + Math.floor(100000 + Math.random() * 900000);
+    const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
+    const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
+
+    // 填充确认页
     document.getElementById("bookingRef").innerText = refNumber;
     document.getElementById("successEmail").innerText = guestEmail;
     document.getElementById("successHotel").innerText = selectedHotel.name;
     document.getElementById("successRoom").innerText = selectedRoom.name;
-    document.getElementById("successPaid").innerText = document.getElementById("checkoutTotalPrice").innerText;
+    document.getElementById("successSize").innerText = selectedRoom.size;
+    document.getElementById("successBath").innerText = selectedRoom.bathroom;
+    document.getElementById("successBfast").innerText = selectedRoom.breakfast;
+    document.getElementById("successPaid").innerText = totalPaidStr;
+
+    // 可选：将预订记录存入 Firebase Realtime Database
+    try {
+      if (typeof firebase !== 'undefined' && firebase.database) {
+        firebase.database().ref('bookings/' + refNumber).set({
+          bookingRef: refNumber,
+          hotelId: selectedHotel.id,
+          hotelName: selectedHotel.name,
+          roomName: selectedRoom.name,
+          roomSize: selectedRoom.size,
+          bathroom: selectedRoom.bathroom,
+          breakfast: selectedRoom.breakfast,
+          guestName: guestName,
+          guestEmail: guestEmail,
+          guestPhone: guestPhone,
+          totalPaid: totalPaidStr,
+          createdAt: new Date().toISOString()
+        }).catch(err => console.log("Firebase sync skipped:", err));
+      }
+    } catch(err) {
+      console.log("Offline mode, skip db push.");
+    }
 
     document.getElementById("successModal").classList.add("active");
   }
@@ -1653,35 +3670,33 @@
     document.getElementById("successModal").classList.remove("active");
   }
 
-  // Budget Slider Filter
+  // 价格滑块过滤
   function updatePriceFilter(val) {
-    document.getElementById("priceRangeLabel").innerText = `Up to $${parseInt(val).toLocaleString()}`;
+    document.getElementById("priceRangeLabel").innerText = `最高 HK$ ${parseInt(val).toLocaleString()}`;
     filterHotels();
   }
 
-  // Combined Filter Logic
+  // 综合多维筛选
   function filterHotels() {
     const maxPrice = parseInt(document.getElementById("priceRange").value);
     const starCheckboxes = Array.from(document.querySelectorAll('input[name="star"]:checked')).map(cb => parseInt(cb.value));
     const ratingCheckboxes = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => parseFloat(cb.value));
 
     const filterBreakfast = document.getElementById("filterBreakfast").checked;
+    const filterPrivateBath = document.getElementById("filterPrivateBath").checked;
     const filterPool = document.getElementById("filterPool").checked;
     const filterCancel = document.getElementById("filterCancel").checked;
     const filterGym = document.getElementById("filterGym").checked;
 
     currentHotels = hotelsData.filter(hotel => {
-      // Price Filter
       if (hotel.price > maxPrice) return false;
-      // Star Filter
       if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
-      // Rating Filter
       if (ratingCheckboxes.length > 0) {
         const minRating = Math.min(...ratingCheckboxes);
         if (hotel.rating < minRating) return false;
       }
-      // Amenities Filter
       if (filterBreakfast && !hotel.hasBreakfast) return false;
+      if (filterPrivateBath && !hotel.hasPrivateBath) return false;
       if (filterPool && !hotel.hasPool) return false;
       if (filterCancel && !hotel.hasCancel) return false;
       if (filterGym && !hotel.hasGym) return false;
@@ -1692,13 +3707,14 @@
     renderHotelList(currentHotels);
   }
 
-  // Reset All Filters
+  // 重置所有筛选条件
   function resetFilters() {
-    document.getElementById("priceRange").value = 900;
-    document.getElementById("priceRangeLabel").innerText = "Up to $900";
+    document.getElementById("priceRange").value = 4500;
+    document.getElementById("priceRangeLabel").innerText = "最高 HK$ 4,500";
     document.querySelectorAll('input[name="star"]').forEach(cb => cb.checked = true);
-    document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = (cb.value === "8.0"));
     document.getElementById("filterBreakfast").checked = false;
+    document.getElementById("filterPrivateBath").checked = true;
     document.getElementById("filterPool").checked = false;
     document.getElementById("filterCancel").checked = false;
     document.getElementById("filterGym").checked = false;
@@ -1707,7 +3723,7 @@
     renderHotelList(currentHotels);
   }
 
-  // Sort Hotels
+  // 排序逻辑
   function sortHotels(type, btnElement) {
     document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
     btnElement.classList.add("active");
@@ -1725,7 +3741,7 @@
     renderHotelList(currentHotels);
   }
 
-  // Initialize
+  // 页面加载完成初始化
   window.addEventListener("DOMContentLoaded", () => {
     renderHotelList(hotelsData);
   });
