@@ -1,6 +1,8 @@
 // ==================== Firebase & 頁面追蹤初始化 ====================
 const pageStartTime = Date.now();
 const NEXT_PAGE_URL = "https://next-page-url.com";
+const POST_SURVEY_URL = "post_survey.html";
+let currentBookingData = null; // 暫存預訂數據
 
 let selectionSequence = [];
 let cart = [];

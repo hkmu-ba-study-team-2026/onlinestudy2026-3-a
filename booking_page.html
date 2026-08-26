@@ -1162,23 +1162,6 @@
       color: var(--text-main);
     }
 
-    .coupon-box {
-      display: flex;
-      gap: 0.5rem;
-      margin: 0.4rem 0;
-    }
-
-    .btn-apply-coupon {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0 1rem;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
     .success-modal-content {
       text-align: center;
       padding: 2.5rem 2rem;
@@ -1539,16 +1522,6 @@
                 <span>政府税项与服务费 (10%)</span>
                 <span id="checkoutTaxPrice">HK$ 276</span>
               </div>
-              <div class="summary-row" style="color:var(--success);" id="couponDiscountRow">
-                <span>优惠码立减</span>
-                <span id="checkoutDiscount">- HK$ 0</span>
-              </div>
-
-              <div class="coupon-box">
-                <input type="text" id="couponInput" class="form-input" style="padding:0.4rem 0.6rem; font-size:0.8rem;" placeholder="输入优惠码: HK2026 或 TRIP10">
-                <button class="btn-apply-coupon" onclick="applyCoupon()">兑换</button>
-              </div>
-
               <div class="summary-row total">
                 <span>实付总额 (含税)</span>
                 <span style="color:var(--accent);" id="checkoutTotalPrice">HK$ 3,036</span>
@@ -1568,29 +1541,29 @@
 
 <!-- 弹窗 3：预订成功凭证 -->
 <div class="modal-overlay" id="successModal">
-  <div class="modal-container" style="max-width: 520px;">
+  <div class="modal-container" style="max-width: 540px;">
     <div class="modal-body">
       <div class="success-modal-content">
-        <div class="success-icon">
-          <i class="fa-solid fa-check"></i>
+        <div class="success-icon" style="background: #e0f2fe; color: var(--primary);">
+          <i class="fa-solid fa-clipboard-check"></i>
         </div>
-        <h2 style="font-size:1.35rem; font-weight:800; color:var(--text-main);">预订成功！</h2>
-        <p style="font-size:0.88rem; color:var(--text-muted);">
-          您的酒店客房已确认锁定。电子凭证与入住指南已发送至 <strong id="successEmail">alex.wong@example.com</strong>
+        <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main);">模拟预订已完成！</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6;">
+          感谢您参与本次酒店预订行为研究。您的模拟预订决策已成功记录。<br>
+          请点击下方按钮前往填写<strong>事后问卷（Post-Survey）</strong>以完成整个实验。
         </p>
 
-        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1.1rem; width:100%; text-align:left; font-size:0.85rem; line-height:1.6;">
-          <p><strong>订单编号：</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">HK-8829104</span></p>
-          <p><strong>入住酒店：</strong> <span id="successHotel">香港唯港荟酒店</span></p>
-          <p><strong>所选客房：</strong> <span id="successRoom">ICON 36 经典城市客房</span></p>
-          <p><strong>客房面积：</strong> <span id="successSize">36 平方米</span></p>
-          <p><strong>卫浴配置：</strong> <span id="successBath">独立干湿分离卫浴</span></p>
-          <p><strong>早餐礼遇：</strong> <span id="successBfast">含双人自助早餐</span></p>
-          <p><strong>实付总金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">HK$ 3,036</span></p>
+        <!-- 预订决策摘要 -->
+        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1rem; width:100%; text-align:left; font-size:0.85rem; line-height:1.6;">
+          <p><strong>研究受试编号 / 订单号：</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">HK-8829104</span></p>
+          <p><strong>最终选定酒店：</strong> <span id="successHotel">香港唯港荟酒店</span></p>
+          <p><strong>所选房型：</strong> <span id="successRoom">ICON 36 经典城市客房</span></p>
+          <p><strong>总计金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">HK$ 3,036</span></p>
         </div>
 
-        <button class="btn-search" style="width:100%; margin-top:0.5rem;" onclick="closeSuccessModal()">
-          完成并返回浏览
+        <!-- 导向问卷按钮 -->
+        <button class="btn-search" style="width:100%; margin-top:0.8rem; font-size:1rem; padding:0.85rem;" onclick="goToPostSurvey()">
+          前往填写问卷 (Post-Survey) <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
     </div>
@@ -1868,8 +1841,6 @@
     const baseTotal = selectedRoom.price * 2;
     const tax = Math.round(baseTotal * 0.1);
     discountAmount = 0;
-    document.getElementById("couponInput").value = "";
-    document.getElementById("checkoutDiscount").innerText = `- HK$ 0`;
 
     document.getElementById("checkoutBasePrice").innerText = `HK$ ${baseTotal.toLocaleString()}`;
     document.getElementById("checkoutTaxPrice").innerText = `HK$ ${tax.toLocaleString()}`;
@@ -1882,22 +1853,6 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
-  function applyCoupon() {
-    const code = document.getElementById("couponInput").value.trim().toUpperCase();
-    const baseTotal = selectedRoom.price * 2;
-    const tax = Math.round(baseTotal * 0.1);
-
-    if (code === "HK2026" || code === "TRIP10" || code === "SUMMER10") {
-      discountAmount = Math.round((baseTotal + tax) * 0.1);
-      document.getElementById("checkoutDiscount").innerText = `- HK$ ${discountAmount.toLocaleString()}`;
-      const finalPrice = baseTotal + tax - discountAmount;
-      document.getElementById("checkoutTotalPrice").innerText = `HK$ ${finalPrice.toLocaleString()}`;
-      alert(`🎉 优惠券 [${code}] 已成功套用！已为您立减 10% 房费 (HK$ ${discountAmount})`);
-    } else {
-      alert("无效或已过期的优惠码。请尝试输入：HK2026 或 TRIP10");
-    }
-  }
-
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
@@ -1908,26 +1863,30 @@
       return;
     }
 
+    if (!selectedHotel || !selectedRoom) {
+      alert("请先选择酒店及客房！");
+      return;
+    }
+
     closeCheckoutModal();
 
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
-    document.getElementById("bookingRef").innerText = refNumber;
-    document.getElementById("successEmail").innerText = guestEmail;
-    document.getElementById("successHotel").innerText = selectedHotel.name;
-    document.getElementById("successRoom").innerText = selectedRoom.name;
-    document.getElementById("successSize").innerText = selectedRoom.size;
-    document.getElementById("successBath").innerText = selectedRoom.bathroom;
-    document.getElementById("successBfast").innerText = selectedRoom.breakfast;
-    document.getElementById("successPaid").innerText = totalPaidStr;
+    // 安全赋值至完成弹窗
+    if (document.getElementById("bookingRef")) document.getElementById("bookingRef").innerText = refNumber;
+    if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
+    if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
+    if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
+    // 写入 Firebase 实时数据库
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + refNumber).set({
           bookingRef: refNumber,
           hotelId: selectedHotel.id,
           hotelName: selectedHotel.name,
+          isRecommended: (selectedHotel.id === RECOMMENDED_HOTEL_ID),
           roomName: selectedRoom.name,
           roomSize: selectedRoom.size,
           bathroom: selectedRoom.bathroom,
@@ -1940,10 +1899,16 @@
         }).catch(err => console.log("Firebase sync skipped:", err));
       }
     } catch(err) {
-      console.log("Offline mode, skip db push.");
+      console.log("Offline mode, skip db push.", err);
     }
 
+    // 显示实验完成弹窗
     document.getElementById("successModal").classList.add("active");
+  }
+
+  // 导向 Post-Survey 问卷页面
+  function goToPostSurvey() {
+    window.location.href = 'post_survey.html';
   }
 
   function closeSuccessModal() {
