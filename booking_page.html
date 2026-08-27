@@ -846,6 +846,7 @@
       box-shadow: 0 6px 16px rgba(217, 119, 6, 0.45);
     }
 
+    /* Condition 1: 常规明显略过按钮 */
     .btn-skip-recommend {
       background: transparent;
       border: 1.5px solid #cbd5e1;
@@ -859,10 +860,32 @@
       transition: all 0.15s;
     }
 
-    .btn-skip-recommend:hover {
+    .btn-skip-recommend:hover:not(:disabled) {
       background: #f1f5f9;
       color: var(--text-main);
       border-color: #94a3b8;
+    }
+
+    /* Condition 2: 极小不显眼且带倒计时的略过按钮样式 */
+    .btn-skip-recommend.condition2-subtle {
+      border: none !important;
+      background: none !important;
+      color: #94a3b8 !important;
+      font-size: 0.72rem !important;
+      padding: 0.25rem !important;
+      text-decoration: underline !important;
+      cursor: pointer;
+      margin-top: 0.2rem;
+    }
+
+    .btn-skip-recommend.condition2-subtle:hover:not(:disabled) {
+      color: #64748b !important;
+    }
+
+    .btn-skip-recommend:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      text-decoration: none !important;
     }
 
     /* 右下角悬浮推荐卡片 Floating Popup */
@@ -901,16 +924,28 @@
       border: none;
       color: white;
       opacity: 0.85;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       cursor: pointer;
       padding: 2px 6px;
       border-radius: 4px;
-      transition: opacity 0.2s;
+      transition: all 0.2s;
+      line-height: 1;
     }
 
     .floating-popup-close:hover {
       opacity: 1;
       background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Condition 2: 右下角极小、不显眼的关闭按钮 */
+    .floating-popup-close.condition2-tiny {
+      font-size: 0.72rem !important;
+      opacity: 0.35 !important;
+      padding: 1px 4px !important;
+    }
+
+    .floating-popup-close.condition2-tiny:hover {
+      opacity: 0.75 !important;
     }
 
     .floating-popup-body {
@@ -1237,7 +1272,7 @@
       <button class="nav-btn"><i class="fa-solid fa-earth-americas"></i> HKD (港币 HK$)</button>
       <div class="user-profile">
         <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-        <span>Alex Wong (测试用户)</span>
+        <span>You</span>
       </div>
     </div>
   </div>
@@ -1247,7 +1282,7 @@
 <div class="hero-search-wrapper">
   <div class="search-container">
     <h1 class="hero-title">探索中国香港精选酒店与品质住宿</h1>
-    <p class="hero-subtitle">覆盖香港中环、尖沙咀、湾仔、铜锣湾及沙田等核心地段，尊享会员低至6折预订特惠</p>
+    <p class="hero-subtitle">覆盖香港中环、尖沙咀、湾仔、铜锣湾及沙田等核心地段</p>
 
     <div class="search-box">
       <!-- 目的地 -->
@@ -1264,7 +1299,7 @@
         <i class="fa-regular fa-calendar-days"></i>
         <div class="search-field-content">
           <span class="search-label">入住 — 退房日期</span>
-          <input type="text" class="search-input" value="2026年8月20日 - 8月22日 (共2晚)">
+          <input type="text" class="search-input" value="2027年8月20日 - 8月22日 (共2晚)">
         </div>
       </div>
 
@@ -1442,7 +1477,7 @@
         <button class="btn-accept-recommend" onclick="acceptRecommendation(42)">
           <i class="fa-solid fa-bed"></i> 立即查看该推荐酒店房型
         </button>
-        <button class="btn-skip-recommend" onclick="dismissRecommendation()">
+        <button class="btn-skip-recommend" id="btnSkipRecommend" onclick="dismissRecommendation()">
           略过推荐，浏览全部 42 间酒店
         </button>
       </div>
@@ -1481,19 +1516,15 @@
           <h4 style="font-weight:700; margin-bottom:0.9rem;">主要入住人信息</h4>
           <div class="form-group">
             <label class="form-label">住客姓名 (中文 / 英文)</label>
-            <input type="text" class="form-input" id="guestName" value="Alex Wong (黄家俊)">
+            <input type="text" class="form-input" id="guestName" value="Chan Tai Man">
           </div>
           <div class="form-group">
             <label class="form-label">电子邮箱 (用于接收预订确认函与凭证)</label>
-            <input type="email" class="form-input" id="guestEmail" value="alex.wong@example.com">
+            <input type="email" class="form-input" id="guestEmail" value="chan.tai.man@example.com">
           </div>
           <div class="form-group">
             <label class="form-label">联系电话</label>
-            <input type="tel" class="form-input" id="guestPhone" value="+852 9123 4567">
-          </div>
-          <div class="form-group">
-            <label class="form-label">特别要求 (选填)</label>
-            <input type="text" class="form-input" placeholder="例如：高楼层、远离电梯、无烟房、延迟退房">
+            <input type="tel" class="form-input" id="guestPhone" value="+852 6543 9876">
           </div>
 
           <h4 style="font-weight:700; margin:1.2rem 0 0.7rem 0;">支付方式 (模拟)</h4>
@@ -1511,7 +1542,7 @@
           <div class="checkout-summary-card">
             <h4 style="font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.5rem;" id="checkoutHotelName">酒店名称</h4>
             <p style="font-size:0.82rem; color:var(--text-muted);" id="checkoutRoomName">客房类型</p>
-            <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> 2026年8月20日 - 8月22日 (2晚)</p>
+            <p style="font-size:0.8rem; color:var(--text-light);"><i class="fa-regular fa-calendar"></i> 2027年8月20日 - 8月22日 (2晚)</p>
 
             <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.4rem;">
               <div class="summary-row">
@@ -1574,7 +1605,7 @@
 <div class="floating-recommend-popup" id="floatingRecommendPopup">
   <div class="floating-popup-header">
     <span><i class="fa-solid fa-crown"></i> 平台主推特选</span>
-    <button class="floating-popup-close" onclick="closeFloatingPopup()" title="关闭"><i class="fa-solid fa-xmark"></i></button>
+    <button class="floating-popup-close" id="btnFloatingClose" onclick="closeFloatingPopup()" title="关闭"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="floating-popup-body">
     <div class="floating-hotel-info">
@@ -1597,11 +1628,57 @@
 
 <!-- 业务交互脚本 -->
 <script>
+  // ==========================================
+  // 实验组态设定 (EXPERIMENT_CONDITION)
+  // 1: 常规模式 (正常明显略过按钮，随时可关)
+  // 2: 强推模式 (需等候 15 秒倒计时解锁略过，按钮极小极隐蔽)
+  // 注：亦支持在 URL 参数中传入 ?condition=1 或 ?condition=2 动态切换
+  // ==========================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2;
+
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
   let selectedHotel = null;
   let selectedRoom = null;
   let discountAmount = 0;
+  let countdownTimer = null;
   const RECOMMENDED_HOTEL_ID = 42; // 第42间酒店ID
+
+  // 根据实验组态初始化 UI 样式与倒数机制
+  function setupConditionUI() {
+    const skipBtn = document.getElementById("btnSkipRecommend");
+    const floatingCloseBtn = document.getElementById("btnFloatingClose");
+
+    if (EXPERIMENT_CONDITION === 2) {
+      // 1. 设置中央略过按钮为极小不显眼的文字样式并默认禁用
+      skipBtn.classList.add("condition2-subtle");
+      skipBtn.disabled = true;
+      let timeLeft = 15;
+      skipBtn.innerText = `略过推荐 (${timeLeft}s)`;
+
+      // 2. 右下角悬浮框关闭按钮极小化
+      floatingCloseBtn.classList.add("condition2-tiny");
+
+      // 3. 启动 15 秒倒计时
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          skipBtn.innerText = `略过推荐 (${timeLeft}s)`;
+        } else {
+          clearInterval(countdownTimer);
+          skipBtn.disabled = false;
+          skipBtn.innerText = "略过推荐，浏览全部酒店";
+        }
+      }, 1000);
+    } else {
+      // Condition 1: 常规样式与文案
+      skipBtn.classList.remove("condition2-subtle");
+      skipBtn.disabled = false;
+      skipBtn.innerText = "略过推荐，浏览全部 42 间酒店";
+      floatingCloseBtn.classList.remove("condition2-tiny");
+    }
+  }
 
   function updateFilterCounts() {
     if (typeof hotelsData === 'undefined' || !hotelsData.length) return;
@@ -1741,12 +1818,14 @@
   }
 
   function acceptRecommendation(hotelId) {
+    if (countdownTimer) clearInterval(countdownTimer);
     dismissRecommendation();
     closeFloatingPopup();
     openRoomModal(hotelId);
   }
 
   function dismissRecommendation() {
+    if (countdownTimer) clearInterval(countdownTimer);
     document.getElementById("entryRecommendModal").classList.remove("active");
   }
 
@@ -1873,17 +1952,17 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
-    // 安全赋值至完成弹窗
     if (document.getElementById("bookingRef")) document.getElementById("bookingRef").innerText = refNumber;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
-    // 写入 Firebase 实时数据库
+    // 写入 Firebase 实时数据库 (包含 experimentCondition 组态标记)
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + refNumber).set({
           bookingRef: refNumber,
+          experimentCondition: EXPERIMENT_CONDITION,
           hotelId: selectedHotel.id,
           hotelName: selectedHotel.name,
           isRecommended: (selectedHotel.id === RECOMMENDED_HOTEL_ID),
@@ -1902,13 +1981,13 @@
       console.log("Offline mode, skip db push.", err);
     }
 
-    // 显示实验完成弹窗
     document.getElementById("successModal").classList.add("active");
   }
 
-  // 导向 Post-Survey 问卷页面
   function goToPostSurvey() {
-    window.location.href = 'post_survey.html';
+    const bookingRef = document.getElementById("bookingRef") ? document.getElementById("bookingRef").innerText : "";
+    const isRec = selectedHotel ? (selectedHotel.id === RECOMMENDED_HOTEL_ID ? "1" : "0") : "0";
+    window.location.href = `post_survey.html?ref=${encodeURIComponent(bookingRef)}&cond=${EXPERIMENT_CONDITION}&rec=${isRec}`;
   }
 
   function closeSuccessModal() {
@@ -1985,6 +2064,7 @@
   window.addEventListener("DOMContentLoaded", () => {
     updateFilterCounts();
     renderHotelList(hotelsData);
+    setupConditionUI();
 
     setTimeout(() => {
       document.getElementById("entryRecommendModal").classList.add("active");
