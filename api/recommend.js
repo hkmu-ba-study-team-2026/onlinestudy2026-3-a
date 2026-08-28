@@ -1,13 +1,14 @@
-const { InferenceClient } = require("@huggingface/inference");
+const { GoogleGenAI } = require("@google/genai");
 
-const HF_TOKEN = process.env.HF_TOKEN;
-const MODEL_NAME = "Qwen/Qwen2.5-7B-Instruct";
+// 讀取環境變數中的 GEMINI_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const MODEL_NAME = "gemini-flash-latest";
 
-const client = HF_TOKEN ? new InferenceClient(HF_TOKEN) : null;
+const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
-async function getAiRecommendationsFromHf(products, preferences) {
-    if (!client) {
-        throw new Error("Missing HF_TOKEN");
+async function getAiRecommendationsFromGemini(products, preferences) {
+    if (!ai) {
+        throw new Error("Missing GEMINI_API_KEY");
     }
 
     const simplifiedProducts = products.map(p => ({
@@ -15,7 +16,7 @@ async function getAiRecommendationsFromHf(products, preferences) {
     }));
 
     const prompt = `
-You are an AI recommender system. Based on user preferences, write a short, engaging recommendation sentence (under 30 words) for the following 5 products:
+Based on the given context, write a short, engaging recommendation sentence (under 30 words) for the following products:
 User preferences: ${JSON.stringify(preferences)},
 Products: ${JSON.stringify(simplifiedProducts)}.
 
@@ -28,20 +29,21 @@ Output MUST be plain text only, exactly one short sentence, starting with "These
         setTimeout(() => reject(new Error("Model Request Timeout (7s)")), 7000)
     );
 
-    const apiPromise = client.chatCompletion({
+    const apiPromise = ai.models.generateContent({
         model: MODEL_NAME,
-        messages: [
-            { role: "system", content: "You are a helpful and concise shopping assistant." },
-            { role: "user", content: prompt }
-        ],
-        max_tokens: 100,
-        temperature: 0.3
+        contents: prompt,
+        config: {
+            systemInstruction: "You are a helpful and concise shopping assistant.",
+            maxOutputTokens: 100,
+            temperature: 0.3
+        }
     });
 
     const response = await Promise.race([apiPromise, timeoutPromise]);
 
-    let content = response.choices[0].message.content.trim();
+    let content = (response.text || "").trim();
 
+    // 清理可能的多餘 markdown 或引號
     if (content.startsWith("```")) {
         content = content.replace(/^```[a-zA-Z]*\n?/, "").replace(/\n?```$/, "").trim();
     }
@@ -63,7 +65,7 @@ module.exports = async (req, res) => {
         return res.status(200).json({
             status: "ok",
             message: "Vercel AI Function Active",
-            has_token: Boolean(HF_TOKEN)
+            has_token: Boolean(GEMINI_API_KEY)
         });
     }
 
@@ -77,7 +79,7 @@ module.exports = async (req, res) => {
 
             let result;
             try {
-                result = await getAiRecommendationsFromHf(products, preferences);
+                result = await getAiRecommendationsFromGemini(products, preferences);
             } catch (aiErr) {
                 console.log(`[AI Model Error/Timeout]: ${aiErr.message}. Switching to Fallback system.`);
                 result = 'Results generated based on your preference.';
