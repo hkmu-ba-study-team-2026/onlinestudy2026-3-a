@@ -769,6 +769,7 @@
       overflow: hidden;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
       border: 2px solid #f59e0b;
+      position: relative;
       animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -777,6 +778,29 @@
       color: white;
       padding: 1.25rem 1.5rem;
       position: relative;
+    }
+
+    /* Condition 2: 弹窗右上角极小且极淡的关闭叉号按钮 */
+    .recommend-top-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #ffffff;
+      opacity: 0.28;
+      font-size: 0.72rem;
+      cursor: pointer;
+      padding: 3px 5px;
+      line-height: 1;
+      border-radius: 3px;
+      display: none;
+      transition: all 0.2s;
+    }
+
+    .recommend-top-close-btn:hover {
+      opacity: 0.65;
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .recommend-pill-tag {
@@ -866,26 +890,13 @@
       border-color: #94a3b8;
     }
 
-    /* Condition 2: 极小不显眼且带倒计时的略过按钮样式 */
-    .btn-skip-recommend.condition2-subtle {
-      border: none !important;
-      background: none !important;
-      color: #94a3b8 !important;
-      font-size: 0.72rem !important;
-      padding: 0.25rem !important;
-      text-decoration: underline !important;
-      cursor: pointer;
-      margin-top: 0.2rem;
-    }
-
-    .btn-skip-recommend.condition2-subtle:hover:not(:disabled) {
-      color: #64748b !important;
-    }
-
-    .btn-skip-recommend:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-      text-decoration: none !important;
+    /* Condition 2 倒数提示文案 (小字且低调) */
+    .recommend-countdown-text {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      display: none;
+      margin-top: -0.2rem;
     }
 
     /* 右下角悬浮推荐卡片 Floating Popup */
@@ -937,15 +948,16 @@
       background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Condition 2: 右下角极小、不显眼的关闭按钮 */
-    .floating-popup-close.condition2-tiny {
-      font-size: 0.72rem !important;
-      opacity: 0.35 !important;
-      padding: 1px 4px !important;
+    /* Condition 2: 右下角极度隐蔽的微小关闭按钮 */
+    .floating-popup-close.condition2-hidden-btn {
+      font-size: 0.58rem !important;
+      opacity: 0.20 !important;
+      padding: 1px 3px !important;
+      color: #fde68a !important;
     }
 
-    .floating-popup-close.condition2-tiny:hover {
-      opacity: 0.75 !important;
+    .floating-popup-close.condition2-hidden-btn:hover {
+      opacity: 0.55 !important;
     }
 
     .floating-popup-body {
@@ -1133,6 +1145,10 @@
       font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
       transition: background 0.2s;
     }
 
@@ -1445,6 +1461,11 @@
       </div>
       <h2 style="font-size:1.3rem; font-weight:800; line-height:1.3;">为您精心甄选：香港维港朗廷汇酒店</h2>
       <p style="font-size:0.85rem; opacity:0.92; margin-top:0.3rem;">坐落中环海滨核心地标，尽享 180° 全景维多利亚港天际线</p>
+
+      <!-- Condition 2: 倒计时结束后在右上角出现极淡的微小叉号 -->
+      <button class="recommend-top-close-btn" id="btnRecommendTopClose" onclick="dismissRecommendation()" title="关闭">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
 
     <div class="recommend-modal-body">
@@ -1477,9 +1498,14 @@
         <button class="btn-accept-recommend" onclick="acceptRecommendation(42)">
           <i class="fa-solid fa-bed"></i> 立即查看该推荐酒店房型
         </button>
+
+        <!-- Condition 1: 显眼按钮；Condition 2: 隐藏此按钮并换成顶部微小叉号 -->
         <button class="btn-skip-recommend" id="btnSkipRecommend" onclick="dismissRecommendation()">
           略过推荐，浏览全部 42 间酒店
         </button>
+
+        <!-- Condition 2: 15秒倒计时低调文字提醒 -->
+        <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (15s)</div>
       </div>
     </div>
   </div>
@@ -1630,8 +1656,8 @@
 <script>
   // ==========================================
   // 实验组态设定 (EXPERIMENT_CONDITION)
-  // 1: 常规模式 (正常明显略过按钮，随时可关)
-  // 2: 强推模式 (需等候 15 秒倒计时解锁略过，按钮极小极隐蔽)
+  // 1: 常规模式 (正常明显底部略过按钮，随时可关)
+  // 2: 强推模式 (需等候 15 秒倒计时，结束后仅在右上角出现微小浅色叉号；右下角关闭按钮极微小隐蔽)
   // 注：亦支持在 URL 参数中传入 ?condition=1 或 ?condition=2 动态切换
   // ==========================================
   const urlParams = new URLSearchParams(window.location.search);
@@ -1647,36 +1673,43 @@
   // 根据实验组态初始化 UI 样式与倒数机制
   function setupConditionUI() {
     const skipBtn = document.getElementById("btnSkipRecommend");
+    const topCloseBtn = document.getElementById("btnRecommendTopClose");
+    const countdownText = document.getElementById("recommendCountdownText");
     const floatingCloseBtn = document.getElementById("btnFloatingClose");
 
     if (EXPERIMENT_CONDITION === 2) {
-      // 1. 设置中央略过按钮为极小不显眼的文字样式并默认禁用
-      skipBtn.classList.add("condition2-subtle");
-      skipBtn.disabled = true;
-      let timeLeft = 15;
-      skipBtn.innerText = `略过推荐 (${timeLeft}s)`;
+      // 1. 隐藏底部大按钮，显示小字倒计时
+      skipBtn.style.display = "none";
+      countdownText.style.display = "block";
+      topCloseBtn.style.display = "none"; // 初始倒计时中不显示叉号
 
-      // 2. 右下角悬浮框关闭按钮极小化
-      floatingCloseBtn.classList.add("condition2-tiny");
+      // 2. 右下角悬浮框关闭按钮设置为极度微小、超低透明度的隐蔽样式
+      floatingCloseBtn.classList.add("condition2-hidden-btn");
 
       // 3. 启动 15 秒倒计时
+      let timeLeft = 15;
+      countdownText.innerText = `推荐浏览中 (${timeLeft}s)`;
+
       if (countdownTimer) clearInterval(countdownTimer);
       countdownTimer = setInterval(() => {
         timeLeft--;
         if (timeLeft > 0) {
-          skipBtn.innerText = `略过推荐 (${timeLeft}s)`;
+          countdownText.innerText = `推荐浏览中 (${timeLeft}s)`;
         } else {
           clearInterval(countdownTimer);
-          skipBtn.disabled = false;
-          skipBtn.innerText = "略过推荐，浏览全部酒店";
+          countdownText.style.display = "none";
+          // 倒计时结束后，仅在右上角显现一个极微小、极淡的关闭叉号
+          topCloseBtn.style.display = "block";
         }
       }, 1000);
     } else {
-      // Condition 1: 常规样式与文案
-      skipBtn.classList.remove("condition2-subtle");
+      // Condition 1: 常规明显按钮模式
+      skipBtn.style.display = "block";
       skipBtn.disabled = false;
       skipBtn.innerText = "略过推荐，浏览全部 42 间酒店";
-      floatingCloseBtn.classList.remove("condition2-tiny");
+      topCloseBtn.style.display = "none";
+      countdownText.style.display = "none";
+      floatingCloseBtn.classList.remove("condition2-hidden-btn");
     }
   }
 
@@ -1952,6 +1985,7 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
+    // 安全赋值至完成弹窗
     if (document.getElementById("bookingRef")) document.getElementById("bookingRef").innerText = refNumber;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
@@ -1981,9 +2015,11 @@
       console.log("Offline mode, skip db push.", err);
     }
 
+    // 显示实验完成弹窗
     document.getElementById("successModal").classList.add("active");
   }
 
+  // 导向 Post-Survey 问卷页面
   function goToPostSurvey() {
     const bookingRef = document.getElementById("bookingRef") ? document.getElementById("bookingRef").innerText : "";
     const isRec = selectedHotel ? (selectedHotel.id === RECOMMENDED_HOTEL_ID ? "1" : "0") : "0";
