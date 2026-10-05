@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>TripStay 实验数据导出工具 (Master Dataset Exporter)</title>
+    <!-- SheetJS 与 Firebase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        // 与 booking_page.html / index.html 保持完全一致的 Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
+            authDomain: "online-study-3a.firebaseapp.com",
+            databaseURL: "https://online-study-3a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "online-study-3a",
+            storageBucket: "online-study-3a.firebasestorage.app",
+            messagingSenderId: "641152608367",
+            appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .export-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 520px;
+            width: 90%;
+            border: 1px solid #e2e8f0;
+        }
+        .icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+        h2 {
+            color: #0f172a;
+            margin-bottom: 8px;
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+        p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .export-btn {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+        .export-btn:hover { background: #1d4ed8; }
+        .export-btn:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        #statusMsg {
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+
+<div class="export-card">
+    <div class="icon">🏨📊</div>
+    <h2>TripStay 实验数据导出工具</h2>
+    <p>点击下方按钮直接从 Firebase Realtime Database 抓取受试者数据、前测调查问卷评分及最终酒店模拟预订决策，并生成结构化的综合 Excel 数据集。</p>
+    <button id="exportBtn" class="export-btn" onclick="exportData()">下载研究数据总表 (.xlsx)</button>
+    <div id="statusMsg"></div>
+</div>
+
+<script>
+    // 定义 index.html 中的 17 道前测调查问卷题目映射[cite: 6]
+    const PRE_SURVEY_QUESTIONS = [
+        { key: "q01_sensory_experience", header: "Pre_Q01_SensoryExperience" },
+        { key: "q02_fresh",              header: "Pre_Q02_Fresh" },
+        { key: "q03_familiar",           header: "Pre_Q03_Familiar" },
+        { key: "q04_high_quality",       header: "Pre_Q04_HighQuality" },
+        { key: "q05_healthy",            header: "Pre_Q05_Healthy" },
+        { key: "q06_safe_to_consume",    header: "Pre_Q06_SafeToConsume" },
+        { key: "q07_price_within_budget",header: "Pre_Q07_PriceWithinBudget" },
+        { key: "q08_price_justified",    header: "Pre_Q08_PriceJustified" },
+        { key: "q09_serving_size",       header: "Pre_Q09_ServingSize" },
+        { key: "q10_convenient",         header: "Pre_Q10_Convenient" },
+        { key: "q11_versatile_use",      header: "Pre_Q11_VersatileUse" },
+        { key: "q12_packaging_protects", header: "Pre_Q12_PackagingProtects" },
+        { key: "q13_trustworthy_claims", header: "Pre_Q13_TrustworthyClaims" },
+        { key: "q14_available",          header: "Pre_Q14_Available" },
+        { key: "q15_no_exploitation",    header: "Pre_Q15_NoExploitation" },
+        { key: "q16_eco_friendly",       header: "Pre_Q16_EcoFriendly" },
+        { key: "q17_local_product",      header: "Pre_Q17_LocalProduct" }
+    ];
+
+    async function exportData() {
+        const btn = document.getElementById("exportBtn");
+        const status = document.getElementById("statusMsg");
+        btn.disabled = true;
+        status.innerText = "⏳ 正在从 Firebase 读取实验数据...";
+
+        try {
+            // 同步并行读取本实验的三大主要数据节点
+            const [participantsSnap, surveySnap, bookingsSnap] = await Promise.all([
+                db.ref('participants').once('value'),
+                db.ref('survey_responses').once('value'),
+                db.ref('bookings').once('value')
+            ]);
+
+            const participantsObj = participantsSnap.val() || {};
+            const surveyObj = surveySnap.val() || {};
+            const bookingsObj = bookingsSnap.val() || {};
+
+            // 提取所有唯一受试者 ID (支持 32 位 ID)[cite: 5, 6]
+            const allPIDs = new Set([
+                ...Object.keys(participantsObj),
+                ...Object.keys(surveyObj),
+                ...Object.keys(bookingsObj)
+            ].filter(pid => pid && pid.trim() !== ""));
+
+            const masterDataMap = {};
+
+            allPIDs.forEach(pid => {
+                const row = {};
+
+                // 1. 受试者基础识别信息
+                row["Participant_ID"] = pid;
+                row["PID_Timestamp_Part"] = pid.length >= 14 ? pid.substring(0, 14) : "";
+                row["PID_Random_Part"] = pid.length >= 32 ? pid.substring(14) : "";
+                row["Registration_Time"] = "";
+
+                // 2. 实验分组与 AI Nudge 信息[cite: 5, 6]
+                row["Experiment_Condition"] = "";
+                row["AI_Nudge_Text"] = "";
+                row["Survey_Submitted_At"] = "";
+
+                // 3. 前测 17 题调查问卷得分
+                PRE_SURVEY_QUESTIONS.forEach(q => {
+                    row[q.header] = "";
+                });
+
+                // 4. 酒店模拟预订决策数据
+                row["Has_Completed_Booking"] = "No";
+                row["Booking_Ref"] = "";
+                row["Selected_Hotel_ID"] = "";
+                row["Selected_Hotel_Name"] = "";
+                row["Is_Recommended_Hotel_42"] = ""; // 核心因变量：是否选择了置顶强推的第42间酒店
+                row["Selected_Room_Name"] = "";
+                row["Room_Size"] = "";
+                row["Room_Bathroom_Type"] = "";
+                row["Room_Breakfast_Plan"] = "";
+                row["Total_Paid_Amount"] = "";
+                row["Booking_Submitted_At"] = "";
+
+                // 5. 填写的联系人信息 (用于配对或排除测试账号)
+                row["Guest_Name"] = "";
+                row["Guest_Email"] = "";
+                row["Guest_Phone"] = "";
+
+                masterDataMap[pid] = row;
+            });
+
+            // 填充 1: participants 节点[cite: 6]
+            Object.entries(participantsObj).forEach(([pid, data]) => {
+                if (masterDataMap[pid]) {
+                    masterDataMap[pid]["Registration_Time"] = data.createdAt || "";
+                }
+            });
+
+            // 填充 2: survey_responses 节点（index.html）[cite: 6]
+            Object.entries(surveyObj).forEach(([pid, data]) => {
+                if (masterDataMap[pid]) {
+                    masterDataMap[pid]["Survey_Submitted_At"] = data.submittedAt || "";
+                    masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText || "";
+
+                    if (data.responses) {
+                        PRE_SURVEY_QUESTIONS.forEach(q => {
+                            if (data.responses[q.key] !== undefined) {
+                                masterDataMap[pid][q.header] = data.responses[q.key];
+                            }
+                        });
+                    }
+                }
+            });
+
+            // 填充 3: bookings 节点（booking_page.html 订房决策）
+            Object.entries(bookingsObj).forEach(([key, data]) => {
+                // key 可能是 32位 PID，或者是生成的订房编号[cite: 5]
+                const pid = data.participantID || key;
+                if (masterDataMap[pid]) {
+                    masterDataMap[pid]["Has_Completed_Booking"] = "Yes";
+                    masterDataMap[pid]["Booking_Ref"] = data.bookingRef || "";
+                    masterDataMap[pid]["Experiment_Condition"] = data.experimentCondition !== undefined ? data.experimentCondition : masterDataMap[pid]["Experiment_Condition"];
+                    masterDataMap[pid]["Selected_Hotel_ID"] = data.hotelId || "";
+                    masterDataMap[pid]["Selected_Hotel_Name"] = data.hotelName || "";
+                    masterDataMap[pid]["Is_Recommended_Hotel_42"] = (data.hotelId === 42 || data.isRecommended) ? "Yes" : "No";
+                    masterDataMap[pid]["Selected_Room_Name"] = data.roomName || "";
+                    masterDataMap[pid]["Room_Size"] = data.roomSize || "";
+                    masterDataMap[pid]["Room_Bathroom_Type"] = data.bathroom || "";
+                    masterDataMap[pid]["Room_Breakfast_Plan"] = data.breakfast || "";
+                    masterDataMap[pid]["Total_Paid_Amount"] = data.totalPaid || "";
+                    masterDataMap[pid]["Booking_Submitted_At"] = data.createdAt || "";
+
+                    masterDataMap[pid]["Guest_Name"] = data.guestName || "";
+                    masterDataMap[pid]["Guest_Email"] = data.guestEmail || "";
+                    masterDataMap[pid]["Guest_Phone"] = data.guestPhone || "";
+                }
+            });
+
+            // 产出 Excel 档案
+            const wb = XLSX.utils.book_new();
+            const wsMaster = XLSX.utils.json_to_sheet(Object.values(masterDataMap));
+            XLSX.utils.book_append_sheet(wb, wsMaster, "TripStay_Research_Data");
+
+            const dateStr = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `TripStay_Master_Data_${dateStr}.xlsx`);
+
+            status.innerText = `✅ 导出成功！共成功处理 ${Object.keys(masterDataMap).length} 位受试者记录。`;
+        } catch (err) {
+            console.error("Export error:", err);
+            status.innerText = "❌ 导出失败，请按 F12 打开开发者控制台查看错误日志。";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
