@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require("@google/genai");
 
 // 讀取環境變數中的 GEMINI_API_KEY
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = (process.env.GEMINI_API_KEY || "").trim();
 const MODEL_NAME = "gemini-flash-latest";
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;

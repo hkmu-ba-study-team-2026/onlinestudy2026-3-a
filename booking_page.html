@@ -264,7 +264,6 @@
 
     .btn-search:hover {
       background: var(--accent-hover);
-      transform: translateY(-1px);
     }
 
     .main-layout {
@@ -416,7 +415,6 @@
       color: var(--text-main);
     }
 
-    /* 酒店卡片基础样式 */
     .hotel-card {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -433,7 +431,6 @@
       border-color: #cbd5e1;
     }
 
-    /* 置顶特别推荐酒店样式 */
     .hotel-card.featured-recommendation {
       border: 2.5px solid #d97706;
       background: linear-gradient(180deg, #fffdfa 0%, #ffffff 100%);
@@ -664,11 +661,6 @@
       box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
     }
 
-    .btn-select-room.gold-btn:hover {
-      background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
-    }
-
-    /* 弹窗通用样式 */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -760,7 +752,6 @@
       object-fit: cover;
     }
 
-    /* 首次进入页面推荐弹窗专属样式 */
     .recommend-modal-card {
       background: #ffffff;
       border-radius: var(--radius-lg);
@@ -780,7 +771,6 @@
       position: relative;
     }
 
-    /* Condition 2: 弹窗右上角极小且极淡的关闭叉号按钮 */
     .recommend-top-close-btn {
       position: absolute;
       top: 10px;
@@ -867,10 +857,8 @@
 
     .btn-accept-recommend:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.45);
     }
 
-    /* Condition 1: 常规明显略过按钮 */
     .btn-skip-recommend {
       background: transparent;
       border: 1.5px solid #cbd5e1;
@@ -890,7 +878,6 @@
       border-color: #94a3b8;
     }
 
-    /* Condition 2 倒数提示文案 (小字且低调) */
     .recommend-countdown-text {
       text-align: center;
       font-size: 0.72rem;
@@ -899,7 +886,6 @@
       margin-top: -0.2rem;
     }
 
-    /* 右下角悬浮推荐卡片 Floating Popup */
     .floating-recommend-popup {
       position: fixed;
       bottom: 24px;
@@ -948,16 +934,11 @@
       background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Condition 2: 右下角极度隐蔽的微小关闭按钮 */
     .floating-popup-close.condition2-hidden-btn {
       font-size: 0.58rem !important;
       opacity: 0.20 !important;
       padding: 1px 3px !important;
       color: #fde68a !important;
-    }
-
-    .floating-popup-close.condition2-hidden-btn:hover {
-      opacity: 0.55 !important;
     }
 
     .floating-popup-body {
@@ -1145,10 +1126,6 @@
       font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
       transition: background 0.2s;
     }
 
@@ -1213,25 +1190,83 @@
       color: var(--text-main);
     }
 
-    .success-modal-content {
-      text-align: center;
-      padding: 2.5rem 2rem;
+    /* 實驗完成與返回問卷專屬彈窗樣式 */
+    .id-copy-container {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 8px;
+      margin: 10px 0;
+      background: #f1f5f9;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #cbd5e1;
     }
 
-    .success-icon {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: #dcfce7;
-      color: var(--success);
+    .id-copy-text {
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      flex: 1;
+      letter-spacing: 0.5px;
+      word-break: break-all;
+    }
+
+    .btn-copy-id {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-copy-id:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-copy-id.copied {
+      background: #10b981;
+    }
+
+    .btn-return-survey {
+      width: 100%;
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      padding: 0.85rem;
+      border-radius: var(--radius-md);
+      border: none;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.2rem;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-return-survey:disabled {
+      background: #cbd5e1 !important;
+      color: #64748b !important;
+      cursor: not-allowed;
+      box-shadow: none !important;
+    }
+
+    .btn-return-survey:not(:disabled) {
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255,87,34,0.35);
+    }
+
+    .btn-return-survey:not(:disabled):hover {
+      background: var(--accent-hover);
     }
 
     @keyframes fadeIn {
@@ -1432,8 +1467,6 @@
 
   <!-- 右侧结果展示 -->
   <section class="results-section">
-
-    <!-- 排序控制栏 -->
     <div class="sort-bar">
       <div>搜索结果：<span class="results-count" id="hotelCount">0 间香港精选酒店</span></div>
       <div class="sort-options">
@@ -1446,13 +1479,11 @@
     </div>
 
     <!-- 酒店列表动态容器 -->
-    <div id="hotelListContainer" style="display: flex; flex-direction: column; gap: 1.25rem;">
-      <!-- 由 JavaScript 渲染 -->
-    </div>
+    <div id="hotelListContainer" style="display: flex; flex-direction: column; gap: 1.25rem;"></div>
   </section>
 </main>
 
-<!-- 新增：进入页面时的特别推荐弹窗对话框 (推介第42间酒店) -->
+<!-- 进入页面时的特别推荐弹窗对话框 (推介第42间酒店) -->
 <div class="modal-overlay" id="entryRecommendModal">
   <div class="recommend-modal-card">
     <div class="recommend-modal-header">
@@ -1462,7 +1493,6 @@
       <h2 style="font-size:1.3rem; font-weight:800; line-height:1.3;">为您精心甄选：香港维港朗廷汇酒店</h2>
       <p style="font-size:0.85rem; opacity:0.92; margin-top:0.3rem;">坐落中环海滨核心地标，尽享 180° 全景维多利亚港天际线</p>
 
-      <!-- Condition 2: 倒计时结束后在右上角出现极淡的微小叉号 -->
       <button class="recommend-top-close-btn" id="btnRecommendTopClose" onclick="dismissRecommendation()" title="关闭">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -1493,18 +1523,15 @@
         <strong>限时礼遇：</strong>免费升级至 58 平方米维港全景客房，尊享米其林星厨定制双人现点早餐及独立白玛瑙观景浴缸卫浴。
       </div>
 
-      <!-- 明确的操作按钮：查看推荐 vs 略过推荐 -->
       <div class="recommend-actions">
         <button class="btn-accept-recommend" onclick="acceptRecommendation(42)">
           <i class="fa-solid fa-bed"></i> 立即查看该推荐酒店房型
         </button>
 
-        <!-- Condition 1: 显眼按钮；Condition 2: 隐藏此按钮并换成顶部微小叉号 -->
         <button class="btn-skip-recommend" id="btnSkipRecommend" onclick="dismissRecommendation()">
           略过推荐，浏览全部 42 间酒店
         </button>
 
-        <!-- Condition 2: 15秒倒计时低调文字提醒 -->
         <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (15s)</div>
       </div>
     </div>
@@ -1596,31 +1623,44 @@
   </div>
 </div>
 
-<!-- 弹窗 3：预订成功凭证 -->
+<!-- 弹窗 3：实验完成、展示32位个人ID并返回问卷主页 -->
 <div class="modal-overlay" id="successModal">
-  <div class="modal-container" style="max-width: 540px;">
+  <div class="modal-container" style="max-width: 560px;">
     <div class="modal-body">
-      <div class="success-modal-content">
-        <div class="success-icon" style="background: #e0f2fe; color: var(--primary);">
+      <div style="text-align: center; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.85rem;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #e0f2fe; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
           <i class="fa-solid fa-clipboard-check"></i>
         </div>
-        <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main);">模拟预订已完成！</h2>
-        <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6;">
-          感谢您参与本次酒店预订行为研究。您的模拟预订决策已成功记录。<br>
-          请点击下方按钮前往填写<strong>事后问卷（Post-Survey）</strong>以完成整个实验。
+        <h2 style="font-size:1.35rem; font-weight:800; color:var(--text-main);">模拟预订已完成</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">
+          感谢您的参与！您即将返回主问卷以完成后续评估。<br>
+          <strong style="color:#b91c1c;">【重要步骤】</strong> 请点击下方按钮<strong>复制您的专属个人ID</strong>，并在回到问卷主页后贴上核验。
         </p>
 
-        <!-- 预订决策摘要 -->
-        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:1rem; width:100%; text-align:left; font-size:0.85rem; line-height:1.6;">
-          <p><strong>研究受试编号 / 订单号：</strong> <span style="color:var(--primary); font-weight:700;" id="bookingRef">HK-8829104</span></p>
-          <p><strong>最终选定酒店：</strong> <span id="successHotel">香港唯港荟酒店</span></p>
-          <p><strong>所选房型：</strong> <span id="successRoom">ICON 36 经典城市客房</span></p>
-          <p><strong>总计金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">HK$ 3,036</span></p>
+        <!-- 32位个人ID 展示与一键复制区 -->
+        <div style="width: 100%; text-align: left;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">您的 32 位个人识别码 (Participant ID)：</label>
+          <div class="id-copy-container">
+            <span class="id-copy-text" id="finalDisplayPID">--------------------------------</span>
+            <button class="btn-copy-id" id="btnCopyPID" onclick="copyParticipantID()">
+              <i class="fa-regular fa-copy"></i> 复制ID
+            </button>
+          </div>
+          <p id="copyStatusTip" style="font-size: 0.75rem; color: #dc2626; margin-top: 2px;">
+            * 必须先点击「复制ID」才能返回主页问卷
+          </p>
         </div>
 
-        <!-- 导向问卷按钮 -->
-        <button class="btn-search" style="width:100%; margin-top:0.8rem; font-size:1rem; padding:0.85rem;" onclick="goToPostSurvey()">
-          前往填写问卷 (Post-Survey) <i class="fa-solid fa-arrow-right"></i>
+        <!-- 预订决择概览 -->
+        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:0.85rem 1rem; width:100%; text-align:left; font-size:0.82rem; line-height:1.6; color:#475569;">
+          <p><strong>最终选定酒店：</strong> <span id="successHotel">--</span></p>
+          <p><strong>所选客房类型：</strong> <span id="successRoom">--</span></p>
+          <p><strong>总计实付金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">--</span></p>
+        </div>
+
+        <!-- 返回主页按钮 (需等5秒 + 必须点击过复制) -->
+        <button class="btn-return-survey" id="btnReturnSurvey" onclick="returnToSurvey()" disabled>
+          请先复制个人ID并等候 (5s)
         </button>
       </div>
     </div>
@@ -1654,14 +1694,13 @@
 
 <!-- 业务交互脚本 -->
 <script>
-  // ==========================================
-  // 实验组态设定 (EXPERIMENT_CONDITION)
-  // 1: 常规模式 (正常明显底部略过按钮，随时可关)
-  // 2: 强推模式 (需等候 15 秒倒计时，结束后仅在右上角出现微小浅色叉号；右下角关闭按钮极微小隐蔽)
-  // 注：亦支持在 URL 参数中传入 ?condition=1 或 ?condition=2 动态切换
-  // ==========================================
+  // =======================================================
+  // ⚙️ 实验参数配置區 (可直接依實驗需求調整)
+  // =======================================================
+  const RETURN_SURVEY_URL = "index.html"; // 返回之問卷主頁網址 (例如 index.html 或 Qualtrics 問卷)
+
   const urlParams = new URLSearchParams(window.location.search);
-  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2;
+  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2; // 1: 常規, 2: 強推15s
 
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
   let selectedHotel = null;
@@ -1670,7 +1709,30 @@
   let countdownTimer = null;
   const RECOMMENDED_HOTEL_ID = 42; // 第42间酒店ID
 
-  // 根据实验组态初始化 UI 样式与倒数机制
+  // 讀取/生成 32 位個人 ID
+  function getOrGenerate32PID() {
+    let pid = localStorage.getItem("participantID");
+    if (!pid || pid.trim().length !== 32) {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const timestamp14 = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      let random18 = '';
+      for (let i = 0; i < 18; i++) {
+        random18 += Math.floor(Math.random() * 10);
+      }
+      pid = timestamp14 + random18;
+      localStorage.setItem("participantID", pid);
+    }
+    return pid;
+  }
+
+  const currentPID = getOrGenerate32PID();
+
+  // 倒數與複製狀態旗標
+  let hasCopiedPID = false;
+  let exitCountdownFinished = false;
+  let exitCountdownSeconds = 5;
+
   function setupConditionUI() {
     const skipBtn = document.getElementById("btnSkipRecommend");
     const topCloseBtn = document.getElementById("btnRecommendTopClose");
@@ -1678,15 +1740,11 @@
     const floatingCloseBtn = document.getElementById("btnFloatingClose");
 
     if (EXPERIMENT_CONDITION === 2) {
-      // 1. 隐藏底部大按钮，显示小字倒计时
       skipBtn.style.display = "none";
       countdownText.style.display = "block";
-      topCloseBtn.style.display = "none"; // 初始倒计时中不显示叉号
-
-      // 2. 右下角悬浮框关闭按钮设置为极度微小、超低透明度的隐蔽样式
+      topCloseBtn.style.display = "none";
       floatingCloseBtn.classList.add("condition2-hidden-btn");
 
-      // 3. 启动 15 秒倒计时
       let timeLeft = 15;
       countdownText.innerText = `推荐浏览中 (${timeLeft}s)`;
 
@@ -1698,12 +1756,10 @@
         } else {
           clearInterval(countdownTimer);
           countdownText.style.display = "none";
-          // 倒计时结束后，仅在右上角显现一个极微小、极淡的关闭叉号
           topCloseBtn.style.display = "block";
         }
       }, 1000);
     } else {
-      // Condition 1: 常规明显按钮模式
       skipBtn.style.display = "block";
       skipBtn.disabled = false;
       skipBtn.innerText = "略过推荐，浏览全部 42 间酒店";
@@ -1952,7 +2008,6 @@
 
     const baseTotal = selectedRoom.price * 2;
     const tax = Math.round(baseTotal * 0.1);
-    discountAmount = 0;
 
     document.getElementById("checkoutBasePrice").innerText = `HK$ ${baseTotal.toLocaleString()}`;
     document.getElementById("checkoutTaxPrice").innerText = `HK$ ${tax.toLocaleString()}`;
@@ -1965,6 +2020,58 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
+  // 1鍵複製個人ID
+  function copyParticipantID() {
+    navigator.clipboard.writeText(currentPID).then(() => {
+      hasCopiedPID = true;
+      const copyBtn = document.getElementById("btnCopyPID");
+      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制!';
+      copyBtn.classList.add("copied");
+
+      const tip = document.getElementById("copyStatusTip");
+      tip.style.color = "#10b981";
+      tip.innerText = "✓ 已成功复制个人识别码，请妥善保存并在主问卷中贴上。";
+
+      updateReturnButtonState();
+    }).catch(err => {
+      // 兼容非安全環境 clipboard fallback
+      const tempInput = document.createElement("input");
+      tempInput.value = currentPID;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+
+      hasCopiedPID = true;
+      const copyBtn = document.getElementById("btnCopyPID");
+      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制!';
+      copyBtn.classList.add("copied");
+      updateReturnButtonState();
+    });
+  }
+
+  // 更新「返回主頁」按鈕文字與可點擊狀態
+  function updateReturnButtonState() {
+    const returnBtn = document.getElementById("btnReturnSurvey");
+    if (!returnBtn) return;
+
+    if (!exitCountdownFinished) {
+      returnBtn.disabled = true;
+      returnBtn.innerText = hasCopiedPID
+              ? `即将可返回主页 (${exitCountdownSeconds}s)`
+              : `请先复制个人ID并等候 (${exitCountdownSeconds}s)`;
+    } else {
+      if (!hasCopiedPID) {
+        returnBtn.disabled = true;
+        returnBtn.innerText = "必须先点击「复制ID」方可返回";
+      } else {
+        returnBtn.disabled = false;
+        returnBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> 返回问卷主页 (Paste ID on Survey)';
+      }
+    }
+  }
+
+  // 執行預訂確認並跳出「完成模擬與ID展示」彈窗
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
@@ -1985,17 +2092,18 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
-    // 安全赋值至完成弹窗
-    if (document.getElementById("bookingRef")) document.getElementById("bookingRef").innerText = refNumber;
+    // 填寫預訂決策資訊
+    if (document.getElementById("finalDisplayPID")) document.getElementById("finalDisplayPID").innerText = currentPID;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
-    // 写入 Firebase 实时数据库 (包含 experimentCondition 组态标记)
+    // 寫入 Firebase (將 32位 PID 記錄為 primary key/欄位)
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
-        firebase.database().ref('bookings/' + refNumber).set({
+        firebase.database().ref('bookings/' + currentPID).set({
           bookingRef: refNumber,
+          participantID: currentPID,
           experimentCondition: EXPERIMENT_CONDITION,
           hotelId: selectedHotel.id,
           hotelName: selectedHotel.name,
@@ -2015,19 +2123,29 @@
       console.log("Offline mode, skip db push.", err);
     }
 
-    // 显示实验完成弹窗
+    // 啟動 5 秒等候倒數計時
+    hasCopiedPID = false;
+    exitCountdownFinished = false;
+    exitCountdownSeconds = 5;
+    updateReturnButtonState();
+
+    const exitTimer = setInterval(() => {
+      exitCountdownSeconds--;
+      if (exitCountdownSeconds <= 0) {
+        clearInterval(exitTimer);
+        exitCountdownFinished = true;
+      }
+      updateReturnButtonState();
+    }, 1000);
+
+    // 彈出對話框
     document.getElementById("successModal").classList.add("active");
   }
 
-  // 导向 Post-Survey 问卷页面
-  function goToPostSurvey() {
-    const bookingRef = document.getElementById("bookingRef") ? document.getElementById("bookingRef").innerText : "";
-    const isRec = selectedHotel ? (selectedHotel.id === RECOMMENDED_HOTEL_ID ? "1" : "0") : "0";
-    window.location.href = `post_survey.html?ref=${encodeURIComponent(bookingRef)}&cond=${EXPERIMENT_CONDITION}&rec=${isRec}`;
-  }
-
-  function closeSuccessModal() {
-    document.getElementById("successModal").classList.remove("active");
+  // 返回問卷主頁
+  function returnToSurvey() {
+    if (!hasCopiedPID || !exitCountdownFinished) return;
+    window.location.href = `${RETURN_SURVEY_URL}?pid=${encodeURIComponent(currentPID)}`;
   }
 
   function updatePriceFilter(val) {

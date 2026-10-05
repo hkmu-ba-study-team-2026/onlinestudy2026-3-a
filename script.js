@@ -3,7 +3,7 @@ const pageStartTime = Date.now();
 const NEXT_PAGE_URL = "post_survey.html"; // 結帳後導向之問卷或下一頁 URL
 
 // ⚠️ 請填入您的 Gemini API Key (若為正式實驗，建議透過後端 Proxy 代理以防 Key 外洩)
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
+const GEMINI_API_KEY = (process.env.GEMINI_API_KEY || "").trim();
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 let selectionSequence = [];
