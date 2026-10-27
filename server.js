@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const PORT = 4000;
+const PORT = 5000;
 
 // 中間件設定
 app.use(cors());
