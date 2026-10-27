@@ -264,6 +264,7 @@
 
     .btn-search:hover {
       background: var(--accent-hover);
+      transform: translateY(-1px);
     }
 
     .main-layout {
@@ -311,8 +312,8 @@
     }
 
     .filter-group {
-      margin-bottom: 1.25rem;
-      padding-bottom: 1.1rem;
+      margin-bottom: 1.15rem;
+      padding-bottom: 1rem;
       border-bottom: 1px solid #f1f5f9;
     }
 
@@ -335,7 +336,7 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
       font-size: 0.85rem;
       color: #334155;
       cursor: pointer;
@@ -1190,7 +1191,6 @@
       color: var(--text-main);
     }
 
-    /* 實驗完成與返回問卷專屬彈窗樣式 */
     .id-copy-container {
       display: flex;
       align-items: center;
@@ -1333,10 +1333,9 @@
 <div class="hero-search-wrapper">
   <div class="search-container">
     <h1 class="hero-title">探索中国香港精选酒店与品质住宿</h1>
-    <p class="hero-subtitle">覆盖香港中环、尖沙咀、湾仔、铜锣湾及沙田等核心地段</p>
+    <p class="hero-subtitle">覆盖香港港岛、九龙及新界核心地段，提供多元星级与灵活配套选择</p>
 
     <div class="search-box">
-      <!-- 目的地 -->
       <div class="search-field">
         <i class="fa-solid fa-location-dot"></i>
         <div class="search-field-content">
@@ -1345,7 +1344,6 @@
         </div>
       </div>
 
-      <!-- 入住退房日期 -->
       <div class="search-field">
         <i class="fa-regular fa-calendar-days"></i>
         <div class="search-field-content">
@@ -1354,7 +1352,6 @@
         </div>
       </div>
 
-      <!-- 客房与人数 -->
       <div class="search-field">
         <i class="fa-solid fa-user-group"></i>
         <div class="search-field-content">
@@ -1363,7 +1360,6 @@
         </div>
       </div>
 
-      <!-- 搜索按钮 -->
       <button class="btn-search" onclick="filterHotels()">
         <i class="fa-solid fa-magnifying-glass"></i> 搜索酒店
       </button>
@@ -1394,7 +1390,27 @@
       </div>
     </div>
 
-    <!-- 酒店星级 (数字动态生成) -->
+    <!-- 新增：所在地区筛选 (港岛 / 九龙 / 新界) -->
+    <div class="filter-group">
+      <div class="filter-title">所在地区</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="region" value="港岛" onchange="filterHotels()">
+        <span>港岛 (Hong Kong Island)</span>
+        <span class="count" id="count-region-hk">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="region" value="九龙" onchange="filterHotels()">
+        <span>九龙 (Kowloon)</span>
+        <span class="count" id="count-region-kl">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="region" value="新界" onchange="filterHotels()">
+        <span>新界 (New Territories)</span>
+        <span class="count" id="count-region-nt">(0)</span>
+      </label>
+    </div>
+
+    <!-- 酒店星级 (每种约10间) -->
     <div class="filter-group">
       <div class="filter-title">酒店星级</div>
       <label class="filter-checkbox">
@@ -1414,27 +1430,32 @@
       </label>
     </div>
 
-    <!-- 住客评分 (数字动态生成) -->
+    <!-- 住客评分 (改为精确特定分数匹配) -->
     <div class="filter-group">
-      <div class="filter-title">住客综合评分</div>
+      <div class="filter-title">住客综合评分 (精确分数)</div>
       <label class="filter-checkbox">
-        <input type="checkbox" name="rating" value="9.2" onchange="filterHotels()">
-        <span>9.2+ 超棒极佳体验</span>
-        <span class="count" id="count-rating-92">(0)</span>
+        <input type="checkbox" name="rating" value="9.5" onchange="filterHotels()">
+        <span>9.5 分 (超棒极佳)</span>
+        <span class="count" id="count-rating-95">(0)</span>
       </label>
       <label class="filter-checkbox">
-        <input type="checkbox" name="rating" value="8.8" onchange="filterHotels()">
-        <span>8.8+ 极高品质好评</span>
-        <span class="count" id="count-rating-88">(0)</span>
+        <input type="checkbox" name="rating" value="9.0" onchange="filterHotels()">
+        <span>9.0 分 (优质好评)</span>
+        <span class="count" id="count-rating-90">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="rating" value="8.5" onchange="filterHotels()">
+        <span>8.5 分 (很棒体验)</span>
+        <span class="count" id="count-rating-85">(0)</span>
       </label>
       <label class="filter-checkbox">
         <input type="checkbox" name="rating" value="8.0" onchange="filterHotels()">
-        <span>8.0+ 良好推荐</span>
+        <span>8.0 分 (良好推荐)</span>
         <span class="count" id="count-rating-80">(0)</span>
       </label>
     </div>
 
-    <!-- 核心客房与设施筛选 (数字动态生成) -->
+    <!-- 客房服务与设施偏好 (每项均控制在 <= 总数一半) -->
     <div class="filter-group">
       <div class="filter-title">客房服务与设施偏好</div>
       <label class="filter-checkbox">
@@ -1508,7 +1529,7 @@
             <p style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> 港岛中环民耀街88号中环海滨</p>
           </div>
           <div style="margin-top:0.5rem;">
-            <span style="font-size:0.72rem; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;">9.8分 传奇极佳</span>
+            <span style="font-size:0.72rem; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;">9.5分 传奇极佳</span>
             <div style="margin-top:4px;">
               <span style="font-size:0.8rem; font-weight:700; color:var(--accent);">HK$ </span>
               <span style="font-size:1.25rem; font-weight:800; color:var(--accent);">4,980</span>
@@ -1529,10 +1550,10 @@
         </button>
 
         <button class="btn-skip-recommend" id="btnSkipRecommend" onclick="dismissRecommendation()">
-          略过推荐，浏览全部 42 间酒店
+          略过推荐，浏览全部 31 间酒店
         </button>
 
-        <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (15s)</div>
+        <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (5s)</div>
       </div>
     </div>
   </div>
@@ -1682,7 +1703,7 @@
         <p><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> 港岛中环民耀街88号</p>
         <div style="margin-top:2px;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--accent);">HK$ 4,980</span>
-          <span style="font-size:0.68rem; color:var(--text-muted);">/晚起 (9.8分)</span>
+          <span style="font-size:0.68rem; color:var(--text-muted);">/晚起 (9.5分)</span>
         </div>
       </div>
     </div>
@@ -1695,21 +1716,19 @@
 <!-- 业务交互脚本 -->
 <script>
   // =======================================================
-  // ⚙️ 实验参数配置區 (可直接依實驗需求調整)
+  // ⚙️ 实验参数配置区
   // =======================================================
-  const RETURN_SURVEY_URL = "index.html"; // 返回之問卷主頁網址 (例如 index.html 或 Qualtrics 問卷)
+  const RETURN_SURVEY_URL = "index.html"; // 返回之问卷主页网址
 
   const urlParams = new URLSearchParams(window.location.search);
-  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2; // 1: 常規, 2: 強推15s
+  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2; // 1: 常规, 2: 强推15s
 
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
   let selectedHotel = null;
   let selectedRoom = null;
-  let discountAmount = 0;
   let countdownTimer = null;
-  const RECOMMENDED_HOTEL_ID = 42; // 第42间酒店ID
+  const RECOMMENDED_HOTEL_ID = 42;
 
-  // 讀取/生成 32 位個人 ID
   function getOrGenerate32PID() {
     let pid = localStorage.getItem("participantID");
     if (!pid || pid.trim().length !== 32) {
@@ -1728,7 +1747,6 @@
 
   const currentPID = getOrGenerate32PID();
 
-  // 倒數與複製狀態旗標
   let hasCopiedPID = false;
   let exitCountdownFinished = false;
   let exitCountdownSeconds = 5;
@@ -1745,7 +1763,7 @@
       topCloseBtn.style.display = "none";
       floatingCloseBtn.classList.add("condition2-hidden-btn");
 
-      let timeLeft = 15;
+      let timeLeft = 5;
       countdownText.innerText = `推荐浏览中 (${timeLeft}s)`;
 
       if (countdownTimer) clearInterval(countdownTimer);
@@ -1762,29 +1780,40 @@
     } else {
       skipBtn.style.display = "block";
       skipBtn.disabled = false;
-      skipBtn.innerText = "略过推荐，浏览全部 42 间酒店";
+      skipBtn.innerText = `略过推荐，浏览全部 ${hotelsData.length} 间酒店`;
       topCloseBtn.style.display = "none";
       countdownText.style.display = "none";
       floatingCloseBtn.classList.remove("condition2-hidden-btn");
     }
   }
 
+  // 动态统计各筛选器数量 (含地区、星级、精确评分、配套设施)
   function updateFilterCounts() {
     if (typeof hotelsData === 'undefined' || !hotelsData.length) return;
 
+    let regHK = 0, regKL = 0, regNT = 0;
     let star5 = 0, star4 = 0, star3 = 0;
-    let r92 = 0, r88 = 0, r80 = 0;
+    let r95 = 0, r90 = 0, r85 = 0, r80 = 0;
     let bfast = 0, pBath = 0, pool = 0, cancel = 0, gym = 0;
 
     hotelsData.forEach(hotel => {
+      // 所在地区
+      if (hotel.region === "港岛") regHK++;
+      else if (hotel.region === "九龙") regKL++;
+      else if (hotel.region === "新界") regNT++;
+
+      // 星级
       if (hotel.stars === 5) star5++;
       else if (hotel.stars === 4) star4++;
       else if (hotel.stars === 3) star3++;
 
-      if (hotel.rating >= 9.2) r92++;
-      if (hotel.rating >= 8.8) r88++;
-      if (hotel.rating >= 8.0) r80++;
+      // 精确住客评分 (Exact Match)
+      if (hotel.rating === 9.5) r95++;
+      else if (hotel.rating === 9.0) r90++;
+      else if (hotel.rating === 8.5) r85++;
+      else if (hotel.rating === 8.0) r80++;
 
+      // 设施与偏好 (每项 <= 总数一半)
       if (hotel.hasBreakfast) bfast++;
       if (hotel.hasPrivateBath) pBath++;
       if (hotel.hasPool) pool++;
@@ -1792,12 +1821,17 @@
       if (hotel.hasGym) gym++;
     });
 
+    document.getElementById("count-region-hk").innerText = `(${regHK})`;
+    document.getElementById("count-region-kl").innerText = `(${regKL})`;
+    document.getElementById("count-region-nt").innerText = `(${regNT})`;
+
     document.getElementById("count-star-5").innerText = `(${star5})`;
     document.getElementById("count-star-4").innerText = `(${star4})`;
     document.getElementById("count-star-3").innerText = `(${star3})`;
 
-    document.getElementById("count-rating-92").innerText = `(${r92})`;
-    document.getElementById("count-rating-88").innerText = `(${r88})`;
+    document.getElementById("count-rating-95").innerText = `(${r95})`;
+    document.getElementById("count-rating-90").innerText = `(${r90})`;
+    document.getElementById("count-rating-85").innerText = `(${r85})`;
     document.getElementById("count-rating-80").innerText = `(${r80})`;
 
     document.getElementById("count-breakfast").innerText = `(${bfast})`;
@@ -1854,7 +1888,7 @@
             <div class="hotel-header-info">
               <div class="hotel-stars">
                 ${'⭐'.repeat(hotel.stars)}
-                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars} 星级酒店 • ${hotel.district}</span>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600; margin-left:4px;">${hotel.stars} 星级酒店 • ${hotel.region} (${hotel.district})</span>
               </div>
               <h2 class="hotel-title" style="${isTopRecommend ? 'color:#1e3a8a;' : ''}">${hotel.name}</h2>
               <div class="hotel-location">
@@ -1865,14 +1899,14 @@
 
             <div class="hotel-badges">
               ${isTopRecommend ? '<span class="badge-pill gold-star"><i class="fa-solid fa-crown"></i> 官方主推</span>' : '<span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay 优选</span>'}
-              <span class="badge-pill"><i class="fa-solid fa-bath"></i> 独立卫浴</span>
-              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> 含自助早餐</span>' : '<span class="badge-pill"><i class="fa-solid fa-mug-hot"></i> 可加购早餐</span>'}
-              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> 景观泳池</span>' : ''}
-              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> 健身房</span>' : ''}
+              ${hotel.hasPrivateBath ? '<span class="badge-pill"><i class="fa-solid fa-bath"></i> 独立卫浴/浴缸</span>' : '<span class="badge-pill"><i class="fa-solid fa-shower"></i> 标准淋浴间</span>'}
+              ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> 含免费早餐</span>' : ''}
+              ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> 室外泳池</span>' : ''}
+              ${hotel.hasGym ? '<span class="badge-pill"><i class="fa-solid fa-dumbbell"></i> 健身中心</span>' : ''}
             </div>
 
             <div class="hotel-perks">
-              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> 提供限时免费取消政策</div>' : '<div><i class="fa-solid fa-circle-check"></i> 特惠不可退订保障</div>'}
+              ${hotel.hasCancel ? '<div><i class="fa-solid fa-circle-check"></i> 提供限时免费取消政策</div>' : '<div style="color:#64748b;"><i class="fa-solid fa-circle-info"></i> 特惠不可退订房型</div>'}
               <div><i class="fa-solid fa-bolt"></i> 即时出票确认 • 无跨境交易手续费</div>
             </div>
           </div>
@@ -1883,7 +1917,7 @@
                 <div class="review-verdict" style="${isTopRecommend ? 'color:#d97706;' : ''}">${hotel.verdict}</div>
                 <div class="review-sub">${hotel.reviewCount.toLocaleString()} 条真实住客评价</div>
               </div>
-              <div class="score-badge ${isTopRecommend ? 'gold-score' : ''}">${hotel.rating}</div>
+              <div class="score-badge ${isTopRecommend ? 'gold-score' : ''}">${hotel.rating.toFixed(1)}</div>
             </div>
 
             <div class="price-container">
@@ -1927,7 +1961,7 @@
     if (!selectedHotel) return;
 
     document.getElementById("modalHotelTitle").innerText = selectedHotel.name;
-    document.getElementById("modalHotelSubtitle").innerText = `${selectedHotel.location} • ${selectedHotel.distance}`;
+    document.getElementById("modalHotelSubtitle").innerText = `${selectedHotel.region} (${selectedHotel.district}) • ${selectedHotel.location}`;
 
     const gallery = document.getElementById("modalGallery");
     gallery.innerHTML = selectedHotel.images.map(img => `<img src="${img}" alt="酒店实景">`).join('');
@@ -1964,7 +1998,7 @@
               </div>
               <div class="room-meta-item">
                 <i class="fa-solid fa-location-dot"></i>
-                <span>商圈：<strong>${selectedHotel.district}</strong></span>
+                <span>地区：<strong>${selectedHotel.region} - ${selectedHotel.district}</strong></span>
               </div>
             </div>
 
@@ -2020,7 +2054,6 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
-  // 1鍵複製個人ID
   function copyParticipantID() {
     navigator.clipboard.writeText(currentPID).then(() => {
       hasCopiedPID = true;
@@ -2033,8 +2066,7 @@
       tip.innerText = "✓ 已成功复制个人识别码，请妥善保存并在主问卷中贴上。";
 
       updateReturnButtonState();
-    }).catch(err => {
-      // 兼容非安全環境 clipboard fallback
+    }).catch(() => {
       const tempInput = document.createElement("input");
       tempInput.value = currentPID;
       document.body.appendChild(tempInput);
@@ -2050,7 +2082,6 @@
     });
   }
 
-  // 更新「返回主頁」按鈕文字與可點擊狀態
   function updateReturnButtonState() {
     const returnBtn = document.getElementById("btnReturnSurvey");
     if (!returnBtn) return;
@@ -2071,7 +2102,6 @@
     }
   }
 
-  // 執行預訂確認並跳出「完成模擬與ID展示」彈窗
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
@@ -2092,13 +2122,11 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
-    // 填寫預訂決策資訊
     if (document.getElementById("finalDisplayPID")) document.getElementById("finalDisplayPID").innerText = currentPID;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
-    // 寫入 Firebase (將 32位 PID 記錄為 primary key/欄位)
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + currentPID).set({
@@ -2107,6 +2135,7 @@
           experimentCondition: EXPERIMENT_CONDITION,
           hotelId: selectedHotel.id,
           hotelName: selectedHotel.name,
+          hotelRegion: selectedHotel.region,
           isRecommended: (selectedHotel.id === RECOMMENDED_HOTEL_ID),
           roomName: selectedRoom.name,
           roomSize: selectedRoom.size,
@@ -2123,7 +2152,6 @@
       console.log("Offline mode, skip db push.", err);
     }
 
-    // 啟動 5 秒等候倒數計時
     hasCopiedPID = false;
     exitCountdownFinished = false;
     exitCountdownSeconds = 5;
@@ -2138,11 +2166,9 @@
       updateReturnButtonState();
     }, 1000);
 
-    // 彈出對話框
     document.getElementById("successModal").classList.add("active");
   }
 
-  // 返回問卷主頁
   function returnToSurvey() {
     if (!hasCopiedPID || !exitCountdownFinished) return;
     window.location.href = `${RETURN_SURVEY_URL}?pid=${encodeURIComponent(currentPID)}`;
@@ -2153,8 +2179,10 @@
     filterHotels();
   }
 
+  // 综合多维过滤（包含地区、星级、精确特定评分、配套设施）
   function filterHotels() {
     const maxPrice = parseInt(document.getElementById("priceRange").value);
+    const regionCheckboxes = Array.from(document.querySelectorAll('input[name="region"]:checked')).map(cb => cb.value);
     const starCheckboxes = Array.from(document.querySelectorAll('input[name="star"]:checked')).map(cb => parseInt(cb.value));
     const ratingCheckboxes = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => parseFloat(cb.value));
 
@@ -2166,11 +2194,11 @@
 
     currentHotels = hotelsData.filter(hotel => {
       if (hotel.price > maxPrice) return false;
+      if (regionCheckboxes.length > 0 && !regionCheckboxes.includes(hotel.region)) return false;
       if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
-      if (ratingCheckboxes.length > 0) {
-        const minRating = Math.min(...ratingCheckboxes);
-        if (hotel.rating < minRating) return false;
-      }
+      // 精确匹配选中的特定分数 (如 8.0 只匹配 8.0)
+      if (ratingCheckboxes.length > 0 && !ratingCheckboxes.includes(hotel.rating)) return false;
+
       if (filterBreakfast && !hotel.hasBreakfast) return false;
       if (filterPrivateBath && !hotel.hasPrivateBath) return false;
       if (filterPool && !hotel.hasPool) return false;
@@ -2186,6 +2214,7 @@
   function resetFilters() {
     document.getElementById("priceRange").value = 5000;
     document.getElementById("priceRangeLabel").innerText = "最高 HK$ 5,000";
+    document.querySelectorAll('input[name="region"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('input[name="star"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = false);
     document.getElementById("filterBreakfast").checked = false;

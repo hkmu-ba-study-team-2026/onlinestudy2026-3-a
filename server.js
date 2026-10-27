@@ -7,13 +7,13 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = 4000;
 
 // 中間件設定
 app.use(cors());
 app.use(express.json());
 
-// 靜態檔案託管（可以直接在 http://localhost:3000 存取你的 HTML/CSS/JS）
+// 靜態檔案託管（可以直接在 http://localhost:4000 存取你的 HTML/CSS/JS）
 app.use(express.static(path.join(__dirname)));
 
 // 匯入你剛改好的 API 邏輯
