@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>TripStay 实验数据导出工具 (Master Dataset Exporter)</title>
+    <title>TripStay 实验数据导出与管理工具 (Master Dataset Exporter)</title>
     <!-- SheetJS 与 Firebase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        // 与 booking_page.html / index.html 保持完全一致的 Firebase 配置
+        // 与 booking_page.html / index.html 保持完全一致的 Firebase 配置[cite: 6]
         const firebaseConfig = {
             apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
             authDomain: "online-study-3a.firebaseapp.com",
@@ -24,61 +24,129 @@
     </script>
 
     <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #dc2626;
+            --danger-hover: #b91c1c;
+            --border: #e2e8f0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #f1f5f9;
+            background: var(--bg-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .export-card {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            padding: 36px 32px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             text-align: center;
-            max-width: 520px;
-            width: 90%;
-            border: 1px solid #e2e8f0;
+            max-width: 580px;
+            width: 100%;
+            border: 1px solid var(--border);
         }
         .icon {
-            font-size: 42px;
+            font-size: 40px;
             margin-bottom: 12px;
         }
         h2 {
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 8px;
             font-size: 1.35rem;
             font-weight: 800;
         }
         p {
-            color: #64748b;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 24px;
             line-height: 1.6;
         }
-        .export-btn {
-            background: #2563eb;
-            color: #ffffff;
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn {
             border: none;
-            padding: 14px 28px;
+            padding: 14px 20px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            box-sizing: border-box;
         }
-        .export-btn:hover { background: #1d4ed8; }
+        .export-btn {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }
+        .export-btn:hover { background: var(--primary-hover); }
         .export-btn:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none; }
+
+        /* 危险区样式 */
+        .danger-zone {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1.5px dashed var(--border);
+            text-align: left;
+        }
+        .danger-title {
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .danger-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .delete-btn {
+            background: #fff;
+            color: var(--danger);
+            border: 1.5px solid #fecaca;
+            font-size: 14px;
+            padding: 10px 16px;
+        }
+        .delete-btn:hover {
+            background: #fee2e2;
+            border-color: var(--danger);
+        }
+        .delete-btn:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            border-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
         #statusMsg {
             margin-top: 18px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             color: #334155;
+            min-height: 20px;
+            line-height: 1.5;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -86,42 +154,38 @@
 
 <div class="export-card">
     <div class="icon">🏨📊</div>
-    <h2>TripStay 实验数据导出工具</h2>
-    <p>点击下方按钮直接从 Firebase Realtime Database 抓取受试者数据、前测调查问卷评分及最终酒店模拟预订决策，并生成结构化的综合 Excel 数据集。</p>
-    <button id="exportBtn" class="export-btn" onclick="exportData()">下载研究数据总表 (.xlsx)</button>
+    <h2>TripStay 实验数据导出与管理工具</h2>
+    <p>从 Firebase 抓取完整的 2×2 自主性与推荐实验数据，整合受试者前测问卷各题偏好、系统所推荐酒店以及最终模拟订房决策，生成结构化 Excel 数据表。</p>
+
+    <div class="btn-group">
+        <button id="exportBtn" class="btn export-btn" onclick="exportData()">
+            📥 下载最新研究数据总表 (.xlsx)
+        </button>
+    </div>
+
     <div id="statusMsg"></div>
+
+    <!-- 数据库重置保护区域 -->
+    <div class="danger-zone">
+        <div class="danger-title">⚠️ 危险操作区 (Danger Zone)</div>
+        <div class="danger-desc">
+            清空数据库将永久删除受试者登记（participants）、前测问卷（survey_responses）与订房订单（bookings），并将实验分组序号（grouping）重置为 0。此操作不可逆。
+        </div>
+        <button id="deleteBtn" class="btn delete-btn" onclick="handleClearDatabase()">
+            🗑️ 清空实验数据库 (需二次验证)
+        </button>
+    </div>
 </div>
 
 <script>
-    // 定义 index.html 中的 17 道前测调查问卷题目映射[cite: 6]
-    const PRE_SURVEY_QUESTIONS = [
-        { key: "q01_sensory_experience", header: "Pre_Q01_SensoryExperience" },
-        { key: "q02_fresh",              header: "Pre_Q02_Fresh" },
-        { key: "q03_familiar",           header: "Pre_Q03_Familiar" },
-        { key: "q04_high_quality",       header: "Pre_Q04_HighQuality" },
-        { key: "q05_healthy",            header: "Pre_Q05_Healthy" },
-        { key: "q06_safe_to_consume",    header: "Pre_Q06_SafeToConsume" },
-        { key: "q07_price_within_budget",header: "Pre_Q07_PriceWithinBudget" },
-        { key: "q08_price_justified",    header: "Pre_Q08_PriceJustified" },
-        { key: "q09_serving_size",       header: "Pre_Q09_ServingSize" },
-        { key: "q10_convenient",         header: "Pre_Q10_Convenient" },
-        { key: "q11_versatile_use",      header: "Pre_Q11_VersatileUse" },
-        { key: "q12_packaging_protects", header: "Pre_Q12_PackagingProtects" },
-        { key: "q13_trustworthy_claims", header: "Pre_Q13_TrustworthyClaims" },
-        { key: "q14_available",          header: "Pre_Q14_Available" },
-        { key: "q15_no_exploitation",    header: "Pre_Q15_NoExploitation" },
-        { key: "q16_eco_friendly",       header: "Pre_Q16_EcoFriendly" },
-        { key: "q17_local_product",      header: "Pre_Q17_LocalProduct" }
-    ];
-
     async function exportData() {
         const btn = document.getElementById("exportBtn");
         const status = document.getElementById("statusMsg");
         btn.disabled = true;
-        status.innerText = "⏳ 正在从 Firebase 读取实验数据...";
+        status.innerText = "⏳ 正在连接 Firebase 并提取最新实验数据...";
 
         try {
-            // 同步并行读取本实验的三大主要数据节点
+            // 同步并行读取本实验的三大主要数据节点[cite: 6]
             const [participantsSnap, surveySnap, bookingsSnap] = await Promise.all([
                 db.ref('participants').once('value'),
                 db.ref('survey_responses').once('value'),
@@ -132,95 +196,133 @@
             const surveyObj = surveySnap.val() || {};
             const bookingsObj = bookingsSnap.val() || {};
 
-            // 提取所有唯一受试者 ID (支持 32 位 ID)[cite: 5, 6]
+            // 提取所有参与者的唯一 ID (32位 Participant ID)[cite: 5, 6]
             const allPIDs = new Set([
                 ...Object.keys(participantsObj),
                 ...Object.keys(surveyObj),
                 ...Object.keys(bookingsObj)
             ].filter(pid => pid && pid.trim() !== ""));
 
+            if (allPIDs.size === 0) {
+                status.innerText = "ℹ️ 数据库目前为空，未找到任何受试者数据记录。";
+                btn.disabled = false;
+                return;
+            }
+
             const masterDataMap = {};
 
+            // 依据最新 2x2 架构预定义表格栏位结构
             allPIDs.forEach(pid => {
-                const row = {};
+                masterDataMap[pid] = {
+                    // 1. 受试者标识
+                    "Participant_ID": pid,
+                    "PID_Timestamp_Part": pid.length >= 14 ? pid.substring(0, 14) : "",
+                    "PID_Random_Part": pid.length >= 32 ? pid.substring(14) : "",
+                    "Registration_Time": "",
 
-                // 1. 受试者基础识别信息
-                row["Participant_ID"] = pid;
-                row["PID_Timestamp_Part"] = pid.length >= 14 ? pid.substring(0, 14) : "";
-                row["PID_Random_Part"] = pid.length >= 32 ? pid.substring(14) : "";
-                row["Registration_Time"] = "";
+                    // 2. 实验分组与自变量 (2x2 Design)
+                    "Grouping_Number": "",
+                    "Grouping_Modulo_4": "", // 0, 1, 2, 3
+                    "Autonomy_Mode": "",     // 'low' | 'high'
+                    "Recommendation_Mode": "", // 'traditional' | 'ai'
 
-                // 2. 实验分组与 AI Nudge 信息[cite: 5, 6]
-                row["Experiment_Condition"] = "";
-                row["AI_Nudge_Text"] = "";
-                row["Survey_Submitted_At"] = "";
+                    // 3. 前测问卷各题回答 (index.html 最新拆分结构)
+                    "Survey_Q1_Price_Preference": "",
+                    "Survey_Q2_Star_Preference": "",
+                    "Survey_Q3_Rating_Preference": "",
+                    "Survey_Q4_Facilities_Preference": "",
+                    "Survey_Q5_Region_Preference": "",
+                    "Survey_Submitted_At": "",
 
-                // 3. 前测 17 题调查问卷得分
-                PRE_SURVEY_QUESTIONS.forEach(q => {
-                    row[q.header] = "";
-                });
+                    // 4. 推荐系统干预内容
+                    "System_Recommended_Hotel_ID": "",
+                    "System_Recommended_Hotel_Name": "",
+                    "AI_Nudge_Text": "",
 
-                // 4. 酒店模拟预订决策数据
-                row["Has_Completed_Booking"] = "No";
-                row["Booking_Ref"] = "";
-                row["Selected_Hotel_ID"] = "";
-                row["Selected_Hotel_Name"] = "";
-                row["Is_Recommended_Hotel_42"] = ""; // 核心因变量：是否选择了置顶强推的第42间酒店
-                row["Selected_Room_Name"] = "";
-                row["Room_Size"] = "";
-                row["Room_Bathroom_Type"] = "";
-                row["Room_Breakfast_Plan"] = "";
-                row["Total_Paid_Amount"] = "";
-                row["Booking_Submitted_At"] = "";
+                    // 5. 酒店预订决策与结果 (因变量)
+                    "Has_Completed_Booking": "No",
+                    "Booking_Ref": "",
+                    "Selected_Hotel_ID": "",
+                    "Selected_Hotel_Name": "",
+                    "Selected_Hotel_Region": "",
+                    "Is_Recommended_Hotel_Chosen": "", // 核心因变量：Yes / No
+                    "Selected_Room_Name": "",
+                    "Selected_Room_Size": "",
+                    "Selected_Room_Bathroom": "",
+                    "Selected_Room_Breakfast": "",
+                    "Total_Paid_Amount": "",
+                    "Booking_Created_At": "",
 
-                // 5. 填写的联系人信息 (用于配对或排除测试账号)
-                row["Guest_Name"] = "";
-                row["Guest_Email"] = "";
-                row["Guest_Phone"] = "";
-
-                masterDataMap[pid] = row;
+                    // 6. 联系人预订登记信息 (防刷单检测)
+                    "Guest_Name": "",
+                    "Guest_Email": "",
+                    "Guest_Phone": ""
+                };
             });
 
-            // 填充 1: participants 节点[cite: 6]
+            // 填充 1: participants 节点登记时间[cite: 6]
             Object.entries(participantsObj).forEach(([pid, data]) => {
                 if (masterDataMap[pid]) {
                     masterDataMap[pid]["Registration_Time"] = data.createdAt || "";
                 }
             });
 
-            // 填充 2: survey_responses 节点（index.html）[cite: 6]
+            // 填充 2: survey_responses 节点（前测问卷及分组）[cite: 6]
             Object.entries(surveyObj).forEach(([pid, data]) => {
                 if (masterDataMap[pid]) {
-                    masterDataMap[pid]["Survey_Submitted_At"] = data.submittedAt || "";
+                    masterDataMap[pid]["Grouping_Number"] = data.groupingNumber !== undefined ? data.groupingNumber : "";
+                    masterDataMap[pid]["Grouping_Modulo_4"] = data.conditionModulo !== undefined ? data.conditionModulo : "";
+                    masterDataMap[pid]["Autonomy_Mode"] = data.autonomyMode || "";
+                    masterDataMap[pid]["Recommendation_Mode"] = data.recommendationMode || "";
+
+                    masterDataMap[pid]["System_Recommended_Hotel_ID"] = data.recommendedHotelId || "";
+                    masterDataMap[pid]["System_Recommended_Hotel_Name"] = data.recommendedHotelName || "";
                     masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText || "";
+                    masterDataMap[pid]["Survey_Submitted_At"] = data.submittedAt || "";
 
                     if (data.responses) {
-                        PRE_SURVEY_QUESTIONS.forEach(q => {
-                            if (data.responses[q.key] !== undefined) {
-                                masterDataMap[pid][q.header] = data.responses[q.key];
-                            }
-                        });
+                        masterDataMap[pid]["Survey_Q1_Price_Preference"] = data.responses.price_preference || "";
+                        masterDataMap[pid]["Survey_Q2_Star_Preference"] = data.responses.star_preference || "";
+                        masterDataMap[pid]["Survey_Q3_Rating_Preference"] = data.responses.rating_preference || "";
+
+                        // 多选设施以逗号拼接展示
+                        if (Array.isArray(data.responses.hotel_facilities)) {
+                            masterDataMap[pid]["Survey_Q4_Facilities_Preference"] = data.responses.hotel_facilities.join(" | ");
+                        } else {
+                            masterDataMap[pid]["Survey_Q4_Facilities_Preference"] = data.responses.hotel_facilities || "";
+                        }
+
+                        masterDataMap[pid]["Survey_Q5_Region_Preference"] = data.responses.preferred_region || "";
                     }
                 }
             });
 
-            // 填充 3: bookings 节点（booking_page.html 订房决策）
+            // 填充 3: bookings 节点（模拟订房决策数据）
             Object.entries(bookingsObj).forEach(([key, data]) => {
-                // key 可能是 32位 PID，或者是生成的订房编号[cite: 5]
                 const pid = data.participantID || key;
                 if (masterDataMap[pid]) {
                     masterDataMap[pid]["Has_Completed_Booking"] = "Yes";
                     masterDataMap[pid]["Booking_Ref"] = data.bookingRef || "";
-                    masterDataMap[pid]["Experiment_Condition"] = data.experimentCondition !== undefined ? data.experimentCondition : masterDataMap[pid]["Experiment_Condition"];
+                    masterDataMap[pid]["Autonomy_Mode"] = data.autonomyMode || masterDataMap[pid]["Autonomy_Mode"];
+                    masterDataMap[pid]["Recommendation_Mode"] = data.recommendationMode || masterDataMap[pid]["Recommendation_Mode"];
+
                     masterDataMap[pid]["Selected_Hotel_ID"] = data.hotelId || "";
                     masterDataMap[pid]["Selected_Hotel_Name"] = data.hotelName || "";
-                    masterDataMap[pid]["Is_Recommended_Hotel_42"] = (data.hotelId === 42 || data.isRecommended) ? "Yes" : "No";
+                    masterDataMap[pid]["Selected_Hotel_Region"] = data.hotelRegion || "";
+
+                    // 核心因变量判断
+                    if (data.isRecommendedHotelChosen !== undefined) {
+                        masterDataMap[pid]["Is_Recommended_Hotel_Chosen"] = data.isRecommendedHotelChosen ? "Yes" : "No";
+                    } else if (masterDataMap[pid]["System_Recommended_Hotel_ID"]) {
+                        masterDataMap[pid]["Is_Recommended_Hotel_Chosen"] = (String(data.hotelId) === String(masterDataMap[pid]["System_Recommended_Hotel_ID"])) ? "Yes" : "No";
+                    }
+
                     masterDataMap[pid]["Selected_Room_Name"] = data.roomName || "";
-                    masterDataMap[pid]["Room_Size"] = data.roomSize || "";
-                    masterDataMap[pid]["Room_Bathroom_Type"] = data.bathroom || "";
-                    masterDataMap[pid]["Room_Breakfast_Plan"] = data.breakfast || "";
+                    masterDataMap[pid]["Selected_Room_Size"] = data.roomSize || "";
+                    masterDataMap[pid]["Selected_Room_Bathroom"] = data.bathroom || "";
+                    masterDataMap[pid]["Selected_Room_Breakfast"] = data.breakfast || "";
                     masterDataMap[pid]["Total_Paid_Amount"] = data.totalPaid || "";
-                    masterDataMap[pid]["Booking_Submitted_At"] = data.createdAt || "";
+                    masterDataMap[pid]["Booking_Created_At"] = data.createdAt || "";
 
                     masterDataMap[pid]["Guest_Name"] = data.guestName || "";
                     masterDataMap[pid]["Guest_Email"] = data.guestEmail || "";
@@ -228,20 +330,98 @@
                 }
             });
 
-            // 产出 Excel 档案
+            // 使用 SheetJS 生成 Excel 工作簿[cite: 6]
             const wb = XLSX.utils.book_new();
             const wsMaster = XLSX.utils.json_to_sheet(Object.values(masterDataMap));
-            XLSX.utils.book_append_sheet(wb, wsMaster, "TripStay_Research_Data");
 
-            const dateStr = new Date().toISOString().split('T')[0];
-            XLSX.writeFile(wb, `TripStay_Master_Data_${dateStr}.xlsx`);
+            // 优化表格列宽
+            const colWidths = [
+                { wch: 34 }, // PID
+                { wch: 16 }, // Time part
+                { wch: 20 }, // Rand part
+                { wch: 22 }, // Reg Time
+                { wch: 16 }, // Grouping
+                { wch: 18 }, // Modulo
+                { wch: 15 }, // Autonomy
+                { wch: 20 }, // Rec Mode
+                { wch: 22 }, // Q1 Price
+                { wch: 18 }, // Q2 Star
+                { wch: 20 }, // Q3 Rating
+                { wch: 32 }, // Q4 Facilities
+                { wch: 20 }, // Q5 Region
+                { wch: 22 }, // Survey time
+                { wch: 28 }, // Rec Hotel ID
+                { wch: 32 }, // Rec Hotel Name
+                { wch: 40 }, // Nudge Text
+                { wch: 22 }, // Has Completed
+                { wch: 16 }, // Booking Ref
+                { wch: 18 }, // Sel Hotel ID
+                { wch: 32 }, // Sel Hotel Name
+                { wch: 18 }, // Region
+                { wch: 28 }, // Is Recommended Chosen
+                { wch: 26 }, // Room Name
+                { wch: 16 }, // Room Size
+                { wch: 24 }, // Bathroom
+                { wch: 24 }, // Breakfast
+                { wch: 16 }, // Total Paid
+                { wch: 22 }  // Booking time
+            ];
+            wsMaster['!cols'] = colWidths;
 
-            status.innerText = `✅ 导出成功！共成功处理 ${Object.keys(masterDataMap).length} 位受试者记录。`;
+            XLSX.utils.book_append_sheet(wb, wsMaster, "TripStay_Experiment_Data");
+
+            const today = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `TripStay_Experiment_Master_${today}.xlsx`);
+
+            status.innerText = `✅ 导出成功！已整合 ${Object.keys(masterDataMap).length} 位受试者的实验决策全量数据。`;
         } catch (err) {
-            console.error("Export error:", err);
-            status.innerText = "❌ 导出失败，请按 F12 打开开发者控制台查看错误日志。";
+            console.error("Export Error:", err);
+            status.innerText = "❌ 导出失败，请检查网络连接或按 F12 打开开发者控制台查看报错。";
         } finally {
             btn.disabled = false;
+        }
+    }
+
+    // 清空数据库逻辑（双重确认安全保护）
+    async function handleClearDatabase() {
+        const deleteBtn = document.getElementById("deleteBtn");
+        const status = document.getElementById("statusMsg");
+
+        // 第一层保护确认
+        const firstConfirm = confirm("⚠️ 警告：您确定要删除 Firebase 数据库中的所有实验记录吗？\n\n此操作将清空所有问卷回答、订房数据及受试者记录！");
+        if (!firstConfirm) return;
+
+        // 第二层保护：文本输入验证
+        const VERIFICATION_CODE = "DELETE-ALL-DATA";
+        const userInput = prompt(`🔴 高危操作：为防止误删，请输入验证码以确认执行：\n\n请输入：${VERIFICATION_CODE}`);
+
+        if (userInput !== VERIFICATION_CODE) {
+            alert("❌ 验证码输入不正确，操作已安全取消。数据库未作任何更改。");
+            return;
+        }
+
+        deleteBtn.disabled = true;
+        status.innerText = "⏳ 正在清空数据库实验数据与重置计数器...";
+
+        try {
+            // 执行原子批量清除并重置计数器
+            const updates = {
+                'participants': null,
+                'survey_responses': null,
+                'bookings': null,
+                'grouping': 0 // 重置分组递增计数
+            };
+
+            await db.ref().update(updates);
+
+            status.innerText = "🗑️ 数据库已彻底清空，实验分组序号已重置为 0。";
+            alert("✅ 数据库清空成功！可以开始新一批次的受试者实验。");
+        } catch (err) {
+            console.error("Clear DB Error:", err);
+            status.innerText = `❌ 清空数据库失败: ${err.message}`;
+            alert(`清空失败: ${err.message}`);
+        } finally {
+            deleteBtn.disabled = false;
         }
     }
 </script>

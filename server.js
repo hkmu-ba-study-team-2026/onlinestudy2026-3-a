@@ -13,7 +13,7 @@ const PORT = 4000;
 app.use(cors());
 app.use(express.json());
 
-// 靜態檔案託管（可以直接在 http://localhost:4000 存取你的 HTML/CSS/JS）
+// 靜態檔案託管
 app.use(express.static(path.join(__dirname)));
 
 // 匯入你剛改好的 API 邏輯

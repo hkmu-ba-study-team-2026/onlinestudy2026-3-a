@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>酒店预订前测问卷</title>
-    <!-- 引入酒店数据集供筛选候选池 -->
+    <!-- 引入酒店数据集供候选用 -->
     <script src="hotels_data.js"></script>
     <style>
         :root {
@@ -78,7 +78,7 @@
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
             gap: 10px;
         }
 
@@ -95,6 +95,7 @@
 
         .option-card label {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 12px 14px;
@@ -102,12 +103,20 @@
             border: 1.5px solid var(--border-color);
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             color: var(--text-primary);
             transition: all 0.2s ease;
             text-align: center;
             user-select: none;
+            height: 100%;
+            gap: 2px;
+        }
+
+        .option-card label span.sub-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
         }
 
         .option-card label:hover {
@@ -121,6 +130,10 @@
             color: var(--accent-color);
             font-weight: 700;
             box-shadow: 0 0 0 1px var(--accent-color);
+        }
+
+        .option-card input:checked + label span.sub-desc {
+            color: #3b82f6;
         }
 
         .submit-btn {
@@ -187,28 +200,96 @@
 
     <form id="surveyForm" onsubmit="handleSubmit(event)">
 
-        <!-- 问题 1: 订房注重倾向 -->
+        <!-- 问题 1: 出行预算取向 (隐蔽映射价格) -->
         <div class="form-group">
-            <label class="question-title">1. 你订酒店时一般比较注重：<span class="required">*</span></label>
+            <label class="question-title">1. 您的住宿预算倾向于哪种安排？</label>
             <div class="options-grid">
                 <div class="option-card">
-                    <input type="radio" id="focus_cheap" name="hotel_focus" value="价格便宜" required>
-                    <label for="focus_cheap">价格便宜</label>
+                    <input type="radio" id="price_budget" name="price_preference" value="经济实惠" required>
+                    <label for="price_budget">
+                        <span>务实精算</span>
+                    </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="focus_value" name="hotel_focus" value="性价比高" required>
-                    <label for="focus_value">性价比高</label>
+                    <input type="radio" id="price_mid" name="price_preference" value="舒适适中" required>
+                    <label for="price_mid">
+                        <span>均衡稳妥</span>
+                    </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="focus_quality" name="hotel_focus" value="品质上乘" required>
-                    <label for="focus_quality">品质上乘</label>
+                    <input type="radio" id="price_luxury" name="price_preference" value="尊贵奢华" required>
+                    <label for="price_luxury">
+                        <span>品质礼遇</span>
+                    </label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 2: 设施偏好 (可多选) -->
+        <!-- 问题 2: 住宿形态与规格 (隐蔽映射星级) -->
         <div class="form-group">
-            <label class="question-title">2. 你重视酒店要有以下设施吗？（可多选）</label>
+            <label class="question-title">2. 您喜欢入住哪种氛围与环境？</label>
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                <div class="option-card">
+                    <input type="radio" id="star_2" name="star_preference" value="2星" required>
+                    <label for="star_2">
+                        <span>简朴青年驿站</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="star_3" name="star_preference" value="3星" required>
+                    <label for="star_3">
+                        <span>经典标准商旅</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="star_4" name="star_preference" value="4星" required>
+                    <label for="star_4">
+                        <span>雅致精品名店</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="star_5" name="star_preference" value="5星" required>
+                    <label for="star_5">
+                        <span>殿堂级地标</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问题 3: 住客口碑依赖度 (隐蔽映射评分) -->
+        <div class="form-group">
+            <label class="question-title">3. 翻阅其他住客的体验分享时，您通常的标准是？</label>
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                <div class="option-card">
+                    <input type="radio" id="rating_80" name="rating_preference" value="8.0分以上" required>
+                    <label for="rating_80">
+                        <span>基本好评</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="rating_85" name="rating_preference" value="8.5分以上" required>
+                    <label for="rating_85">
+                        <span>多数肯定</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="rating_90" name="rating_preference" value="9.0分以上" required>
+                    <label for="rating_90">
+                        <span>广泛盛赞</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="rating_95" name="rating_preference" value="9.5分顶尖" required>
+                    <label for="rating_95">
+                        <span>近乎无可挑剔</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问题 4: 设施偏好 (直白选项，可多选) -->
+        <div class="form-group">
+            <label class="question-title">4. 你重视酒店要有以下设施吗？（可多选）</label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="checkbox" id="facility_breakfast" name="hotel_facilities" value="含免费丰盛早餐">
@@ -233,21 +314,21 @@
             </div>
         </div>
 
-        <!-- 问题 3: 偏好地区 -->
+        <!-- 问题 5: 偏好地区 (直白选项) -->
         <div class="form-group">
-            <label class="question-title">3. 你喜欢住在哪个地区？<span class="required">*</span></label>
+            <label class="question-title">5. 你喜欢住在哪个地区？<span class="required">*</span></label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="radio" id="region_hk" name="preferred_region" value="港岛" required>
-                    <label for="region_hk">港岛</label>
+                    <label for="region_hk">港岛 (Hong Kong Island)</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_kl" name="preferred_region" value="九龙" required>
-                    <label for="region_kl">九龙</label>
+                    <label for="region_kl">九龙 (Kowloon)</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_nt" name="preferred_region" value="新界" required>
-                    <label for="region_nt">新界</label>
+                    <label for="region_nt">新界 (New Territories)</label>
                 </div>
             </div>
         </div>
@@ -290,7 +371,7 @@
         }
     });
 
-    // 透過 Firebase transaction 進行原子計數遞增 (+1)
+    // Firebase 原子计数递增 (+1)
     function getNextGroupingNumber() {
         return new Promise((resolve) => {
             if (typeof db === 'undefined') {
@@ -308,7 +389,6 @@
                     console.warn("Transaction failed, using fallback:", error);
                     resolve(Math.floor(Math.random() * 100));
                 } else {
-                    // 分配給該次訪問的序號
                     resolve(snapshot.val() - 1);
                 }
             });
@@ -320,53 +400,54 @@
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.textContent = '正在分析偏好并配置实验条件...';
+        submitBtn.textContent = '正在分析偏好并分配模式...';
 
         const formData = new FormData(event.target);
-        const hotelFocus = formData.get("hotel_focus");
+
+        // 收集问卷数据
+        const pricePref = formData.get("price_preference");
+        const starPref = formData.get("star_preference");
+        const ratingPref = formData.get("rating_preference");
         const facilities = formData.getAll("hotel_facilities");
         const preferredRegion = formData.get("preferred_region");
 
         const surveyResponses = {
-            hotel_focus: hotelFocus,
+            price_preference: pricePref,
+            star_preference: starPref,
+            rating_preference: ratingPref,
             hotel_facilities: facilities,
             preferred_region: preferredRegion
         };
 
-        // 1. 取得全域遞增的序號
+        // 获取分组编号及余数 (grouping % 4)
         const currentGroupNumber = await getNextGroupingNumber();
+        const conditionModulo = currentGroupNumber % 4;
 
-        // 2. 核心分組邏輯：grouping % 4
-        // 0: low autonomy traditional
-        // 1: low autonomy AI
-        // 2: high autonomy traditional
-        // 3: high autonomy AI
-        const groupMod = currentGroupNumber % 4;
-        let autonomyCondition = "low"; // 'low' 或 'high'
-        let recommendationMode = "traditional"; // 'traditional' 或 'ai'
+        let autonomyMode = "low";
+        let recommendationMode = "traditional";
 
-        if (groupMod === 0) {
-            autonomyCondition = "low";
+        if (conditionModulo === 0) {
+            autonomyMode = "low";
             recommendationMode = "traditional";
-        } else if (groupMod === 1) {
-            autonomyCondition = "low";
+        } else if (conditionModulo === 1) {
+            autonomyMode = "low";
             recommendationMode = "ai";
-        } else if (groupMod === 2) {
-            autonomyCondition = "high";
+        } else if (conditionModulo === 2) {
+            autonomyMode = "high";
             recommendationMode = "traditional";
-        } else if (groupMod === 3) {
-            autonomyCondition = "high";
+        } else if (conditionModulo === 3) {
+            autonomyMode = "high";
             recommendationMode = "ai";
         }
 
-        // 預設推薦 4 星級 Eco 酒店：香港東隅酒店 (ID: 21)
+        // 默认 Traditional 推荐：4 星级 Eco 酒店 (香港东隅酒店 ID: 21)
         let recommendedHotelId = 21;
         let recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
         let aiNudgeText = "";
 
         if (recommendationMode === "ai") {
             try {
-                // 候選池僅傳遞具備 eco 屬性的酒店
+                // 仅筛选具有 eco 纪录的候选酒店传递给 AI
                 const ecoHotels = typeof hotelsData !== 'undefined'
                     ? hotelsData.filter(h => h.eco && h.eco.trim() !== "")
                     : [];
@@ -396,28 +477,28 @@
                 aiNudgeText = "These items feature verified green operations and refined hospitality for your ideal stay.";
             }
         } else {
-            // Traditional 模式推薦 4 星 Eco 酒店
+            // Traditional 模式
             recommendedHotelId = 21;
             recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
             aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
         }
 
-        // 保存實驗組態至 localStorage
+        // 保存状态至 localStorage
         localStorage.setItem("grouping_number", currentGroupNumber);
-        localStorage.setItem("group_mod", groupMod);
-        localStorage.setItem("autonomy_condition", autonomyCondition);
+        localStorage.setItem("condition_modulo", conditionModulo);
+        localStorage.setItem("autonomy_mode", autonomyMode);
         localStorage.setItem("recommendation_mode", recommendationMode);
         localStorage.setItem("recommended_hotel_id", recommendedHotelId);
         localStorage.setItem("recommended_hotel_name", recommendedHotelName);
         localStorage.setItem("ai_nudge_text", aiNudgeText);
         localStorage.setItem("user_preferences", JSON.stringify(surveyResponses));
 
-        // 寫入 Firebase
+        // 写入 Firebase 问卷数据节点
         const firebaseData = {
             participantID: currentParticipantID,
             groupingNumber: currentGroupNumber,
-            groupMod: groupMod,
-            autonomyCondition: autonomyCondition,
+            conditionModulo: conditionModulo,
+            autonomyMode: autonomyMode,
             recommendationMode: recommendationMode,
             recommendedHotelId: recommendedHotelId,
             recommendedHotelName: recommendedHotelName,
@@ -434,8 +515,8 @@
             console.error('保存至 Firebase 失败:', dbError);
         }
 
-        // 跳轉到預訂頁面，帶上 autonomy、mode、recId 及組號參數
-        window.location.href = `booking_page.html?autonomy=${autonomyCondition}&mode=${recommendationMode}&recId=${recommendedHotelId}&group=${currentGroupNumber}`;
+        // 跳转并带上实验组态参数
+        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&autonomy=${autonomyMode}&group=${currentGroupNumber}`;
     }
 </script>
 </body>

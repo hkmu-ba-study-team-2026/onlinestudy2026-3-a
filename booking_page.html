@@ -1432,20 +1432,20 @@
       <button class="btn-reset-filters" onclick="resetFilters()">重置所有</button>
     </div>
 
-    <!-- 价格滑块 -->
+    <!-- 价格滑块 (最低下调至 HK$ 200，最高 HK$ 5,000) -->
     <div class="filter-group">
       <div class="filter-title">
         <span>每晚预算上限</span>
         <span id="priceRangeLabel">最高 HK$ 5,000</span>
       </div>
-      <input type="range" id="priceRange" class="price-range-slider" min="400" max="5000" step="50" value="5000" oninput="updatePriceFilter(this.value)">
+      <input type="range" id="priceRange" class="price-range-slider" min="200" max="5000" step="50" value="5000" oninput="updatePriceFilter(this.value)">
       <div class="price-values">
-        <span>HK$ 400</span>
+        <span>HK$ 200</span>
         <span>HK$ 5,000+</span>
       </div>
     </div>
 
-    <!-- 所在地区筛选 -->
+    <!-- 所在地区筛选 (港岛 27 / 九龙 27 / 新界 26) -->
     <div class="filter-group">
       <div class="filter-title">所在地区</div>
       <label class="filter-checkbox">
@@ -1465,23 +1465,28 @@
       </label>
     </div>
 
-    <!-- 酒店星级 -->
+    <!-- 酒店星级 (4 种星级各 20 间) -->
     <div class="filter-group">
       <div class="filter-title">酒店星级</div>
       <label class="filter-checkbox">
         <input type="checkbox" name="star" value="5" onchange="filterHotels()">
-        <span>⭐⭐⭐⭐⭐ 五星级奢华</span>
-        <span class="count" id="count-star-5">(0)</span>
+        <span>五星级奢华</span>
+        <span class="count" id="count-star-5">(20)</span>
       </label>
       <label class="filter-checkbox">
         <input type="checkbox" name="star" value="4" onchange="filterHotels()">
-        <span>⭐⭐⭐⭐ 四星级高档</span>
-        <span class="count" id="count-star-4">(0)</span>
+        <span>四星级高档</span>
+        <span class="count" id="count-star-4">(20)</span>
       </label>
       <label class="filter-checkbox">
         <input type="checkbox" name="star" value="3" onchange="filterHotels()">
-        <span>⭐⭐⭐ 三星级舒适</span>
-        <span class="count" id="count-star-3">(0)</span>
+        <span>三星级舒适</span>
+        <span class="count" id="count-star-3">(20)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="star" value="2" onchange="filterHotels()">
+        <span>经济级实惠</span>
+        <span class="count" id="count-star-2">(20)</span>
       </label>
     </div>
 
@@ -1693,47 +1698,68 @@
   </div>
 </div>
 
-<!-- 弹窗 3：实验完成、展示32位个人ID并返回问卷主页 -->
+<!-- 弹窗 3：模拟预订完成、强制复制 32 位个人 ID 并警告指引 -->
 <div class="modal-overlay" id="successModal">
-  <div class="modal-container" style="max-width: 560px;">
-    <div class="modal-body">
-      <div style="text-align: center; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.85rem;">
+  <div class="modal-container" style="max-width: 600px;">
+    <div class="modal-body" style="padding: 2rem 1.8rem;">
+      <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.9rem;">
+
+        <!-- 成功图示 -->
         <div style="width: 64px; height: 64px; border-radius: 50%; background: #e0f2fe; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
           <i class="fa-solid fa-clipboard-check"></i>
         </div>
-        <h2 style="font-size:1.35rem; font-weight:800; color:var(--text-main);">模拟预订已完成</h2>
-        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">
-          感谢您的参与！您即将返回主问卷以完成后续评估。<br>
-          <strong style="color:#b91c1c;">【重要步骤】</strong> 请点击下方按钮<strong>复制您的专属个人ID</strong>，并在回到问卷主页后贴上核验。
-        </p>
 
-        <div style="width: 100%; text-align: left;">
-          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">您的 32 位个人识别码 (Participant ID)：</label>
-          <div class="id-copy-container">
-            <span class="id-copy-text" id="finalDisplayPID">--------------------------------</span>
-            <button class="btn-copy-id" id="btnCopyPID" onclick="copyParticipantID()">
-              <i class="fa-regular fa-copy"></i> 复制ID
-            </button>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: -2px;">
+          模拟预订已成功完成
+        </h2>
+
+        <!-- 重要警告横幅 (严格警告) -->
+        <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 1rem 1.2rem; text-align: left; width: 100%; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px; color: #b91c1c; font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.15rem;"></i>
+            <span>【重要警告】必须完成以下核验步骤</span>
           </div>
-          <p id="copyStatusTip" style="font-size: 0.75rem; color: #dc2626; margin-top: 2px;">
-            * 必须先点击「复制ID」才能返回主页问卷
+          <p style="color: #991b1b; font-size: 0.85rem; line-height: 1.6; margin: 0;">
+            1. 请务必点击下方按钮<strong>复制您的专属个人 ID</strong>。<br>
+            2. 请<strong>自行切换回原本的问卷主页分页面</strong>，在相应题目中<strong>贴上此 ID</strong> 继续完成作答。<br>
+            <strong style="color: #dc2626; text-decoration: underline;">特别声明：若未在问卷中贴上正确 ID，系统将无法核验您的实验记录，本次作答将被视为无效，且绝不会发放任何相关报酬或实验奖励！</strong>
           </p>
         </div>
 
-        <div style="background:#f8fafc; border:1px dashed var(--border); border-radius:8px; padding:0.85rem 1rem; width:100%; text-align:left; font-size:0.82rem; line-height:1.6; color:#475569;">
-          <p><strong>最终选定酒店：</strong> <span id="successHotel">--</span></p>
-          <p><strong>所选客房类型：</strong> <span id="successRoom">--</span></p>
-          <p><strong>总计实付金额：</strong> <span style="color:var(--accent); font-weight:800;" id="successPaid">--</span></p>
+        <!-- 32 位 ID 复制展示框 -->
+        <div style="width: 100%; text-align: left; margin-top: 4px;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);">
+            您的 32 位个人识别码 (Participant ID)：
+          </label>
+          <div class="id-copy-container" style="margin-top: 6px;">
+            <span class="id-copy-text" id="finalDisplayPID">--------------------------------</span>
+            <button type="button" class="btn-copy-id" id="btnCopyPID" onclick="copyParticipantID()">
+              <i class="fa-regular fa-copy"></i> 复制ID
+            </button>
+          </div>
+          <p id="copyStatusTip" style="font-size: 0.78rem; color: #dc2626; margin-top: 4px; font-weight: 600;">
+            * 尚未复制：请先点击上方蓝色「复制ID」按钮
+          </p>
         </div>
 
-        <button class="btn-return-survey" id="btnReturnSurvey" onclick="returnToSurvey()" disabled>
-          请先复制个人ID并等候 (5s)
-        </button>
+        <!-- 订房决策回执摘要 (供核实) -->
+        <div style="background: #f8fafc; border: 1px dashed var(--border); border-radius: 8px; padding: 0.85rem 1rem; width: 100%; text-align: left; font-size: 0.82rem; line-height: 1.6; color: #475569; box-sizing: border-box;">
+          <p><strong>最终选定酒店：</strong> <span id="successHotel">--</span></p>
+          <p><strong>所选客房类型：</strong> <span id="successRoom">--</span></p>
+          <p><strong>订单确认编号：</strong> <span id="successRef" style="font-family: monospace; font-weight: 700;">--</span></p>
+          <p><strong>模拟实付金额：</strong> <span style="color: var(--accent); font-weight: 800;" id="successPaid">--</span></p>
+        </div>
+
+        <!-- 底部静态行动指引提示 (无按钮，指引返回) -->
+        <div style="width: 100%; padding: 0.85rem; border-radius: 8px; background: #f1f5f9; color: #334155; font-size: 0.85rem; font-weight: 600; text-align: center; border: 1px solid #cbd5e1;">
+          <i class="fa-solid fa-arrow-turn-up" style="transform: rotate(-90deg); margin-right: 4px; color: var(--primary);"></i>
+          已复制 ID 后，请在浏览器上方切换回<strong>问卷主页标签页</strong>继续作答。
+        </div>
+
       </div>
     </div>
   </div>
 </div>
-
 <!-- 右下角悬浮推荐卡片 Floating Popup (根据 Autonomy 设定叉键) -->
 <div class="floating-recommend-popup" id="floatingRecommendPopup">
   <div class="floating-popup-header">
@@ -1883,24 +1909,29 @@
     if (typeof hotelsData === 'undefined' || !hotelsData.length) return;
 
     let regHK = 0, regKL = 0, regNT = 0;
-    let star5 = 0, star4 = 0, star3 = 0;
+    let star5 = 0, star4 = 0, star3 = 0, star2 = 0;
     let r95 = 0, r90 = 0, r85 = 0, r80 = 0;
     let bfast = 0, pBath = 0, pool = 0, cancel = 0, gym = 0;
 
     hotelsData.forEach(hotel => {
+      // 地区分布
       if (hotel.region === "港岛") regHK++;
       else if (hotel.region === "九龙") regKL++;
       else if (hotel.region === "新界") regNT++;
 
+      // 星级分布 (各 20)
       if (hotel.stars === 5) star5++;
       else if (hotel.stars === 4) star4++;
       else if (hotel.stars === 3) star3++;
+      else if (hotel.stars === 2) star2++;
 
+      // 评分分布 (各 20)
       if (hotel.rating === 9.5) r95++;
       else if (hotel.rating === 9.0) r90++;
       else if (hotel.rating === 8.5) r85++;
       else if (hotel.rating === 8.0) r80++;
 
+      // 配套设施 (<= 40)
       if (hotel.hasBreakfast) bfast++;
       if (hotel.hasPrivateBath) pBath++;
       if (hotel.hasPool) pool++;
@@ -1915,6 +1946,9 @@
     document.getElementById("count-star-5").innerText = `(${star5})`;
     document.getElementById("count-star-4").innerText = `(${star4})`;
     document.getElementById("count-star-3").innerText = `(${star3})`;
+    if (document.getElementById("count-star-2")) {
+      document.getElementById("count-star-2").innerText = `(${star2})`;
+    }
 
     document.getElementById("count-rating-95").innerText = `(${r95})`;
     document.getElementById("count-rating-90").innerText = `(${r90})`;
@@ -2159,32 +2193,38 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
+  // 复制个人 ID 功能
   function copyParticipantID() {
-    navigator.clipboard.writeText(currentPID).then(() => {
+    const copyBtn = document.getElementById("btnCopyPID");
+    const tip = document.getElementById("copyStatusTip");
+
+    function setSuccessState() {
       hasCopiedPID = true;
-      const copyBtn = document.getElementById("btnCopyPID");
-      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制!';
+      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已成功复制!';
       copyBtn.classList.add("copied");
+      tip.style.color = "#047857";
+      tip.innerText = "✓ 已成功复制到剪贴簿！请现在切换回问卷主页分页面贴上。";
+    }
 
-      const tip = document.getElementById("copyStatusTip");
-      tip.style.color = "#10b981";
-      tip.innerText = "✓ 已成功复制个人识别码，请妥善保存并在主问卷中贴上。";
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentPID).then(() => {
+        setSuccessState();
+      }).catch(() => {
+        fallbackCopy();
+      });
+    } else {
+      fallbackCopy();
+    }
 
-      updateReturnButtonState();
-    }).catch(() => {
+    function fallbackCopy() {
       const tempInput = document.createElement("input");
       tempInput.value = currentPID;
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-
-      hasCopiedPID = true;
-      const copyBtn = document.getElementById("btnCopyPID");
-      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制!';
-      copyBtn.classList.add("copied");
-      updateReturnButtonState();
-    });
+      setSuccessState();
+    }
   }
 
   function updateReturnButtonState() {
@@ -2207,6 +2247,7 @@
     }
   }
 
+  // 确认订单并弹出模态框 (不再包含跳转按钮与倒数计时)
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
@@ -2227,12 +2268,27 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
+    // 填充完成弹窗数据
     if (document.getElementById("finalDisplayPID")) document.getElementById("finalDisplayPID").innerText = currentPID;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
+    if (document.getElementById("successRef")) document.getElementById("successRef").innerText = refNumber;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
-    // 记录订房决策与 2x2 实验变量
+    // 重置复制按钮状态
+    hasCopiedPID = false;
+    const copyBtn = document.getElementById("btnCopyPID");
+    if (copyBtn) {
+      copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制ID';
+      copyBtn.classList.remove("copied");
+    }
+    const tip = document.getElementById("copyStatusTip");
+    if (tip) {
+      tip.style.color = "#dc2626";
+      tip.innerText = "* 尚未复制：请先点击上方蓝色「复制ID」按钮";
+    }
+
+    // 写入 Firebase 实验数据记录
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + currentPID).set({
@@ -2260,20 +2316,7 @@
       console.log("Offline mode, skip db push.", err);
     }
 
-    hasCopiedPID = false;
-    exitCountdownFinished = false;
-    exitCountdownSeconds = 5;
-    updateReturnButtonState();
-
-    const exitTimer = setInterval(() => {
-      exitCountdownSeconds--;
-      if (exitCountdownSeconds <= 0) {
-        clearInterval(exitTimer);
-        exitCountdownFinished = true;
-      }
-      updateReturnButtonState();
-    }, 1000);
-
+    // 显示弹窗并锁定背景
     document.getElementById("successModal").classList.add("active");
   }
 
