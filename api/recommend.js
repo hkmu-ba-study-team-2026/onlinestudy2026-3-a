@@ -62,7 +62,7 @@ ${JSON.stringify(simplifiedHotels)}
 Requirements:
 1. Select1 hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
 2. The recommendedHotelId must strictly match the integer 'id' of the chosen hotel.
-3. The recommendation text must be plain text under 30 words, starting with "These items".
+3. The recommendation text must be plain text under 30 words, written in Simplified Chinese.
 4. Naturally highlight the sustainable/eco-friendly advantages of the chosen hotel without explicitly saying it was derived from user preferences.
 5. Output ONLY a raw JSON object. Do NOT include any conversational prefix like "Here is the JSON".
 `;
