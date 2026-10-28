@@ -333,16 +333,17 @@
         };
 
         const currentGroupNumber = await getNextGroupingNumber();
+        // 判斷單數 (AI 推薦模式) 或雙數 (傳統模式)
         const isOdd = (currentGroupNumber % 2 !== 0);
         const recommendationMode = isOdd ? "ai" : "traditional";
 
-        let recommendedHotelId = 42; // 預設推薦
-        let recommendedHotelName = "香港维港朗廷汇酒店";
+        // 預設推薦 4星級且具備 Eco 認證的香港東隅酒店 (ID: 21)
+        let recommendedHotelId = 21;
+        let recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
         let aiNudgeText = "";
 
         if (recommendationMode === "ai") {
             try {
-                // 傳遞具備 eco 屬性的酒店
                 const ecoHotels = typeof hotelsData !== 'undefined'
                     ? hotelsData.filter(h => h.eco && h.eco.trim() !== "")
                     : [];
@@ -360,29 +361,25 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.recommendedHotelId) {
-                        recommendedHotelId = data.recommendedHotelId;
-                    }
-                    if (data.recommendedHotelName) {
-                        recommendedHotelName = data.recommendedHotelName;
-                    }
+                    if (data.recommendedHotelId) recommendedHotelId = data.recommendedHotelId;
+                    if (data.recommendedHotelName) recommendedHotelName = data.recommendedHotelName;
                     aiNudgeText = data.recommendation || "These items offer premium hospitality and certified eco-friendly living tailored to your stay.";
                 } else {
                     throw new Error("AI service non-200");
                 }
             } catch (err) {
                 console.warn("AI recommendation failed, using fallback:", err);
-                recommendedHotelId = 42;
+                recommendedHotelId = 21;
                 aiNudgeText = "These items feature verified green operations and refined hospitality for your ideal stay.";
             }
         } else {
-            // 雙數：傳統固定推薦模式
-            recommendedHotelId = 42;
-            recommendedHotelName = "香港维港朗廷汇酒店";
-            aiNudgeText = "为您精选平台今日主推特选住宿与地标酒店。";
+            // 雙數：傳統推薦模式 (固定推薦 4星級 Eco 酒店：香港東隅酒店)
+            recommendedHotelId = 21;
+            recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
+            aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
         }
 
-        // 保存至 localStorage
+        // 保存狀態並導向
         localStorage.setItem("recommendation_mode", recommendationMode);
         localStorage.setItem("grouping_number", currentGroupNumber);
         localStorage.setItem("recommended_hotel_id", recommendedHotelId);

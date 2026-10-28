@@ -1,10 +1,9 @@
-// 香港 60 间酒店完整平衡数据集
-// 星级分布：5星 (20间: ID 1-19, 42) | 4星 (20间: ID 20-39) | 3星 (20间: ID 40-41, 43-60)
-// 设施平衡：每项设施 (hasBreakfast, hasPrivateBath, hasPool, hasCancel, hasGym) 均严格控制在 30 间 (50%)
-// 环保认证：新增 "eco" 字段，收录 24 间真实环保奖项与可持续发展纪录 (每星级各 8 间)
+// 香港 60 间酒店完整平衡数据集 (ID 1 至 60 重新整理)
+// 5星 (ID 1-20) | 4星 (ID 21-40) | 3星 (ID 41-60)
+// 每项配套设施严格 <= 30间；收录 24 间真实环保认证酒店 (每星级各 8 间)
 const hotelsData = [
     // =========================================================================
-    // ⭐⭐⭐⭐⭐ 5 星级酒店 (共 20 间：ID 1 ~ 19 及 ID 42)
+    // ⭐⭐⭐⭐⭐ 5 星级酒店 (共 20 间：ID 1 ~ 20)
     // =========================================================================
     {
         "id": 1,
@@ -312,6 +311,45 @@ const hotelsData = [
     },
     {
         "id": 9,
+        "name": "香港维港朗廷汇酒店 (The Grand Harbourside Langham)",
+        "enName": "The Grand Harbourside Langham Hong Kong",
+        "region": "港岛",
+        "district": "中环",
+        "location": "港岛中环民耀街88号中环海滨综合体",
+        "distance": "紧邻中环天星码头与摩天轮，直通IFC与中环站",
+        "stars": 5,
+        "rating": 9.5,
+        "reviewCount": 1580,
+        "verdict": "传奇云端奢华",
+        "dealTag": "黑卡尊享礼遇",
+        "price": 4980,
+        "originalPrice": 6280,
+        "hasBreakfast": true,
+        "hasPrivateBath": true,
+        "hasPool": true,
+        "hasCancel": true,
+        "hasGym": true,
+        "eco": "荣获 EarthCheck 金级认证及 LEED 铂金级绿色建筑评级，全馆实现 100% 零塑胶客房及智能再生能源热回收系统",
+        "images": [
+            "https://commons.wikimedia.org/wiki/Special:FilePath/HK_Four_Seasons_Hotel_view.jpg?width=800"
+        ],
+        "rooms": [
+            {
+                "id": "ghl-901",
+                "name": "天际尊尚维港全景客房",
+                "size": "58 平方米",
+                "bed": "1张特大双人床 (Custom King Bed)",
+                "bathroom": "独立进口白玛瑙奢华水疗卫浴 (配落地窗景双人浴缸)",
+                "breakfast": "含双人米其林星厨定制点单式奢华早餐",
+                "cancel": "入住前24小时内可免费取消",
+                "price": 4980,
+                "origPrice": 6280,
+                "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Rosewood_Hong_Kong_Lobby_The_Skin_Speaks_A_Language_Not_Its_Own_2019.jpg?width=600"
+            }
+        ]
+    },
+    {
+        "id": 10,
         "name": "香港丽思卡尔顿酒店 (The Ritz-Carlton Hong Kong)",
         "enName": "The Ritz-Carlton Hong Kong",
         "region": "九龙",
@@ -335,7 +373,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "rc-901",
+                "id": "rc-1001",
                 "name": "豪华云端维港客房",
                 "size": "50 平方米",
                 "bed": "1张特大双人床",
@@ -349,7 +387,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 10,
+        "id": 11,
         "name": "香港JW万豪酒店 (JW Marriott Hotel Hong Kong)",
         "enName": "JW Marriott Hotel Hong Kong",
         "region": "港岛",
@@ -373,7 +411,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "jw-1001",
+                "id": "jw-1101",
                 "name": "精选豪华大床房",
                 "size": "33 平方米",
                 "bed": "1张特大床",
@@ -387,7 +425,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 11,
+        "id": 12,
         "name": "香港九龙香格里拉大酒店 (Kowloon Shangri-La)",
         "enName": "Kowloon Shangri-La",
         "region": "九龙",
@@ -411,7 +449,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "ksl-1101",
+                "id": "ksl-1201",
                 "name": "豪华阁城市客房",
                 "size": "42 平方米",
                 "bed": "1张特大床",
@@ -425,7 +463,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 12,
+        "id": 13,
         "name": "香港朗廷酒店 (The Langham Hong Kong)",
         "enName": "The Langham Hong Kong",
         "region": "九龙",
@@ -449,7 +487,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "lh-1201",
+                "id": "lh-1301",
                 "name": "高级内园景客房",
                 "size": "32 平方米",
                 "bed": "1张特大双人床",
@@ -463,7 +501,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 13,
+        "id": 14,
         "name": "香港沙田凯悦酒店 (Hyatt Regency Hong Kong, Sha Tin)",
         "enName": "Hyatt Regency Hong Kong, Sha Tin",
         "region": "新界",
@@ -487,7 +525,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "hrs-1301",
+                "id": "hrs-1401",
                 "name": "九肚山景标准客房",
                 "size": "38 平方米",
                 "bed": "1张特大床",
@@ -501,7 +539,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 14,
+        "id": 15,
         "name": "香港东涌世茂喜来登酒店 (Sheraton Hong Kong Tung Chung)",
         "enName": "Sheraton Hong Kong Tung Chung Hotel",
         "region": "新界",
@@ -525,7 +563,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "stc-1401",
+                "id": "stc-1501",
                 "name": "豪华山景客房",
                 "size": "35 平方米",
                 "bed": "1张特大双人床",
@@ -539,7 +577,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 15,
+        "id": 16,
         "name": "香港喜来登酒店 (Sheraton Hong Kong Hotel & Towers)",
         "enName": "Sheraton Hong Kong Hotel & Towers",
         "region": "九龙",
@@ -563,7 +601,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "shk-1501",
+                "id": "shk-1601",
                 "name": "经典豪华客房",
                 "size": "30 平方米",
                 "bed": "1张特大床",
@@ -577,7 +615,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 16,
+        "id": 17,
         "name": "香港帝京酒店 (Royal Plaza Hotel)",
         "enName": "Royal Plaza Hotel",
         "region": "九龙",
@@ -601,7 +639,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "rpl-1601",
+                "id": "rpl-1701",
                 "name": "尊贵双大床家庭房",
                 "size": "33 平方米",
                 "bed": "2张宽敞大床",
@@ -615,7 +653,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 17,
+        "id": 18,
         "name": "香港九龙海逸君绰酒店 (Harbour Grand Kowloon)",
         "enName": "Harbour Grand Kowloon",
         "region": "九龙",
@@ -639,7 +677,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "hgk-1701",
+                "id": "hgk-1801",
                 "name": "城景塔楼客房",
                 "size": "36 平方米",
                 "bed": "1张双人床",
@@ -653,7 +691,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 18,
+        "id": 19,
         "name": "香港文华东方酒店 (Mandarin Oriental, Hong Kong)",
         "enName": "Mandarin Oriental, Hong Kong",
         "region": "港岛",
@@ -677,7 +715,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "mohk-1801",
+                "id": "mohk-1901",
                 "name": "皇后像广场景观客房",
                 "size": "40 平方米",
                 "bed": "1张特大床",
@@ -691,7 +729,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 19,
+        "id": 20,
         "name": "香港荃湾西如心酒店 (Nina Hotel Tsuen Wan West)",
         "enName": "Nina Hotel Tsuen Wan West",
         "region": "新界",
@@ -715,7 +753,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "nina-1901",
+                "id": "nina-2001",
                 "name": "高空城景大床房",
                 "size": "35 平方米",
                 "bed": "1张特大双人床",
@@ -730,10 +768,10 @@ const hotelsData = [
     },
 
     // =========================================================================
-    // ⭐⭐⭐⭐ 4 星级酒店 (共 20 间：ID 20 ~ 39)
+    // ⭐⭐⭐⭐ 4 星级酒店 (共 20 间：ID 21 ~ 40)
     // =========================================================================
     {
-        "id": 20,
+        "id": 21,
         "name": "香港东隅酒店 (EAST Hong Kong)",
         "enName": "EAST Hong Kong",
         "region": "港岛",
@@ -757,7 +795,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "east-2001",
+                "id": "east-2101",
                 "name": "Urban View 城市精选房",
                 "size": "28 平方米",
                 "bed": "1张特大床",
@@ -771,7 +809,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 21,
+        "id": 22,
         "name": "香港旺角帝盛酒店 (Dorsett Mongkok, Hong Kong)",
         "enName": "Dorsett Mongkok, Hong Kong",
         "region": "九龙",
@@ -795,7 +833,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "dm-2101",
+                "id": "dm-2201",
                 "name": "舒适双人客房",
                 "size": "20 平方米",
                 "bed": "1张双人床",
@@ -809,7 +847,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 22,
+        "id": 23,
         "name": "香港湾仔帝盛酒店 (Dorsett Wanchai, Hong Kong)",
         "enName": "Dorsett Wanchai, Hong Kong",
         "region": "港岛",
@@ -833,7 +871,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "dw-2201",
+                "id": "dw-2301",
                 "name": "跑马地马场景观房",
                 "size": "25 平方米",
                 "bed": "1张大床",
@@ -847,7 +885,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 23,
+        "id": 24,
         "name": "香港逸东酒店 (Eaton HK)",
         "enName": "Eaton HK",
         "region": "九龙",
@@ -871,7 +909,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "eaton-2301",
+                "id": "eaton-2401",
                 "name": "逸・新 (Eaton Room) 客房",
                 "size": "24 平方米",
                 "bed": "1张特大床",
@@ -885,7 +923,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 24,
+        "id": 25,
         "name": "香港沙田万怡酒店 (Courtyard by Marriott Sha Tin)",
         "enName": "Courtyard by Marriott Hong Kong Sha Tin",
         "region": "新界",
@@ -909,7 +947,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "cym-2401",
+                "id": "cym-2501",
                 "name": "城门河景舒适客房",
                 "size": "27 平方米",
                 "bed": "1张大床 或 2张单人床",
@@ -923,7 +961,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 25,
+        "id": 26,
         "name": "香港沙田帝都酒店 (Royal Park Hotel)",
         "enName": "Royal Park Hotel",
         "region": "新界",
@@ -947,7 +985,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "rp-2501",
+                "id": "rp-2601",
                 "name": "标准城景双人房",
                 "size": "30 平方米",
                 "bed": "1张大床 或 2张单人床",
@@ -961,7 +999,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 26,
+        "id": 27,
         "name": "香港百乐酒店 (Park Hotel Hong Kong)",
         "enName": "Park Hotel Hong Kong",
         "region": "九龙",
@@ -985,7 +1023,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "ph-2601",
+                "id": "ph-2701",
                 "name": "高级城市双床房",
                 "size": "28 平方米",
                 "bed": "2张单人床",
@@ -999,7 +1037,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 27,
+        "id": 28,
         "name": "香港九龙东智选假日酒店 (Holiday Inn Express Kowloon East)",
         "enName": "Holiday Inn Express Hong Kong Kowloon East",
         "region": "新界",
@@ -1023,7 +1061,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "hie-2701",
+                "id": "hie-2801",
                 "name": "标准智选双床房",
                 "size": "22 平方米",
                 "bed": "2张单人床",
@@ -1037,7 +1075,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 28,
+        "id": 29,
         "name": "香港诺富特世纪酒店 (Novotel Century Hong Kong)",
         "enName": "Novotel Century Hong Kong",
         "region": "港岛",
@@ -1061,7 +1099,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "nc-2801",
+                "id": "nc-2901",
                 "name": "高级标准双人房",
                 "size": "23 平方米",
                 "bed": "1张标准双人床",
@@ -1075,7 +1113,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 29,
+        "id": 30,
         "name": "香港六国酒店 (Gloucester Luk Kwok Hong Kong)",
         "enName": "Gloucester Luk Kwok Hong Kong",
         "region": "港岛",
@@ -1099,7 +1137,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "lk-2901",
+                "id": "lk-3001",
                 "name": "高级行政大床房",
                 "size": "26 平方米",
                 "bed": "1张大床",
@@ -1113,7 +1151,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 30,
+        "id": 31,
         "name": "香港铜锣湾维景酒店 (Metropark Hotel Causeway Bay)",
         "enName": "Metropark Hotel Causeway Bay",
         "region": "港岛",
@@ -1137,7 +1175,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "mpcb-3001",
+                "id": "mpcb-3101",
                 "name": "高级维园景客房",
                 "size": "25 平方米",
                 "bed": "1张双人床",
@@ -1151,7 +1189,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 31,
+        "id": 32,
         "name": "香港湾仔皇悦酒店 (Empire Hotel Hong Kong - Wan Chai)",
         "enName": "Empire Hotel Hong Kong - Wan Chai",
         "region": "港岛",
@@ -1175,7 +1213,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "ehw-3101",
+                "id": "ehw-3201",
                 "name": "标准城市客房",
                 "size": "22 平方米",
                 "bed": "1张大床",
@@ -1189,7 +1227,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 32,
+        "id": 33,
         "name": "香港九龙酒店 (The Kowloon Hotel)",
         "enName": "The Kowloon Hotel",
         "region": "九龙",
@@ -1213,7 +1251,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "kh-3201",
+                "id": "kh-3301",
                 "name": "高级双床客房",
                 "size": "21 平方米",
                 "bed": "2张单人床",
@@ -1227,7 +1265,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 33,
+        "id": 34,
         "name": "香港悦来酒店 (Panda Hotel)",
         "enName": "Panda Hotel Hong Kong",
         "region": "新界",
@@ -1251,7 +1289,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "panda-3301",
+                "id": "panda-3401",
                 "name": "标准双人客房",
                 "size": "25 平方米",
                 "bed": "1张双人床 或 2张单人床",
@@ -1265,7 +1303,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 34,
+        "id": 35,
         "name": "香港迪士尼好莱坞酒店 (Disney's Hollywood Hotel)",
         "enName": "Disney's Hollywood Hotel",
         "region": "新界",
@@ -1289,7 +1327,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "dhh-3401",
+                "id": "dhh-3501",
                 "name": "「米奇与好友」豪华客房",
                 "size": "29 平方米",
                 "bed": "2张双人床",
@@ -1303,7 +1341,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 35,
+        "id": 36,
         "name": "香港沙田丽豪酒店 (Regal Riverside Hotel)",
         "enName": "Regal Riverside Hotel",
         "region": "新界",
@@ -1327,7 +1365,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "rrh-3501",
+                "id": "rrh-3601",
                 "name": "河景标准双床房",
                 "size": "24 平方米",
                 "bed": "2张单人床",
@@ -1341,7 +1379,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 36,
+        "id": 37,
         "name": "香港港岛万怡酒店 (Courtyard by Marriott Hong Kong)",
         "enName": "Courtyard by Marriott Hong Kong",
         "region": "港岛",
@@ -1365,7 +1403,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "cymhk-3601",
+                "id": "cymhk-3701",
                 "name": "高级海景大床房",
                 "size": "25 平方米",
                 "bed": "1张大床",
@@ -1379,7 +1417,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 37,
+        "id": 38,
         "name": "香港芬名酒店 (The Fleming Hong Kong)",
         "enName": "The Fleming Boutique Hotel",
         "region": "港岛",
@@ -1403,7 +1441,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "fl-3701",
+                "id": "fl-3801",
                 "name": "雅致小号双人房",
                 "size": "22 平方米",
                 "bed": "1张标准双人床",
@@ -1417,7 +1455,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 38,
+        "id": 39,
         "name": "香港中环荷李活道木的地酒店 (Madera Hollywood)",
         "enName": "Madera Hollywood",
         "region": "港岛",
@@ -1441,7 +1479,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "mh-3801",
+                "id": "mh-3901",
                 "name": "好莱坞经典一房套房",
                 "size": "54 平方米",
                 "bed": "1张特大双人床",
@@ -1455,7 +1493,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 39,
+        "id": 40,
         "name": "香港荃湾帝盛酒店 (Dorsett Tsuen Wan)",
         "enName": "Dorsett Tsuen Wan, Hong Kong",
         "region": "新界",
@@ -1479,7 +1517,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "dtw-3901",
+                "id": "dtw-4001",
                 "name": "帝盛舒适双人房",
                 "size": "22 平方米",
                 "bed": "1张双人床",
@@ -1494,10 +1532,10 @@ const hotelsData = [
     },
 
     // =========================================================================
-    // ⭐⭐⭐ 3 星级酒店 (前 2 间：ID 40, 41)
+    // ⭐⭐⭐ 3 星级酒店 (共 20 间：ID 41 ~ 60)
     // =========================================================================
     {
-        "id": 40,
+        "id": 41,
         "name": "香港宜必思中上环酒店 (ibis Hong Kong Central & Sheung Wan)",
         "enName": "ibis Hong Kong Central & Sheung Wan",
         "region": "港岛",
@@ -1521,7 +1559,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "ibis-4001",
+                "id": "ibis-4101",
                 "name": "标准城景大床房",
                 "size": "17 平方米",
                 "bed": "1张标准大床",
@@ -1535,7 +1573,7 @@ const hotelsData = [
         ]
     },
     {
-        "id": 41,
+        "id": 42,
         "name": "香港宜必思北角酒店 (ibis Hong Kong North Point)",
         "enName": "ibis Hong Kong North Point",
         "region": "港岛",
@@ -1559,7 +1597,7 @@ const hotelsData = [
         ],
         "rooms": [
             {
-                "id": "ibnp-4101",
+                "id": "ibnp-4201",
                 "name": "精选海景双床房",
                 "size": "16 平方米",
                 "bed": "2张单人床",
@@ -1572,67 +1610,6 @@ const hotelsData = [
             }
         ]
     },
-
-    // =========================================================================
-    // ⭐⭐⭐⭐⭐ 置顶推荐 5 星级酒店 (ID: 42，第 20 间五星级酒店)
-    // =========================================================================
-    {
-        "id": 42,
-        "name": "香港维港朗廷汇酒店 (The Grand Harbourside Langham Hong Kong)",
-        "enName": "The Grand Harbourside Langham Hong Kong",
-        "region": "港岛",
-        "district": "中环",
-        "location": "港岛中环民耀街88号中环海滨综合体",
-        "distance": "紧邻中环天星码头与摩天轮，直通IFC与中环站",
-        "stars": 5,
-        "rating": 9.5,
-        "reviewCount": 1580,
-        "verdict": "传奇云端奢华",
-        "dealTag": "黑卡尊享礼遇",
-        "price": 4980,
-        "originalPrice": 6280,
-        "hasBreakfast": true,
-        "hasPrivateBath": true,
-        "hasPool": true,
-        "hasCancel": true,
-        "hasGym": true,
-        "eco": "荣获 EarthCheck 金级认证及 LEED 铂金级绿色建筑评级，全馆实现 100% 零塑胶客房及智能再生能源热回收系统",
-        "images": [
-            "https://commons.wikimedia.org/wiki/Special:FilePath/HK_Four_Seasons_Hotel_view.jpg?width=800",
-            "https://commons.wikimedia.org/wiki/Special:FilePath/Rosewood_Hong_Kong_Lobby_The_Skin_Speaks_A_Language_Not_Its_Own_2019.jpg?width=600",
-            "https://commons.wikimedia.org/wiki/Special:FilePath/The_Ritz-Carlton_Hong_Kong_Level_103_Lobby.jpg?width=600"
-        ],
-        "rooms": [
-            {
-                "id": "ghl-4201",
-                "name": "天际尊尚维港全景客房 (Grand Skyline Harbour Room)",
-                "size": "58 平方米",
-                "bed": "1张特大双人床 (Custom King Bed)",
-                "bathroom": "独立进口白玛瑙奢华水疗卫浴 (配落地窗景双人浴缸与智能淋浴系统)",
-                "breakfast": "含双人米其林星厨定制点单式奢华早餐",
-                "cancel": "入住前24小时内可免费取消",
-                "price": 4980,
-                "origPrice": 6280,
-                "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Rosewood_Hong_Kong_Lobby_The_Skin_Speaks_A_Language_Not_Its_Own_2019.jpg?width=600"
-            },
-            {
-                "id": "ghl-4202",
-                "name": "维港朗廷汇府邸海景套房 (The Grand Harbourside Suite)",
-                "size": "92 平方米",
-                "bed": "独立起居会客厅 + 特大双人床",
-                "bathroom": "独立双台盆大理石浴室 (带蒸汽水疗房与全景浸泡浴缸)",
-                "breakfast": "含专属行政贵宾府邸全日香槟茶点与定制早餐",
-                "cancel": "入住前48小时内可免费取消",
-                "price": 7980,
-                "origPrice": 9980,
-                "image": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Ritz-Carlton_Hong_Kong_Level_103_Lobby.jpg?width=600"
-            }
-        ]
-    },
-
-    // =========================================================================
-    // ⭐⭐⭐ 3 星级酒店 (后 18 间：ID 43 ~ 60)
-    // =========================================================================
     {
         "id": 43,
         "name": "香港富荟上环酒店 (iclub Sheung Wan Hotel)",
@@ -1787,7 +1764,7 @@ const hotelsData = [
     },
     {
         "id": 47,
-        "name": "香港城景国际酒店 (The Cityview - Chinese YMCA of Hong Kong)",
+        "name": "香港城景国际酒店 (The Cityview)",
         "enName": "The Cityview Hong Kong",
         "region": "九龙",
         "district": "油麻地",
@@ -1939,7 +1916,7 @@ const hotelsData = [
     },
     {
         "id": 51,
-        "name": "香港红茶馆酒店 - 西营盘皇后大道西 (Bridal Tea House Hotel)",
+        "name": "香港红茶馆酒店 - 西营盘 (Bridal Tea House)",
         "enName": "Bridal Tea House Hotel Sai Ying Pun",
         "region": "港岛",
         "district": "西营盘",

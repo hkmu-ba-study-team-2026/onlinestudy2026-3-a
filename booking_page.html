@@ -1745,13 +1745,14 @@
   const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2;
 
   // 1. 动态确定推荐酒店 ID (优先从 URL 抓取，次之 localStorage，默认 42)
-  let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId')) || parseInt(localStorage.getItem('recommended_hotel_id')) || 42;
-  const RECOMMENDATION_MODE = urlParams.get('mode') || localStorage.getItem('recommendation_mode') || 'ai';
+  // 優先從 URL 抓取，次之 localStorage，預設為 4星 Eco 酒店 ID 21 (香港東隅酒店)
+  let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId')) || parseInt(localStorage.getItem('recommended_hotel_id')) || 21;
+  const RECOMMENDATION_MODE = urlParams.get('mode') || localStorage.getItem('recommendation_mode') || 'traditional';
   const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "为您精选平台今日主推特选住宿与地标酒店。";
 
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
-  let recommendedHotelObj = hotelsData.find(h => h.id === RECOMMENDED_HOTEL_ID) || hotelsData.find(h => h.id === 42) || hotelsData[0];
-  RECOMMENDED_HOTEL_ID = recommendedHotelObj.id; // 确保 ID 绝对有效
+  let recommendedHotelObj = hotelsData.find(h => h.id === RECOMMENDED_HOTEL_ID) || hotelsData.find(h => h.id === 21) || hotelsData[0];
+  RECOMMENDED_HOTEL_ID = recommendedHotelObj.id;
 
   let selectedHotel = null;
   let selectedRoom = null;

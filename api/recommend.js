@@ -116,8 +116,8 @@ module.exports = async (req, res) => {
                 result = await getAiRecommendationsFromGemini(products, preferences);
             } catch (aiErr) {
                 console.log(`[AI Model Error/Timeout]: ${aiErr.message}. Switching to Fallback system.`);
-                // 備援：優先推薦 42 號酒店，若無則推薦候選清單第一間
-                const defaultHotel = products.find(h => h.id === 42) || products[0];
+                // 備援：優先推薦 4星 Eco 酒店 (ID 21)
+                const defaultHotel = products.find(h => h.id === 21) || products[0];
                 result = {
                     recommendedHotelId: defaultHotel.id,
                     recommendedHotelName: defaultHotel.name,
