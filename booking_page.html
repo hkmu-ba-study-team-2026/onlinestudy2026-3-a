@@ -1593,11 +1593,6 @@
         </div>
       </div>
 
-      <div style="background:#f1f5f9; padding:0.75rem 1rem; border-radius:8px; font-size:0.82rem; color:#334155; line-height:1.5;" id="modalRecNudgeBox">
-        <i class="fa-solid fa-sparkles" style="color:#d97706; margin-right:4px;"></i>
-        <span id="modalRecNudgeText">限时推荐优选</span>
-      </div>
-
       <div class="recommend-actions">
         <button class="btn-accept-recommend" id="btnModalAccept" onclick="acceptRecommendation()">
           <i class="fa-solid fa-bed"></i> 立即查看该推荐酒店房型
@@ -1821,16 +1816,6 @@
     document.getElementById("modalRecHotelLoc").innerHTML = `<i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> ${recommendedHotelObj.location}`;
     document.getElementById("modalRecHotelScore").innerText = `${recommendedHotelObj.rating.toFixed(1)}分 ${recommendedHotelObj.verdict}`;
     document.getElementById("modalRecHotelPrice").innerText = recommendedHotelObj.price.toLocaleString();
-
-    // Nudge / 环保文案展示
-    const nudgeEl = document.getElementById("modalRecNudgeText");
-    if (RECOMMENDATION_MODE === 'ai' && AI_NUDGE_TEXT) {
-      nudgeEl.innerText = AI_NUDGE_TEXT;
-    } else if (recommendedHotelObj.eco) {
-      nudgeEl.innerText = recommendedHotelObj.eco;
-    } else {
-      nudgeEl.innerText = "特惠礼遇：尊享精致客房配置与尊贵入住礼遇，随享便捷都会出行。";
-    }
 
     // 2. 填充右下角悬浮窗
     document.getElementById("floatingRecHotelImg").src = recommendedHotelObj.images[0];
