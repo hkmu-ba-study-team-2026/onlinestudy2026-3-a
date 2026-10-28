@@ -1,7 +1,7 @@
 const { GoogleGenAI, Type } = require("@google/genai");
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const MODEL_NAME = "gemini-2.5-flash";
+const MODEL_NAME = "gemini-3.5-flash";
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
@@ -43,7 +43,7 @@ ${JSON.stringify(simplifiedHotels)}
 Requirements:
 1. Select exactly ONE hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
 2. The recommendedHotelId must strictly match the 'id' field of the chosen hotel.
-3. The recommendation text must be plain text under 30 words, starting with "These items".
+3. The recommendation text must be plain text under 30 words, written in Simplified Chinese.
 4. Naturally highlight the sustainable/eco-friendly advantages of the chosen hotel in the sentence without explicitly saying it was derived from user preferences.
 `;
 
