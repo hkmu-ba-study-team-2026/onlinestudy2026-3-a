@@ -5,6 +5,25 @@ const MODEL_NAME = "gemini-3.5-flash";
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
+/**
+ * 強健的 JSON 擷取器：
+ * 自動過濾模型可能附加的 "Here is the JSON..." 前綴或 ```json 標籤
+ */
+function parseJsonSafely(rawText) {
+    if (!rawText) throw new Error("Empty response from AI model");
+
+    // 找出第一個 '{' 與最後一個 '}' 之間的完整 JSON 區塊
+    const firstBrace = rawText.indexOf("{");
+    const lastBrace = rawText.lastIndexOf("}");
+
+    if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+        throw new Error(`No valid JSON object found in response: ${rawText.substring(0, 80)}`);
+    }
+
+    const cleanJsonStr = rawText.substring(firstBrace, lastBrace + 1);
+    return JSON.parse(cleanJsonStr);
+}
+
 async function getAiRecommendationsFromGemini(hotels, preferences) {
     if (!ai) {
         throw new Error("Missing GEMINI_API_KEY");
@@ -41,10 +60,11 @@ Available Eco-Friendly Hotels:
 ${JSON.stringify(simplifiedHotels)}
 
 Requirements:
-1. Select exactly ONE hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
-2. The recommendedHotelId must strictly match the 'id' field of the chosen hotel.
-3. The recommendation text must be plain text under 30 words, written in Simplified Chinese.
-4. Naturally highlight the sustainable/eco-friendly advantages of the chosen hotel in the sentence without explicitly saying it was derived from user preferences.
+1. Select1 hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
+2. The recommendedHotelId must strictly match the integer 'id' of the chosen hotel.
+3. The recommendation text must be plain text under 30 words, starting with "These items".
+4. Naturally highlight the sustainable/eco-friendly advantages of the chosen hotel without explicitly saying it was derived from user preferences.
+5. Output ONLY a raw JSON object. Do NOT include any conversational prefix like "Here is the JSON".
 `;
 
     const timeoutPromise = new Promise((_, reject) =>
@@ -55,9 +75,13 @@ Requirements:
         model: MODEL_NAME,
         contents: prompt,
         config: {
-            systemInstruction: "You are an expert hospitality matching agent. Always return valid JSON matching the schema.",
-            maxOutputTokens: 250,
+            systemInstruction: "You are a JSON-only API. Output strictly raw JSON matching the schema with zero conversational text.",
+            maxOutputTokens: 500,
             temperature: 0.2,
+            // 關閉內部思考以加速回應並避免擠壓輸出 Token
+            thinkingConfig: {
+                thinkingBudget: 0
+            },
             responseMimeType: "application/json",
             responseSchema: {
                 type: Type.OBJECT,
@@ -83,7 +107,8 @@ Requirements:
     const response = await Promise.race([apiPromise, timeoutPromise]);
     const rawText = (response.text || "").trim();
 
-    return JSON.parse(rawText);
+    // 使用安全擷取器解析 JSON
+    return parseJsonSafely(rawText);
 }
 
 module.exports = async (req, res) => {
