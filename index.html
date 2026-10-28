@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>酒店预订前测问卷</title>
-    <!-- 引入酒店数据集，供前端筛选候选用 -->
+    <!-- 引入酒店数据集供筛选候选池 -->
     <script src="hotels_data.js"></script>
     <style>
         :root {
@@ -294,7 +294,7 @@
     function getNextGroupingNumber() {
         return new Promise((resolve) => {
             if (typeof db === 'undefined') {
-                let fallbackNum = parseInt(localStorage.getItem('local_grouping_num') || "1", 10);
+                let fallbackNum = parseInt(localStorage.getItem('local_grouping_num') || "0", 10);
                 localStorage.setItem('local_grouping_num', fallbackNum + 1);
                 resolve(fallbackNum);
                 return;
@@ -308,6 +308,7 @@
                     console.warn("Transaction failed, using fallback:", error);
                     resolve(Math.floor(Math.random() * 100));
                 } else {
+                    // 分配給該次訪問的序號
                     resolve(snapshot.val() - 1);
                 }
             });
@@ -319,7 +320,7 @@
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.textContent = '正在分析偏好并生成专属推荐...';
+        submitBtn.textContent = '正在分析偏好并配置实验条件...';
 
         const formData = new FormData(event.target);
         const hotelFocus = formData.get("hotel_focus");
@@ -332,18 +333,40 @@
             preferred_region: preferredRegion
         };
 
+        // 1. 取得全域遞增的序號
         const currentGroupNumber = await getNextGroupingNumber();
-        // 判斷單數 (AI 推薦模式) 或雙數 (傳統模式)
-        const isOdd = (currentGroupNumber % 2 !== 0);
-        const recommendationMode = isOdd ? "ai" : "traditional";
 
-        // 預設推薦 4星級且具備 Eco 認證的香港東隅酒店 (ID: 21)
+        // 2. 核心分組邏輯：grouping % 4
+        // 0: low autonomy traditional
+        // 1: low autonomy AI
+        // 2: high autonomy traditional
+        // 3: high autonomy AI
+        const groupMod = currentGroupNumber % 4;
+        let autonomyCondition = "low"; // 'low' 或 'high'
+        let recommendationMode = "traditional"; // 'traditional' 或 'ai'
+
+        if (groupMod === 0) {
+            autonomyCondition = "low";
+            recommendationMode = "traditional";
+        } else if (groupMod === 1) {
+            autonomyCondition = "low";
+            recommendationMode = "ai";
+        } else if (groupMod === 2) {
+            autonomyCondition = "high";
+            recommendationMode = "traditional";
+        } else if (groupMod === 3) {
+            autonomyCondition = "high";
+            recommendationMode = "ai";
+        }
+
+        // 預設推薦 4 星級 Eco 酒店：香港東隅酒店 (ID: 21)
         let recommendedHotelId = 21;
         let recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
         let aiNudgeText = "";
 
         if (recommendationMode === "ai") {
             try {
+                // 候選池僅傳遞具備 eco 屬性的酒店
                 const ecoHotels = typeof hotelsData !== 'undefined'
                     ? hotelsData.filter(h => h.eco && h.eco.trim() !== "")
                     : [];
@@ -373,15 +396,17 @@
                 aiNudgeText = "These items feature verified green operations and refined hospitality for your ideal stay.";
             }
         } else {
-            // 雙數：傳統推薦模式 (固定推薦 4星級 Eco 酒店：香港東隅酒店)
+            // Traditional 模式推薦 4 星 Eco 酒店
             recommendedHotelId = 21;
             recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
             aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
         }
 
-        // 保存狀態並導向
-        localStorage.setItem("recommendation_mode", recommendationMode);
+        // 保存實驗組態至 localStorage
         localStorage.setItem("grouping_number", currentGroupNumber);
+        localStorage.setItem("group_mod", groupMod);
+        localStorage.setItem("autonomy_condition", autonomyCondition);
+        localStorage.setItem("recommendation_mode", recommendationMode);
         localStorage.setItem("recommended_hotel_id", recommendedHotelId);
         localStorage.setItem("recommended_hotel_name", recommendedHotelName);
         localStorage.setItem("ai_nudge_text", aiNudgeText);
@@ -391,6 +416,8 @@
         const firebaseData = {
             participantID: currentParticipantID,
             groupingNumber: currentGroupNumber,
+            groupMod: groupMod,
+            autonomyCondition: autonomyCondition,
             recommendationMode: recommendationMode,
             recommendedHotelId: recommendedHotelId,
             recommendedHotelName: recommendedHotelName,
@@ -407,8 +434,8 @@
             console.error('保存至 Firebase 失败:', dbError);
         }
 
-        // 跳轉到預訂頁面，帶上所選出的推薦酒店 ID、模式及組號
-        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&group=${currentGroupNumber}`;
+        // 跳轉到預訂頁面，帶上 autonomy、mode、recId 及組號參數
+        window.location.href = `booking_page.html?autonomy=${autonomyCondition}&mode=${recommendationMode}&recId=${recommendedHotelId}&group=${currentGroupNumber}`;
     }
 </script>
 </body>

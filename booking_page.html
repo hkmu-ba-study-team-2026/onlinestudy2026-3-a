@@ -28,7 +28,7 @@
     }
   </script>
 
-  <!-- 引入独立酒店数据集 -->
+  <!-- 引入独立酒店数据集 (1 至 60) -->
   <script src="hotels_data.js"></script>
 
   <!-- Google Fonts & Font Awesome 图标库 -->
@@ -276,6 +276,7 @@
       width: 100%;
     }
 
+    /* 左侧筛选侧边栏：设为 static，随整个页面自然上下拉动 */
     .filters-sidebar {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -797,26 +798,44 @@
       position: relative;
     }
 
+    /* 彈窗右上角叉鍵基礎樣式 */
     .recommend-top-close-btn {
       position: absolute;
       top: 10px;
       right: 12px;
       background: none;
       border: none;
-      color: #ffffff;
-      opacity: 0.28;
-      font-size: 0.72rem;
       cursor: pointer;
-      padding: 3px 5px;
       line-height: 1;
-      border-radius: 3px;
-      display: none;
+      border-radius: 4px;
       transition: all 0.2s;
     }
 
-    .recommend-top-close-btn:hover {
+    /* Low Autonomy: 微小且極淡 */
+    .recommend-top-close-btn.autonomy-low {
+      color: #ffffff;
+      opacity: 0.28;
+      font-size: 0.72rem;
+      padding: 3px 5px;
+      display: none; /* 倒數結束前不顯示 */
+    }
+    .recommend-top-close-btn.autonomy-low:hover {
       opacity: 0.65;
       background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* High Autonomy: 明顯大叉號，自始可點擊 */
+    .recommend-top-close-btn.autonomy-high {
+      color: #ffffff;
+      opacity: 0.95;
+      font-size: 1.25rem;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.12);
+      display: block;
+    }
+    .recommend-top-close-btn.autonomy-high:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .recommend-pill-tag {
@@ -912,6 +931,7 @@
       margin-top: -0.2rem;
     }
 
+    /* 右下角懸浮推薦卡片 Floating Popup */
     .floating-recommend-popup {
       position: fixed;
       bottom: 24px;
@@ -945,26 +965,33 @@
     .floating-popup-close {
       background: none;
       border: none;
-      color: white;
-      opacity: 0.85;
-      font-size: 1.4rem;
       cursor: pointer;
-      padding: 2px 6px;
       border-radius: 4px;
       transition: all 0.2s;
       line-height: 1;
     }
 
-    .floating-popup-close:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .floating-popup-close.condition2-hidden-btn {
+    /* Low Autonomy: 右下角隱蔽微小按鈕 */
+    .floating-popup-close.autonomy-low {
       font-size: 0.58rem !important;
       opacity: 0.20 !important;
       padding: 1px 3px !important;
       color: #fde68a !important;
+    }
+    .floating-popup-close.autonomy-low:hover {
+      opacity: 0.55 !important;
+    }
+
+    /* High Autonomy: 右下角清晰可見的大叉號按鈕 */
+    .floating-popup-close.autonomy-high {
+      font-size: 1.25rem !important;
+      opacity: 0.95 !important;
+      padding: 2px 8px !important;
+      color: #ffffff !important;
+    }
+    .floating-popup-close.autonomy-high:hover {
+      opacity: 1 !important;
+      background: rgba(255, 255, 255, 0.2) !important;
     }
 
     .floating-popup-body {
@@ -1398,7 +1425,7 @@
 
 <!-- 主体区域 -->
 <main class="main-layout">
-  <!-- 左侧筛选栏 -->
+  <!-- 左侧筛选栏 (随页面自然拉动) -->
   <aside class="filters-sidebar">
     <div class="filter-header">
       <h3><i class="fa-solid fa-sliders"></i> 条件筛选</h3>
@@ -1531,7 +1558,7 @@
   </section>
 </main>
 
-<!-- 动态渲染中央推荐弹窗 -->
+<!-- 动态渲染中央推荐弹窗 (Low: 15秒倒数与微小叉号 / High: 无倒数与明显大叉号) -->
 <div class="modal-overlay" id="entryRecommendModal">
   <div class="recommend-modal-card">
     <div class="recommend-modal-header">
@@ -1551,12 +1578,12 @@
         <img id="modalRecHotelImg" src="" alt="推荐酒店">
         <div style="padding:0.9rem; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <div style="color:var(--star); font-size:0.75rem; margin-bottom:2px;" id="modalRecHotelStars">⭐⭐⭐⭐⭐</div>
+            <div style="color:var(--star); font-size:0.75rem; margin-bottom:2px;" id="modalRecHotelStars">⭐⭐⭐⭐</div>
             <h4 style="font-size:1rem; font-weight:800; color:var(--text-main);" id="modalRecHotelName">酒店名称</h4>
             <p style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;" id="modalRecHotelLoc"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> 地点信息</p>
           </div>
           <div style="margin-top:0.5rem;">
-            <span style="font-size:0.72rem; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;" id="modalRecHotelScore">9.5分 极佳好评</span>
+            <span style="font-size:0.72rem; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;" id="modalRecHotelScore">9.0分 优质好评</span>
             <div style="margin-top:4px;">
               <span style="font-size:0.8rem; font-weight:700; color:var(--accent);">HK$ </span>
               <span style="font-size:1.25rem; font-weight:800; color:var(--accent);" id="modalRecHotelPrice">0</span>
@@ -1566,7 +1593,6 @@
         </div>
       </div>
 
-      <!-- AI 个性化推荐语容器 -->
       <div style="background:#f1f5f9; padding:0.75rem 1rem; border-radius:8px; font-size:0.82rem; color:#334155; line-height:1.5;" id="modalRecNudgeBox">
         <i class="fa-solid fa-sparkles" style="color:#d97706; margin-right:4px;"></i>
         <span id="modalRecNudgeText">限时推荐优选</span>
@@ -1581,13 +1607,13 @@
           略过推荐，浏览全部酒店
         </button>
 
-        <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (5s)</div>
+        <div class="recommend-countdown-text" id="recommendCountdownText">推荐浏览中 (15s)</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 弹窗 1：房型选择与完整 Metadata 详情 -->
+<!-- 弹窗 1：房型选择与详情 -->
 <div class="modal-overlay" id="roomModal">
   <div class="modal-container">
     <div class="modal-header">
@@ -1713,7 +1739,7 @@
   </div>
 </div>
 
-<!-- 右下角悬浮推荐卡片 Floating Popup (动态绑定推荐酒店) -->
+<!-- 右下角悬浮推荐卡片 Floating Popup (根据 Autonomy 设定叉键) -->
 <div class="floating-recommend-popup" id="floatingRecommendPopup">
   <div class="floating-popup-header">
     <span><i class="fa-solid fa-crown"></i> 平台主推特选</span>
@@ -1723,7 +1749,7 @@
     <div class="floating-hotel-info">
       <img id="floatingRecHotelImg" src="" alt="推荐酒店" class="floating-hotel-thumb">
       <div class="floating-hotel-details">
-        <div style="color:var(--star); font-size:0.7rem;" id="floatingRecHotelStars">⭐⭐⭐⭐⭐</div>
+        <div style="color:var(--star); font-size:0.7rem;" id="floatingRecHotelStars">⭐⭐⭐⭐</div>
         <h4 id="floatingRecHotelName">酒店名称</h4>
         <p id="floatingRecHotelLoc"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> 区域</p>
         <div style="margin-top:2px;">
@@ -1742,13 +1768,14 @@
 <script>
   const RETURN_SURVEY_URL = "index.html";
   const urlParams = new URLSearchParams(window.location.search);
-  const EXPERIMENT_CONDITION = parseInt(urlParams.get('condition')) || 2;
 
-  // 1. 动态确定推荐酒店 ID (优先从 URL 抓取，次之 localStorage，默认 42)
-  // 優先從 URL 抓取，次之 localStorage，預設為 4星 Eco 酒店 ID 21 (香港東隅酒店)
-  let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId')) || parseInt(localStorage.getItem('recommended_hotel_id')) || 21;
+  // 1. 读取实验自变量
+  const AUTONOMY_MODE = urlParams.get('autonomy') || localStorage.getItem('autonomy_mode') || 'low';
   const RECOMMENDATION_MODE = urlParams.get('mode') || localStorage.getItem('recommendation_mode') || 'traditional';
-  const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "为您精选平台今日主推特选住宿与地标酒店。";
+
+  // 默认传统推荐 4 星 Eco 酒店：香港东隅酒店 (ID: 21)
+  let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId')) || parseInt(localStorage.getItem('recommended_hotel_id')) || 21;
+  const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
 
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
   let recommendedHotelObj = hotelsData.find(h => h.id === RECOMMENDED_HOTEL_ID) || hotelsData.find(h => h.id === 21) || hotelsData[0];
@@ -1795,7 +1822,7 @@
     document.getElementById("modalRecHotelScore").innerText = `${recommendedHotelObj.rating.toFixed(1)}分 ${recommendedHotelObj.verdict}`;
     document.getElementById("modalRecHotelPrice").innerText = recommendedHotelObj.price.toLocaleString();
 
-    // 显示 AI Nudge 推荐文案或环保纪录
+    // Nudge / 环保文案展示
     const nudgeEl = document.getElementById("modalRecNudgeText");
     if (RECOMMENDATION_MODE === 'ai' && AI_NUDGE_TEXT) {
       nudgeEl.innerText = AI_NUDGE_TEXT;
@@ -1814,19 +1841,27 @@
     document.getElementById("floatingRecHotelScore").innerText = `/晚起 (${recommendedHotelObj.rating.toFixed(1)}分)`;
   }
 
+  // 根据 Autonomy 设定配置 UI (Low vs. High)
   function setupConditionUI() {
     const skipBtn = document.getElementById("btnSkipRecommend");
     const topCloseBtn = document.getElementById("btnRecommendTopClose");
     const countdownText = document.getElementById("recommendCountdownText");
     const floatingCloseBtn = document.getElementById("btnFloatingClose");
 
-    if (EXPERIMENT_CONDITION === 2) {
+    if (AUTONOMY_MODE === "low") {
+      // ================= LOW AUTONOMY =================
+      // 1. 隐藏底部大按钮，显示 15 秒倒计时
       skipBtn.style.display = "none";
       countdownText.style.display = "block";
-      topCloseBtn.style.display = "none";
-      floatingCloseBtn.classList.add("condition2-hidden-btn");
 
-      let timeLeft = 5;
+      // 2. 右上角叉键：低对比度、微小、倒数前隐藏
+      topCloseBtn.className = "recommend-top-close-btn autonomy-low";
+      topCloseBtn.style.display = "none";
+
+      // 3. 右下角叉键：极小隐蔽
+      floatingCloseBtn.className = "floating-popup-close autonomy-low";
+
+      let timeLeft = 15;
       countdownText.innerText = `推荐浏览中 (${timeLeft}s)`;
 
       if (countdownTimer) clearInterval(countdownTimer);
@@ -1837,16 +1872,25 @@
         } else {
           clearInterval(countdownTimer);
           countdownText.style.display = "none";
-          topCloseBtn.style.display = "block";
+          topCloseBtn.style.display = "block"; // 15秒倒计时结束后显现微小叉号
         }
       }, 1000);
+
     } else {
+      // ================= HIGH AUTONOMY =================
+      // 1. 无倒计时，直接提供清晰明确的略过按钮
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownText.style.display = "none";
       skipBtn.style.display = "block";
       skipBtn.disabled = false;
       skipBtn.innerText = `略过推荐，浏览全部 ${hotelsData.length} 间酒店`;
-      topCloseBtn.style.display = "none";
-      countdownText.style.display = "none";
-      floatingCloseBtn.classList.remove("condition2-hidden-btn");
+
+      // 2. 右上角叉键：醒目大叉号，背景半透明悬浮框，随时可关
+      topCloseBtn.className = "recommend-top-close-btn autonomy-high";
+      topCloseBtn.style.display = "block";
+
+      // 3. 右下角叉键：明显易点
+      floatingCloseBtn.className = "floating-popup-close autonomy-high";
     }
   }
 
@@ -1915,7 +1959,7 @@
       return;
     }
 
-    // 依據動態推薦 ID 進行排序，推薦酒店置頂
+    // 推荐酒店置顶
     const sortedList = [...hotels].sort((a, b) => {
       if (a.id === RECOMMENDED_HOTEL_ID) return -1;
       if (b.id === RECOMMENDED_HOTEL_ID) return 1;
@@ -2203,12 +2247,13 @@
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
+    // 记录订房决策与 2x2 实验变量
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + currentPID).set({
           bookingRef: refNumber,
           participantID: currentPID,
-          experimentCondition: EXPERIMENT_CONDITION,
+          autonomyMode: AUTONOMY_MODE,
           recommendationMode: RECOMMENDATION_MODE,
           recommendedHotelId: RECOMMENDED_HOTEL_ID,
           isRecommendedHotelChosen: (selectedHotel.id === RECOMMENDED_HOTEL_ID),
@@ -2321,7 +2366,7 @@
   }
 
   window.addEventListener("DOMContentLoaded", () => {
-    populateRecommendationData(); // 填充推薦資料至彈窗及浮動窗
+    populateRecommendationData();
     updateFilterCounts();
     renderHotelList(hotelsData);
     setupConditionUI();
