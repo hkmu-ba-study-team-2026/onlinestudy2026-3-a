@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>酒店预订前测问卷</title>
+    <!-- 引入酒店数据集，供前端筛选候选用 -->
+    <script src="hotels_data.js"></script>
     <style>
         :root {
             --bg-color: #f4f6f8;
@@ -204,7 +206,7 @@
             </div>
         </div>
 
-        <!-- 问题 2: 设施偏好 (客房及酒店配套设施，可多选) -->
+        <!-- 问题 2: 设施偏好 (可多选) -->
         <div class="form-group">
             <label class="question-title">2. 你重视酒店要有以下设施吗？（可多选）</label>
             <div class="options-grid">
@@ -257,7 +259,6 @@
 </div>
 
 <script>
-    // 生成 32 位个人 ID: 14位时间戳 (YYYYMMDDHHmmss) + 18位随机数
     function generate32DigitParticipantID() {
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
@@ -270,7 +271,6 @@
         return timestamp14 + random18;
     }
 
-    // 初始化并持久化 Participant ID (不在页面显示，但在底层保存供后续实验使用)
     let currentParticipantID = localStorage.getItem("participantID");
     if (!currentParticipantID || currentParticipantID.length !== 32) {
         currentParticipantID = generate32DigitParticipantID();
@@ -278,7 +278,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        // 同步登记此 ID 至 Firebase Realtime Database
         try {
             if (typeof db !== 'undefined') {
                 db.ref('participants/' + currentParticipantID).update({
@@ -291,16 +290,38 @@
         }
     });
 
+    // 透過 Firebase transaction 進行原子計數遞增 (+1)
+    function getNextGroupingNumber() {
+        return new Promise((resolve) => {
+            if (typeof db === 'undefined') {
+                let fallbackNum = parseInt(localStorage.getItem('local_grouping_num') || "1", 10);
+                localStorage.setItem('local_grouping_num', fallbackNum + 1);
+                resolve(fallbackNum);
+                return;
+            }
+
+            const groupingRef = db.ref('grouping');
+            groupingRef.transaction((currentValue) => {
+                return (currentValue || 0) + 1;
+            }, (error, committed, snapshot) => {
+                if (error || !committed) {
+                    console.warn("Transaction failed, using fallback:", error);
+                    resolve(Math.floor(Math.random() * 100));
+                } else {
+                    resolve(snapshot.val() - 1);
+                }
+            });
+        });
+    }
+
     async function handleSubmit(event) {
         event.preventDefault();
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.textContent = '正在保存问卷并跳转...';
+        submitBtn.textContent = '正在分析偏好并生成专属推荐...';
 
         const formData = new FormData(event.target);
-
-        // 收集 3 个问题的答案
         const hotelFocus = formData.get("hotel_focus");
         const facilities = formData.getAll("hotel_facilities");
         const preferredRegion = formData.get("preferred_region");
@@ -311,9 +332,73 @@
             preferred_region: preferredRegion
         };
 
+        const currentGroupNumber = await getNextGroupingNumber();
+        const isOdd = (currentGroupNumber % 2 !== 0);
+        const recommendationMode = isOdd ? "ai" : "traditional";
+
+        let recommendedHotelId = 42; // 預設推薦
+        let recommendedHotelName = "香港维港朗廷汇酒店";
+        let aiNudgeText = "";
+
+        if (recommendationMode === "ai") {
+            try {
+                // 傳遞具備 eco 屬性的酒店
+                const ecoHotels = typeof hotelsData !== 'undefined'
+                    ? hotelsData.filter(h => h.eco && h.eco.trim() !== "")
+                    : [];
+
+                const payload = {
+                    products: ecoHotels,
+                    preferences: surveyResponses
+                };
+
+                const response = await fetch("/api/recommend", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.recommendedHotelId) {
+                        recommendedHotelId = data.recommendedHotelId;
+                    }
+                    if (data.recommendedHotelName) {
+                        recommendedHotelName = data.recommendedHotelName;
+                    }
+                    aiNudgeText = data.recommendation || "These items offer premium hospitality and certified eco-friendly living tailored to your stay.";
+                } else {
+                    throw new Error("AI service non-200");
+                }
+            } catch (err) {
+                console.warn("AI recommendation failed, using fallback:", err);
+                recommendedHotelId = 42;
+                aiNudgeText = "These items feature verified green operations and refined hospitality for your ideal stay.";
+            }
+        } else {
+            // 雙數：傳統固定推薦模式
+            recommendedHotelId = 42;
+            recommendedHotelName = "香港维港朗廷汇酒店";
+            aiNudgeText = "为您精选平台今日主推特选住宿与地标酒店。";
+        }
+
+        // 保存至 localStorage
+        localStorage.setItem("recommendation_mode", recommendationMode);
+        localStorage.setItem("grouping_number", currentGroupNumber);
+        localStorage.setItem("recommended_hotel_id", recommendedHotelId);
+        localStorage.setItem("recommended_hotel_name", recommendedHotelName);
+        localStorage.setItem("ai_nudge_text", aiNudgeText);
+        localStorage.setItem("user_preferences", JSON.stringify(surveyResponses));
+
+        // 寫入 Firebase
         const firebaseData = {
             participantID: currentParticipantID,
-            submittedAt: new Date().toLocaleString(),
+            groupingNumber: currentGroupNumber,
+            recommendationMode: recommendationMode,
+            recommendedHotelId: recommendedHotelId,
+            recommendedHotelName: recommendedHotelName,
+            aiNudgeText: aiNudgeText,
+            submittedAt: new Date().toISOString(),
             responses: surveyResponses
         };
 
@@ -325,8 +410,8 @@
             console.error('保存至 Firebase 失败:', dbError);
         }
 
-        // 跳转至酒店预订模拟平台
-        window.location.href = 'booking_page.html';
+        // 跳轉到預訂頁面，帶上所選出的推薦酒店 ID、模式及組號
+        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&group=${currentGroupNumber}`;
     }
 </script>
 </body>
