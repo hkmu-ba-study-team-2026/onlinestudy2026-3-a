@@ -1,12 +1,12 @@
 // 香港 80 间酒店完整正交平衡数据集
-// 1. 照片保证：80 间酒店采用 80 张完全不重复的高可用性酒店建筑外观 (Exterior/Facade) 照片，彻底解决破图问题
+// 1. 照片保证：80 间酒店采用 80 张完全不重复的高可用性酒店建筑外观照片
 // 2. 星级分布：5星(20) | 4星(20) | 3星(20) | 2星(20)
 // 3. 地区分布：港岛(27) | 九龙(27) | 新界(26)
 // 4. 评分正交：9.5(20) | 9.0(20) | 8.5(20) | 8.0(20) (每个星级内各评分均严格占 5 间)
+// 5. 设施平衡：含早餐(40)、独立卫浴/浴缸(40)、室外泳池(38)、免费取消(40)、健身中心(40)、机场接送(40)、免费泊车(40)
 const hotelsData = [
     // =========================================================================
     // ⭐⭐⭐⭐⭐ 5 星级奢华酒店 (ID 1 ~ 20)
-    // 地区：港岛 6 | 九龙 8 | 新界 6
     // =========================================================================
     {
         "id": 1,
@@ -27,8 +27,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "获颁国际 Green Key 环保钥匙认证，配备 ORCA 厨余有氧分解系统及 100% 纯电动穿梭巴士",
-        "images": ["https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://res.klook.com/klook-hotel/image/upload/w_750,c_fill,q_85/travelapi/5000000/4250000/4247500/4247437/0e0aea1b_z.jpg"],
         "rooms": [{ "id": "icon-101", "name": "ICON 36 经典城市客房", "size": "36 平方米", "bed": "1张特大双人床", "bathroom": "独立干湿分离卫浴 (带深浸浴缸)", "breakfast": "含双人精致自助早餐", "cancel": "入住前24小时可免费取消", "price": 1480, "origPrice": 1880, "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -50,8 +52,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "荣获 LEED Gold 金级绿色建筑认证，馆内全面采用 Nordaq 现场过滤玻璃瓶装水系统",
-        "images": ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShoQwnyWg1oXs1Q8kSR8fqPYHTD73VK-OUXh0E-oX8kUgMg0lngs8kbfA&s=10"],
         "rooms": [{ "id": "rw-201", "name": "九龙景观尊贵客房", "size": "53 平方米", "bed": "1张特大双人床", "bathroom": "独立双台盆大理石卫浴 (带浸泡浴缸)", "breakfast": "含半自助早餐", "cancel": "特惠房型不可退订", "price": 4680, "origPrice": 5880, "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -73,8 +77,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "荣获 EarthCheck 白金级认证，旗下米其林三星餐厅 Amber 推行全素食及低碳排永续高级餐饮",
-        "images": ["https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRauIMnWGPkjkpT6ZmvOnMZgifNCrFFbLPMMj0mp4lcWgWEheMBRMjprA&s=10"],
         "rooms": [{ "id": "lmo-301", "name": "L600 尊贵客房", "size": "56 平方米", "bed": "1张特大双人床", "bathroom": "独立超大圆形浸泡浴缸", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 4500, "origPrice": 5600, "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -96,8 +102,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "荣获 EarthCheck 金级认证及 LEED 铂金级绿色建筑评级，全馆实现 100% 零塑胶客房",
-        "images": ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.langhamhotels.com/content/dam/langhamhotels/dynamicmedia/global/hotels/langham-hotels/tlhkg-langham-hong-kong.jpg"],
         "rooms": [{ "id": "ghl-401", "name": "天际尊尚维港客房", "size": "58 平方米", "bed": "1张特大双人床", "bathroom": "独立白玛瑙水疗卫浴 (配双人浴缸)", "breakfast": "含星厨定制点单式早餐", "cancel": "入住前24小时内可免费取消", "price": 4980, "origPrice": 6280, "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -119,8 +127,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "属于保育中环旗舰活化项目，保留百年古树节果决明，荣获 LEED 金级认证",
-        "images": ["https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://static-new.lhw.com/HotelImages/Final/LW2869/lw2869_l2868811_720x450.jpg"],
         "rooms": [{ "id": "mur-501", "name": "N1 Deluxe 豪华客房", "size": "47 平方米", "bed": "1张特大床", "bathroom": "独立云石卫浴 (带浴缸)", "breakfast": "含双人半自助早餐", "cancel": "特惠房型不可退订", "price": 2650, "origPrice": 3350, "image": "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -142,8 +152,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gXMMJBLFrt30UWrNEXpADZfSWpIeLdjE4lPsgMHvie0GgOKQWzLCowHj&s=10"],
         "rooms": [{ "id": "fs-601", "name": "山景豪华客房", "size": "45 平方米", "bed": "1张特大双人床", "bathroom": "现代步入式淋浴间", "breakfast": "含双人四季丰盛早餐", "cancel": "特惠房型不可退订", "price": 4800, "origPrice": 6000, "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -165,8 +177,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "备品采用 99.9% 无石油塑料可回收铝瓶，获 BREEAM 绿色建筑认证",
-        "images": ["https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/884996112.jpg?k=c50bfbce44c0c11cf3c7f9e13c40192389626e9bfc15802907c27e6c423d2832&o="],
         "rooms": [{ "id": "pen-701", "name": "豪华特大床客房", "size": "43 平方米", "bed": "1张豪华特大床", "bathroom": "独立大理石卫浴 (配水疗浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 4980, "origPrice": 6280, "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -188,8 +202,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "连续 15 年荣获 EarthCheck Master 最高认证及 ISO 14001 环境管理认证",
-        "images": ["https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.cordishotels.com/content/dam/cordishotels/dynamicmedia/global/cordis_global/destinations/cd-destinations-hong-kong-exterior.jpg?wid=700"],
         "rooms": [{ "id": "cd-801", "name": "高级城市客房", "size": "32 平方米", "bed": "1张大床", "bathroom": "独立大理石卫浴 (配浴缸)", "breakfast": "含双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 1480, "origPrice": 1880, "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -211,8 +227,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://images.trvl-media.com/lodging/3000000/2440000/2437300/2437201/14b66c3e.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill"],
         "rooms": [{ "id": "hrs-901", "name": "九肚山景客房", "size": "38 平方米", "bed": "1张特大床", "bathroom": "现代淋浴间", "breakfast": "含双人咖啡厅早餐", "cancel": "入住前24小时可免费取消", "price": 1180, "origPrice": 1480, "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -234,8 +252,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/649465771.jpg?k=9339aff51f07aabb698557e7fbaecc4151ff53730424b5cf1ee68fbd408c8ff1&o="],
         "rooms": [{ "id": "stc-1001", "name": "豪华山景客房", "size": "35 平方米", "bed": "1张特大双人床", "bathroom": "现代步入式淋浴间", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 1280, "origPrice": 1650, "image": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -257,8 +277,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "荣获 ISO 14001 环境管理认证，设有天台有机农圃与自设水净化系统",
-        "images": ["https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/668043161.jpg?k=6f31aea110ea9da6886b3b0546f5ddef9434518ed6b8deaf4b6b66cff5c25c3d&o="],
         "rooms": [{ "id": "kh-1101", "name": "城市景观客房", "size": "42 平方米", "bed": "1张特大床", "bathroom": "现代淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 1880, "origPrice": 2380, "image": "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -280,8 +302,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1506059612708-99d6c258160e?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/756354168.jpg?k=f05b6cdfe143288eb3deab442a2886afe828b26d0831d5e4859723e27988f82e&o="],
         "rooms": [{ "id": "rc-1201", "name": "云端维港客房", "size": "50 平方米", "bed": "1张特大双人床", "bathroom": "独立大理石卫浴 (配浸泡浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 4100, "origPrice": 5200, "image": "https://images.unsplash.com/photo-1506059612708-99d6c258160e?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -303,8 +327,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1559599238-308793637427?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9ofF7mOvNHVRECuYzghs1-YeBfdEdQw20hUiFmPXgOg&s=10"],
         "rooms": [{ "id": "jw-1301", "name": "豪华大床房", "size": "33 平方米", "bed": "1张特大床", "bathroom": "标准淋浴间", "breakfast": "含双人自助早餐", "cancel": "特惠房型不可退订", "price": 2250, "origPrice": 2850, "image": "https://images.unsplash.com/photo-1559599238-308793637427?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -326,8 +352,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cdn.prod.rexby.com/image/47581e1732eb400f87511c68bb866280?format=webp&width=1080&height=1350&quality=80"],
         "rooms": [{ "id": "nina-1401", "name": "高空城景房", "size": "35 平方米", "bed": "1张特大双人床", "bathroom": "干湿分离淋浴间", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 890, "origPrice": 1150, "image": "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -349,6 +377,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "荣获香港绿色机构认证，推行厨余回收转化及节水淋浴改造",
         "images": ["https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "rp-1501", "name": "标准城景双人房", "size": "30 平方米", "bed": "1张大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 1050, "origPrice": 1380, "image": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=600&q=80" }]
@@ -372,8 +402,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://ik.imgkit.net/3vlqs5axxjf/external/https://www.cfmedia.vfmleonardo.com/imageRepo/7/0/145/658/242/Hotel_Driveway_O.jpg?tr=w-1200%2Cfo-auto"],
         "rooms": [{ "id": "hgk-1601", "name": "海景塔楼客房", "size": "40 平方米", "bed": "1张特大床", "bathroom": "独立云石浴缸卫浴", "breakfast": "含双人早餐", "cancel": "入住前24小时可免费取消", "price": 1220, "origPrice": 1580, "image": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -395,8 +427,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1561501900-3701fa6a0864?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.langhamhotels.com/content/dam/langhamhotels/dynamicmedia/asia/the-langham-hong-kong-tlhkg/home/tlhkg-langham-hong-kong.jpg"],
         "rooms": [{ "id": "lh-1701", "name": "内园景客房", "size": "32 平方米", "bed": "1张特大双人床", "bathroom": "独立大理石浴室 (配浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 1780, "origPrice": 2280, "image": "https://images.unsplash.com/photo-1561501900-3701fa6a0864?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -418,8 +452,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmOI8OolrcCy-s8u5BpznkN-979d9dmPHEqHGsGKJhYQ2lewziKLtnGE4&s=10"],
         "rooms": [{ "id": "shk-1801", "name": "经典豪华客房", "size": "30 平方米", "bed": "1张特大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人早餐", "cancel": "入住前24小时可免费取消", "price": 1520, "origPrice": 1950, "image": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -441,8 +477,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.regalhotel.com/sites/regal/files/2026-07/Hotel_Thumbnail_0.jpg"],
         "rooms": [{ "id": "rah-1901", "name": "高级隔音双大床房", "size": "33 平方米", "bed": "2张宽敞大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 1150, "origPrice": 1480, "image": "https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -464,14 +502,15 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1519449556851-5720b33024e7?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://images.trvl-media.com/lodging/2000000/1930000/1926700/1926667/f887dc26.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill"],
         "rooms": [{ "id": "dlh-2001", "name": "标准海景客房", "size": "36 平方米", "bed": "2张双人床", "bathroom": "独立卫浴 (配浴缸)", "breakfast": "含翠乐庭双人自助早餐", "cancel": "特惠房型不可退订", "price": 2350, "origPrice": 2980, "image": "https://images.unsplash.com/photo-1519449556851-5720b33024e7?auto=format&fit=crop&w=600&q=80" }]
     },
 
     // =========================================================================
     // ⭐⭐⭐⭐ 4 星级高档酒店 (ID 21 ~ 40)
-    // 地区：港岛 8 | 九龙 6 | 新界 6
     // =========================================================================
     {
         "id": 21,
@@ -492,8 +531,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "荣获 EarthCheck Silver 银级认证，回收逾 6,400 公斤生蚝壳复育珊瑚礁并通过 ORCA 分解 46,000 公斤厨余",
-        "images": ["https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://r-xx.bstatic.com/xdata/images/hotel/1200x630/678850464.jpg?k=42f23a692e5cae8b6aa5caf2b278c3e9b1ef5f8fcc2ce62673d854119cf8ac0e&o="],
         "rooms": [{ "id": "east-2101", "name": "Urban View 城市客房", "size": "28 平方米", "bed": "1张特大床", "bathroom": "现代步入式雨淋花洒淋浴间", "breakfast": "含 FEAST 双人活力早餐", "cancel": "入住前24小时可免费取消", "price": 1280, "origPrice": 1620, "image": "https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -515,8 +556,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "荣获 EarthCheck 白金级认证及绿建环评 BEAM Plus 金级，逸东轩推行零剩食与有机农场直送食材",
-        "images": ["https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThO7i5MMRLMV4FqlS-HjHVYTfJ_vtBOvBPP2ln4BB-iw&s=10"],
         "rooms": [{ "id": "eaton-2201", "name": "逸・新 (Eaton Room) 客房", "size": "24 平方米", "bed": "1张特大床", "bathroom": "现代步入式淋浴间", "breakfast": "含普庆餐厅双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 980, "origPrice": 1280, "image": "https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -538,8 +581,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://static.prod.r53.tablethotels.com/media/hotels/slideshow_images_staged/large/1077839.jpg"],
         "rooms": [{ "id": "fl-2301", "name": "雅致双人房", "size": "22 平方米", "bed": "1张标准双人床", "bathroom": "复古黄铜淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 1180, "origPrice": 1480, "image": "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -561,8 +606,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1563911302283-d2bc129e7570?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/606799321.jpg?k=ab984e35b4b4641c28cac7105ab9d3649df234b079f06f73e4800335080bfbc4&o="],
         "rooms": [{ "id": "dhh-2401", "name": "好莱坞豪华客房", "size": "29 平方米", "bed": "2张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人自助早餐", "cancel": "特惠房型不可退订", "price": 1680, "origPrice": 2150, "image": "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -584,8 +631,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "获万豪 Serve 360 认证，采用大容量环保装洗护及智能变频节能空调",
-        "images": ["https://images.unsplash.com/photo-1571624436279-b272aff752b5?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://upload.wikimedia.org/wikipedia/commons/f/f5/Courtyard_by_Marriott_Hong_Kong_Sha_Tin_201307.jpg?utm_source=zh.wikipedia.org&utm_campaign=index&utm_content=original"],
         "rooms": [{ "id": "cym-2501", "name": "城门河景舒适房", "size": "27 平方米", "bed": "1张大床", "bathroom": "现代淋浴间", "breakfast": "含双人 MoMo Cafe 早餐", "cancel": "特惠房型不可退订", "price": 820, "origPrice": 1080, "image": "https://images.unsplash.com/photo-1571624436279-b272aff752b5?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -607,8 +656,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1580041065738-e72023775cdc?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/65775256.jpg?k=8ab32e0696b62557c69d55d9d843de365611785807a0858fb7b73065191f2564&o="],
         "rooms": [{ "id": "mh-2601", "name": "好莱坞经典套房", "size": "54 平方米", "bed": "1张特大双人床", "bathroom": "独立奢华浴缸", "breakfast": "含双人欧陆早餐", "cancel": "特惠房型不可退订", "price": 1580, "origPrice": 1980, "image": "https://images.unsplash.com/photo-1580041065738-e72023775cdc?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -630,8 +681,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQetoGQu7UuYEm-WUx9T9EiJyqpNJ8C4PoemGMWnhMRSoH3LiB6fCTwZwM&s=10"],
         "rooms": [{ "id": "lk-2701", "name": "高级行政客房", "size": "26 平方米", "bed": "1张大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 1050, "origPrice": 1350, "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -653,8 +706,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "客房安装直饮水过滤系统，每年减少逾 20 万个即弃塑胶水樽",
-        "images": ["https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://image-tc.galaxy.tf/wijpeg-3y69dp0f676w8i9dofn98goiq/park-hotel-hong-kong-exterior-tsim-sha-tsui-jpg.jpg?height=700"],
         "rooms": [{ "id": "ph-2801", "name": "高级城市双床房", "size": "28 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 790, "origPrice": 1020, "image": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -676,8 +731,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRycylBZfIe1Jj8xE0gn3zKgcUfHiil72bqVPvCOUH4X2AnN8qxOyn71uwo&s=10"],
         "rooms": [{ "id": "cymhk-2901", "name": "高级海景房", "size": "25 平方米", "bed": "1张大床", "bathroom": "现代淋浴间", "breakfast": "含双人 MoMo Cafe 早餐", "cancel": "入住前24小时可免费取消", "price": 960, "origPrice": 1240, "image": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -699,8 +756,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "通过 IHG Green Engage 三级认证，设有空中绿化花园与太阳能系统",
-        "images": ["https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://digital.ihg.com/is/image/ihg/holiday-inn-express-hong-kong-5827559532-4x3"],
         "rooms": [{ "id": "hie-3001", "name": "标准智选双床房", "size": "22 平方米", "bed": "2张单人床", "bathroom": "现代淋浴间", "breakfast": "含双人活力早餐", "cancel": "特惠房型不可退订", "price": 740, "origPrice": 960, "image": "https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -722,8 +781,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "获颁 EarthCheck 铜级认证，推行 EcoChoice+ 计划并设立智能净水站",
-        "images": ["https://images.unsplash.com/photo-1529290130-4ca3753253ae?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://pix10.agoda.net/hotelImages/194021/0/8042e9f77d1cc4f4cc41e032d041e37e.jpeg?ce=2&s=414x232"],
         "rooms": [{ "id": "dm-3101", "name": "舒适双人客房", "size": "20 平方米", "bed": "1张双人床", "bathroom": "现代淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 720, "origPrice": 940, "image": "https://images.unsplash.com/photo-1529290130-4ca3753253ae?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -745,8 +806,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "国泰绿色旅游环保酒店认证，全面淘汰一次性塑胶用品",
-        "images": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/30/58/70/5b/hotel-exterior.jpg?w=900&h=500&s=1"],
         "rooms": [{ "id": "dw-3201", "name": "跑马地马景房", "size": "25 平方米", "bed": "1张大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人自助早餐", "cancel": "特惠房型不可退订", "price": 850, "origPrice": 1100, "image": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -768,6 +831,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "nc-3301", "name": "高级标准双人房", "size": "23 平方米", "bed": "1张双人床", "bathroom": "现代淋浴间", "breakfast": "含双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 860, "origPrice": 1120, "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" }]
@@ -791,6 +856,8 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "kh-3401", "name": "高级双床房", "size": "21 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人自助早餐", "cancel": "特惠房型不可退订", "price": 820, "origPrice": 1060, "image": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80" }]
@@ -814,8 +881,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/623589421.jpg?k=06eb1225a9ddc21c2e1129ef588a4ca4804d9e9cb33a5686feec228e67a24b29&o="],
         "rooms": [{ "id": "dtw-3501", "name": "帝盛舒适双人房", "size": "22 平方米", "bed": "1张双人床", "bathroom": "现代淋浴间", "breakfast": "含双人自助早餐", "cancel": "特惠房型不可退订", "price": 620, "origPrice": 800, "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -837,8 +906,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFsjY8rIDrumhr55HYB9Iq6sgKfVvl0_na9iLYj-okIhslvcwapYeHZs6N&s=10"],
         "rooms": [{ "id": "mpcb-3601", "name": "维园景客房", "size": "25 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人早餐", "cancel": "特惠房型不可退订", "price": 780, "origPrice": 990, "image": "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -860,8 +931,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB0L2CU_JMOyB2xikJ5jScO1SkR-fHa_nxdfSUNBmcPfje_ifzU6LI6Yg&s=10"],
         "rooms": [{ "id": "ehw-3701", "name": "标准城市客房", "size": "22 平方米", "bed": "1张大床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 710, "origPrice": 920, "image": "https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -883,8 +956,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/30/8f/34/3f/caption.jpg?w=800&h=500&s=1"],
         "rooms": [{ "id": "panda-3801", "name": "标准双人房", "size": "25 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 590, "origPrice": 780, "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -906,6 +981,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "rrh-3901", "name": "河景标准双床房", "size": "24 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 620, "origPrice": 810, "image": "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?auto=format&fit=crop&w=600&q=80" }]
@@ -929,14 +1006,15 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1551918120-9739cb430c6d?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrnjTpiWoZq3K05pMVgS-IyIaG5k-WOA1FsLY---HA229erTbtDl5fGgg&s=10"],
         "rooms": [{ "id": "mpk-4001", "name": "标准双人客房", "size": "22 平方米", "bed": "1张大床", "bathroom": "现代淋浴间", "breakfast": "含双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 690, "origPrice": 890, "image": "https://images.unsplash.com/photo-1551918120-9739cb430c6d?auto=format&fit=crop&w=600&q=80" }]
     },
 
     // =========================================================================
     // ⭐⭐⭐ 3 星级舒适酒店 (ID 41 ~ 60)
-    // 地区：港岛 6 | 九龙 6 | 新界 8
     // =========================================================================
     {
         "id": 41,
@@ -957,6 +1035,8 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "荣获 EarthCheck Silver 银级认证，为香港首批全面推行碳中和住宿的绿色环保酒店",
         "images": ["https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "icsw-4101", "name": "iPlus 尊荟客房", "size": "18 平方米", "bed": "1张大床", "bathroom": "现代淋浴间", "breakfast": "含欧陆轻食早点", "cancel": "入住前24小时可免费取消", "price": 620, "origPrice": 800, "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80" }]
@@ -980,8 +1060,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "多次荣获香港环境卓越大奖及 EarthCheck 金级认证，全馆采用热泵热回收系统",
-        "images": ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3X9HT7-5dYsjVX5f2SGDa3IyLOcinl_YwQwypztzpNhpCCtMYwSPcvqE&s=10"],
         "rooms": [{ "id": "cv-4201", "name": "尊贵低碳双人房", "size": "22 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 660, "origPrice": 850, "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1003,6 +1085,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "设立生态农庄与蝴蝶园，安装超过 200 块太阳能光伏板并提供室内智能过滤水",
         "images": ["https://images.unsplash.com/photo-1535827841776-24afc1e255ac?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "gch-4301", "name": "豪华海景客房", "size": "32 平方米", "bed": "1张大床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 750, "origPrice": 980, "image": "https://images.unsplash.com/photo-1535827841776-24afc1e255ac?auto=format&fit=crop&w=600&q=80" }]
@@ -1026,8 +1110,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "荣获 EarthCheck Silver 银级环保认证，推行全馆塑胶减量与智能断电节能",
-        "images": ["https://images.unsplash.com/photo-1470075801209-17f9ec0cada6?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/115539375.jpg?k=691783835441cf8141c4a069a5557aa82cd7fea3d3f6187f7e21a46128e15a66&o="],
         "rooms": [{ "id": "ictkw-4401", "name": "标准大床房", "size": "15 平方米", "bed": "1张双人床", "bathroom": "现代淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 510, "origPrice": 660, "image": "https://images.unsplash.com/photo-1470075801209-17f9ec0cada6?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1049,8 +1135,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1464146072230-91cabc968266?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/228650861.jpg?k=59814690bd86fec28659451db817e499d1266768dc746ed77cd02ca2abfb0e50&o="],
         "rooms": [{ "id": "rgd-4501", "name": "园景舒适房", "size": "19 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带小型浴缸)", "breakfast": "含双人简单早点", "cancel": "特惠房型不可退订", "price": 410, "origPrice": 530, "image": "https://images.unsplash.com/photo-1464146072230-91cabc968266?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1072,8 +1160,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "获颁 EarthCheck Silver 银级认证，安装高效节能照明及太阳能户外设施",
-        "images": ["https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/31/21/43/6c/caption.jpg?w=1100&h=1100&s=1"],
         "rooms": [{ "id": "icfh-4601", "name": "iSelect 双床房", "size": "16 平方米", "bed": "2张单人床", "bathroom": "现代淋浴间", "breakfast": "含晨间轻食早点", "cancel": "特惠房型不可退订", "price": 530, "origPrice": 690, "image": "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1095,8 +1185,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "获 EarthCheck Silver 认证，采用自然采光与雨水回收灌溉系统",
-        "images": ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://res.klook.com/image/upload/w_750,c_fill,q_85/v1632127094/hotel/vf0nxdjulrbw8kkunxk8.jpg"],
         "rooms": [{ "id": "icmk-4701", "name": "标准客房", "size": "16 平方米", "bed": "1张双人床", "bathroom": "现代淋浴间", "breakfast": "含早间茶点", "cancel": "特惠房型不可退订", "price": 590, "origPrice": 760, "image": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1118,8 +1210,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "荣获国际 Green Key 环保钥匙认证，落实雅高集团零塑胶承诺",
-        "images": ["https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrOhs9Orv7qm4AAXGu5h4B3nGum3V_9Uo_5V3o8EAtVg&s"],
         "rooms": [{ "id": "ibis-4801", "name": "标准城景大床房", "size": "17 平方米", "bed": "1张大床", "bathroom": "模块化淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 580, "origPrice": 750, "image": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1141,8 +1235,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "荣获 Green Key 认证，推行客房节能温控与无纸化电子入住",
-        "images": ["https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/25520956.jpg?k=40c6d4cd114c0f20aa92ebef3aaef1ff2628d212a4f5faad5f3abddee4edb1fc&o="],
         "rooms": [{ "id": "ibnp-4901", "name": "海景双床房", "size": "16 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "含双人轻食自助早餐", "cancel": "特惠房型不可退订", "price": 480, "origPrice": 620, "image": "https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1164,8 +1260,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://pix10.agoda.net/hotelImages/1620257/0/98637befa3c5045101d054337a9d07db.jpeg?ce=2&s=1024x768"],
         "rooms": [{ "id": "sst-5001", "name": "标准双人房", "size": "18 平方米", "bed": "1张大床", "bathroom": "独立卫浴 (带小型浴缸)", "breakfast": "含早餐", "cancel": "入住前24小时可免费取消", "price": 490, "origPrice": 640, "image": "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1187,8 +1285,10 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.wyndhamhotels.com/content/dam/property-images/en-us/ra/cn/others/hong-kong/52289/52289_exterior_view_1.jpg"],
         "rooms": [{ "id": "rmd-5101", "name": "海景双人房", "size": "18 平方米", "bed": "1张双人床", "bathroom": "独立私人卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 460, "origPrice": 600, "image": "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1210,6 +1310,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "ro-5201", "name": "标准双床房", "size": "18 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 420, "origPrice": 550, "image": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=600&q=80" }]
@@ -1233,8 +1335,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://aw-d.tripcdn.com/images/220s0v000000jx3q9A183.jpg"],
         "rooms": [{ "id": "rmg-5301", "name": "城景客房", "size": "19 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "含双人早点", "cancel": "特惠房型不可退订", "price": 490, "origPrice": 650, "image": "https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1256,8 +1360,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTctUzMTCwqe6YAeD1kQm4XTbTpac4KHm8IxFx4pHiWN_UTN14FQy-n9UI&s=10"],
         "rooms": [{ "id": "ssv-5401", "name": "标准城景房", "size": "15 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "含双人简式早餐", "cancel": "入住前24小时可免费取消", "price": 520, "origPrice": 680, "image": "https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1279,8 +1385,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-mt6E1ulijzzTmjnBOszft8iVbUp90IKkgwV9k_uafTluKgLc_9_ea_t1&s=10"],
         "rooms": [{ "id": "ptm-5501", "name": "贝尔特标准客房", "size": "18 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人早点", "cancel": "入住前24小时可免费取消", "price": 500, "origPrice": 650, "image": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1302,8 +1410,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1430285561322-7808604715df?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://media-cdn.tripadvisor.com/media/photo-s/02/74/37/3a/silka-far-east-hotel.jpg"],
         "rooms": [{ "id": "slk-5601", "name": "标准双人房", "size": "16 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含早餐", "cancel": "特惠房型不可退订", "price": 540, "origPrice": 700, "image": "https://images.unsplash.com/photo-1430285561322-7808604715df?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1325,8 +1435,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/7b/57/06/harbour-plaza-resort.jpg?w=900&h=500&s=1"],
         "rooms": [{ "id": "hprc-5701", "name": "度假标准双人房", "size": "26 平方米", "bed": "1张双人床", "bathroom": "独立淋浴间", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 520, "origPrice": 680, "image": "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1348,6 +1460,8 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": true,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "mpw-5801", "name": "高级双人房", "size": "19 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 610, "origPrice": 790, "image": "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=600&q=80" }]
@@ -1371,6 +1485,8 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": true,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "cozi-5901", "name": "悦品标准房", "size": "18 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人自助早餐", "cancel": "入住前24小时可免费取消", "price": 470, "origPrice": 610, "image": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=600&q=80" }]
@@ -1394,14 +1510,15 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://dynamic-media-cdn.tripadvisor.com/media/photo-o/05/0a/8c/b4/nearby-attraction-heritage.jpg?w=900&h=-1&s=1"],
         "rooms": [{ "id": "imp-6001", "name": "标准双床房", "size": "17 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 560, "origPrice": 730, "image": "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=600&q=80" }]
     },
 
     // =========================================================================
     // ⭐⭐ 2 星级经济型实惠住宿 (ID 61 ~ 80)
-    // 地区：港岛 7 | 九龙 7 | 新界 6
     // =========================================================================
     {
         "id": 61,
@@ -1422,8 +1539,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "荣获联合国教科文组织亚太区文化遗产保护荣誉奖及绿建环评金级认证",
-        "images": ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/137119382.jpg?k=086fe3962538c3a3715e96fcc40eaee1375674bebaeec36d2649b1428d092118&o="],
         "rooms": [{ "id": "mhh-6101", "name": "怀旧独立双人房", "size": "20 平方米", "bed": "1张大床", "bathroom": "独立私人卫浴 (带浴缸)", "breakfast": "含双人轻食早餐", "cancel": "入住前24小时可免费取消", "price": 380, "origPrice": 490, "image": "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1445,8 +1564,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "推行「零即弃塑胶旅宿」计划，全面提供不锈钢滤水瓶并设旧物改造厨房",
-        "images": ["https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://q-xx.bstatic.com/xdata/images/hotel/max500/47299613.jpg?k=a7d4e7cd79a20706454ef27922b1ddd22a6fc92fc1a76f4f6912a5be4eed3a97&o="],
         "rooms": [{ "id": "mj-6201", "name": "精品私人大床房", "size": "12 平方米", "bed": "1张双人床", "bathroom": "独立紧凑淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 350, "origPrice": 450, "image": "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1468,8 +1589,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "获选 Tripadvisor 全球绿色领航旅宿，采用环保 LED 与本地可回收木材定制家具",
-        "images": ["https://images.unsplash.com/photo-1596276020587-8044fe049813?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/274360422.jpg?k=44f934169ffa4a991a9f31b360c6cf2cb4b3f0cc73185603bed3996afdb4844c&o="],
         "rooms": [{ "id": "hop-6301", "name": "艺术设计双人房", "size": "14 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带迷你浴缸)", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 390, "origPrice": 520, "image": "https://images.unsplash.com/photo-1596276020587-8044fe049813?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1491,8 +1614,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "建有雨水收集过滤及太阳能离网发电系统，被誉为港岛生态环保避世胜地",
-        "images": ["https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://q-xx.bstatic.com/xdata/images/hotel/1200x630/66569103.jpg?k=1d4ecc43507c4c805889bc4b87e5ea94c42bed86457423f92c88930a89c59f26&o="],
         "rooms": [{ "id": "md-6401", "name": "全海景独立双人房", "size": "15 平方米", "bed": "2张单人床", "bathroom": "独立淋浴间", "breakfast": "含双人简易早餐", "cancel": "入住前24小时可免费取消", "price": 360, "origPrice": 480, "image": "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1514,8 +1639,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "设有有机堆肥区与生态导赏中心，全力推行低碳自然露营计划",
-        "images": ["https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.yha.org.hk/wp-content/uploads/2015/12/Entrance-e1542961673287.jpg"],
         "rooms": [{ "id": "tmt-6501", "name": "湖畔景观双人间", "size": "16 平方米", "bed": "2张单人床", "bathroom": "独立卫浴 (带浴缸)", "breakfast": "含双人营地早餐", "cancel": "特惠房型不可退订", "price": 340, "origPrice": 460, "image": "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1537,8 +1664,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "常年推行节能计划，采用环保变频除湿与节能空调",
-        "images": ["https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://aw-d.tripcdn.com/images/1mc0y12000qpkucp93167.jpg"],
         "rooms": [{ "id": "yes-6601", "name": "标准私密双人房", "size": "11 平方米", "bed": "1张双人床", "bathroom": "紧凑淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 320, "origPrice": 420, "image": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1560,8 +1689,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "全面推行无纸化入住与环保废纸竹浆制品",
-        "images": ["https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://q-xx.bstatic.com/xdata/images/hotel/max300/85945119.jpg?k=d54b0067927cdafe84bfa72009b0a83d2d688a2409e7c2ecb168febcb243fe3c&o="],
         "rooms": [{ "id": "ci-6701", "name": "简约大床房", "size": "12 平方米", "bed": "1张双人床", "bathroom": "标准淋浴间", "breakfast": "含咖啡及吐司早点", "cancel": "特惠房型不可退订", "price": 330, "origPrice": 440, "image": "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1583,8 +1714,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "加拿大环保设计师主理，室内装饰 80% 采用升级再造材料",
-        "images": ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://pix10.agoda.net/hotelImages/774280/-1/d7ae32db4cb6d4b6c372a1f463653a55.jpg?ca=9&ce=1&s=414x232&ar=16x9"],
         "rooms": [{ "id": "up-6801", "name": "都市舒适大床房", "size": "13 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带迷你浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 350, "origPrice": 460, "image": "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1606,8 +1739,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://www.yha.org.hk/wp-content/uploads/2015/12/NP_Building_1024.jpg"],
         "rooms": [{ "id": "np-6901", "name": "绿意独立大床房", "size": "14 平方米", "bed": "1张双人床", "bathroom": "标准淋浴间", "breakfast": "含双人素食早点", "cancel": "特惠房型不可退订", "price": 310, "origPrice": 400, "image": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1629,8 +1764,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1576941089067-2de3c901e126?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU5XyBri7JvkRC1BzHk6PKdTX7tyieu8p9oCS_maHPxLDC3VNRLLDicz8&s=10"],
         "rooms": [{ "id": "pso-7001", "name": "山林标准双床房", "size": "15 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 290, "origPrice": 380, "image": "https://images.unsplash.com/photo-1576941089067-2de3c901e126?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1652,8 +1789,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYAWUOpAAdcLEBA78C3FI-8TxL78uvL47HnPK-fzMcHUfj8SmhRmdznxM&s=10"],
         "rooms": [{ "id": "ah-7101", "name": "迷你独立双人房", "size": "10 平方米", "bed": "1张标准双人床", "bathroom": "独立卫浴 (带迷你浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 280, "origPrice": 360, "image": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1675,8 +1814,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://minimal-bazaar.hongkonghotelsandrates.com/data/Pics/OriginalPhoto/14363/1436327/1436327221/pop-inn-mong-kok-hong-kong-pic-8.JPEG"],
         "rooms": [{ "id": "mhb-7201", "name": "极简舒适大床房", "size": "12 平方米", "bed": "1张双人床", "bathroom": "独立卫浴", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 310, "origPrice": 410, "image": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1698,8 +1839,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1598228723793-52759bba239c?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/49359509.jpg?k=fdc6dbf6fac110c36bb0395fb3d1c9c15a324d95ca16b1331947bd7b4f6aced9&o="],
         "rooms": [{ "id": "bw-7301", "name": "标准大床客房", "size": "15 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带标准浴缸)", "breakfast": "含简式早餐", "cancel": "入住前24小时可免费取消", "price": 360, "origPrice": 480, "image": "https://images.unsplash.com/photo-1598228723793-52759bba239c?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1721,8 +1864,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFwFPkHi8fvS7s5LXqDDA66s4KICOKx6pbchiHfVlvA_xfB6QDlPbLybwi&s=10"],
         "rooms": [{ "id": "sly-7401", "name": "高山观星双床房", "size": "13 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 270, "origPrice": 350, "image": "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1744,6 +1889,8 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=750&q=80"],
         "rooms": [{ "id": "dh-7501", "name": "标准私享双人间", "size": "11 平方米", "bed": "1张双人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "特惠房型不可退订", "price": 290, "origPrice": 380, "image": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=600&q=80" }]
@@ -1767,8 +1914,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://res.klook.com/klook-hotel/image/upload/w_750,c_fill,q_85/travelapi/10000000/9490000/9482700/9482695/b3624154_z.jpg"],
         "rooms": [{ "id": "gch-7601", "name": "标准都会双人客房", "size": "14 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带标准浴缸)", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 320, "origPrice": 420, "image": "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1790,8 +1939,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://pix10.agoda.net/hotelImages/486/48641/48641_14062912540020081850.jpg?ca=2&ce=1&s=414x232&ar=16x9"],
         "rooms": [{ "id": "wh-7701", "name": "经济标准大床房", "size": "13 平方米", "bed": "1张双人床", "bathroom": "独立卫浴 (带小型浴缸)", "breakfast": "含双人简式早餐", "cancel": "特惠房型不可退订", "price": 330, "origPrice": 430, "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1813,8 +1964,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": false,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://cf.bstatic.com/xdata/images/hotel/max1024x768/608753781.jpg?k=8228a0fc75a03a8609f9a11c4411d9aa78fe0b621736fda805236c829fe1d634&o="],
         "rooms": [{ "id": "sdh-7801", "name": "闹市精巧双人房", "size": "10 平方米", "bed": "1张双人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 280, "origPrice": 360, "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80" }]
     },
     {
@@ -1836,6 +1989,8 @@ const hotelsData = [
         "hasPool": true,
         "hasCancel": false,
         "hasGym": false,
+        "hasAirportShuttle": false,
+        "hasFreeParking": false,
         "eco": "",
         "images": ["https://images.unsplash.com/photo-1499916078039-922301b0eb9b?auto=format&fit=crop&w=800&q=80"],
         "rooms": [{ "id": "smb-7901", "name": "沙滩双人木屋", "size": "18 平方米", "bed": "1张大床", "bathroom": "独立私人卫浴 (带浴缸)", "breakfast": "含双人早点", "cancel": "特惠房型不可退订", "price": 350, "origPrice": 450, "image": "https://images.unsplash.com/photo-1499916078039-922301b0eb9b?auto=format&fit=crop&w=600&q=80" }]
@@ -1859,8 +2014,10 @@ const hotelsData = [
         "hasPool": false,
         "hasCancel": true,
         "hasGym": false,
+        "hasAirportShuttle": true,
+        "hasFreeParking": true,
         "eco": "",
-        "images": ["https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=800&q=80"],
+        "images": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe2hcpDtM50PmiGizmgWU-0iiNZ2tbh9f_t_zdYwitEQ&s=10"],
         "rooms": [{ "id": "bbg-8001", "name": "海风标准客房", "size": "12 平方米", "bed": "2张单人床", "bathroom": "标准淋浴间", "breakfast": "不含早餐", "cancel": "入住前24小时可免费取消", "price": 300, "origPrice": 390, "image": "https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=600&q=80" }]
     }
 ];

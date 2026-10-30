@@ -46,6 +46,8 @@ async function getAiRecommendationsFromGemini(hotels, preferences) {
         hasPool: Boolean(h.hasPool),
         hasCancel: Boolean(h.hasCancel),
         hasGym: Boolean(h.hasGym),
+        hasAirportShuttle: Boolean(h.hasAirportShuttle),
+        hasFreeParking: Boolean(h.hasFreeParking),
         eco: h.eco
     }));
 
