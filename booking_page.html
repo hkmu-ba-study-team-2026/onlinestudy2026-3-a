@@ -28,12 +28,12 @@
     }
   </script>
 
-  <!-- 引入独立酒店数据集 (1 至 60) -->
+  <!-- 引入独立酒店数据集 (1 至 80) -->
   <script src="hotels_data.js"></script>
 
   <!-- Google Fonts & Font Awesome 图标库 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -276,7 +276,6 @@
       width: 100%;
     }
 
-    /* 左侧筛选侧边栏：设为 static，随整个页面自然上下拉动 */
     .filters-sidebar {
       background: var(--surface);
       border-radius: var(--radius-lg);
@@ -558,6 +557,13 @@
       font-weight: 700;
     }
 
+    .badge-pill.loc-pill {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #e9d5ff;
+      font-weight: 600;
+    }
+
     .hotel-eco-row {
       display: flex;
       align-items: flex-start;
@@ -764,21 +770,6 @@
       gap: 1.5rem;
     }
 
-    .hotel-gallery-strip {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 0.6rem;
-      height: 220px;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-
-    .hotel-gallery-strip img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
     .recommend-modal-card {
       background: #ffffff;
       border-radius: var(--radius-lg);
@@ -817,25 +808,37 @@
       opacity: 0.28;
       font-size: 0.72rem;
       padding: 3px 5px;
-      display: none; /* 倒數結束前不顯示 */
+      display: none;
     }
     .recommend-top-close-btn.autonomy-low:hover {
       opacity: 0.65;
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* High Autonomy: 明顯大叉號，自始可點擊 */
+    /* High Autonomy: 鮮紅高對比實色大按鈕，極其明顯易見 */
     .recommend-top-close-btn.autonomy-high {
+      top: 12px;
+      right: 14px;
+      width: 44px;
+      height: 44px;
+      background: #ef4444; /* 鮮明紅色底色 */
       color: #ffffff;
-      opacity: 0.95;
-      font-size: 2rem;
-      padding: 6px 10px;
-      background: rgba(255, 255, 255, 0.12);
-      display: block;
+      border: 2.5px solid #ffffff;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 1;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5), 0 2px 6px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+      z-index: 20;
     }
     .recommend-top-close-btn.autonomy-high:hover {
-      opacity: 1;
-      background: rgba(255, 255, 255, 0.25);
+      background: #dc2626;
+      transform: scale(1.12);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.65);
     }
 
     .recommend-pill-tag {
@@ -982,16 +985,25 @@
       opacity: 0.55 !important;
     }
 
-    /* High Autonomy: 右下角清晰可見的大叉號按鈕 */
+    /* High Autonomy: 右下角鮮紅實色大叉號，極顯眼 */
     .floating-popup-close.autonomy-high {
-      font-size: 1.25rem !important;
-      opacity: 0.95 !important;
-      padding: 2px 8px !important;
+      font-size: 1.15rem !important;
+      background: #ef4444 !important;
       color: #ffffff !important;
+      border: 1.5px solid #ffffff !important;
+      border-radius: 50% !important;
+      width: 30px !important;
+      height: 30px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      opacity: 1 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+      cursor: pointer !important;
     }
     .floating-popup-close.autonomy-high:hover {
-      opacity: 1 !important;
-      background: rgba(255, 255, 255, 0.2) !important;
+      background: #dc2626 !important;
+      transform: scale(1.1) !important;
     }
 
     .floating-popup-body {
@@ -1057,7 +1069,6 @@
       align-items: start;
     }
 
-    /* 左侧酒店主图展示卡 */
     .modal-hotel-preview-col {
       position: sticky;
       top: 0;
@@ -1088,7 +1099,7 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
       display: grid;
-      grid-template-columns: 1fr 210px; /* 原为 230px 1fr 210px，已移除图片列 */
+      grid-template-columns: 1fr 210px;
       overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s;
       background: #fff;
@@ -1109,16 +1120,6 @@
     .room-card:hover {
       border-color: var(--primary);
       box-shadow: var(--shadow-md);
-    }
-
-    .room-img-box {
-      position: relative;
-    }
-
-    .room-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
 
     .room-info-box {
@@ -1332,39 +1333,6 @@
       background: #10b981;
     }
 
-    .btn-return-survey {
-      width: 100%;
-      margin-top: 0.8rem;
-      font-size: 1rem;
-      padding: 0.85rem;
-      border-radius: var(--radius-md);
-      border: none;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-    }
-
-    .btn-return-survey:disabled {
-      background: #cbd5e1 !important;
-      color: #64748b !important;
-      cursor: not-allowed;
-      box-shadow: none !important;
-    }
-
-    .btn-return-survey:not(:disabled) {
-      background: var(--accent);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(255,87,34,0.35);
-    }
-
-    .btn-return-survey:not(:disabled):hover {
-      background: var(--accent-hover);
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -1394,9 +1362,6 @@
       }
       .room-card {
         grid-template-columns: 1fr;
-      }
-      .room-img-box {
-        height: 180px;
       }
       .checkout-grid {
         grid-template-columns: 1fr;
@@ -1465,14 +1430,14 @@
 
 <!-- 主体区域 -->
 <main class="main-layout">
-  <!-- 左侧筛选栏 (随页面自然拉动) -->
+  <!-- 左侧筛选栏 -->
   <aside class="filters-sidebar">
     <div class="filter-header">
       <h3><i class="fa-solid fa-sliders"></i> 条件筛选</h3>
       <button class="btn-reset-filters" onclick="resetFilters()">重置所有</button>
     </div>
 
-    <!-- 价格滑块 (最低下调至 HK$ 200，最高 HK$ 5,000) -->
+    <!-- 价格滑块 -->
     <div class="filter-group">
       <div class="filter-title">
         <span>每晚预算上限</span>
@@ -1485,7 +1450,7 @@
       </div>
     </div>
 
-    <!-- 所在地区筛选 (港岛 27 / 九龙 27 / 新界 26) -->
+    <!-- 所在地区筛选 -->
     <div class="filter-group">
       <div class="filter-title">所在地区</div>
       <label class="filter-checkbox">
@@ -1505,7 +1470,7 @@
       </label>
     </div>
 
-    <!-- 酒店星级 (4 种星级各 20 间) -->
+    <!-- 酒店星级 -->
     <div class="filter-group">
       <div class="filter-title">酒店星级</div>
       <label class="filter-checkbox">
@@ -1527,6 +1492,31 @@
         <input type="checkbox" name="star" value="2" onchange="filterHotels()">
         <span>经济级实惠</span>
         <span class="count" id="count-star-2">(20)</span>
+      </label>
+    </div>
+
+    <!-- 新增：周边地理特色筛选 (对应问卷第 5 题) -->
+    <div class="filter-group">
+      <div class="filter-title">地理位置特色</div>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="locationTag" value="近机场/高铁站" onchange="filterHotels()">
+        <span>近机场 / 高铁站</span>
+        <span class="count" id="count-tag-transport">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="locationTag" value="近地铁站" onchange="filterHotels()">
+        <span>近地铁站 (步行即达)</span>
+        <span class="count" id="count-tag-metro">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="locationTag" value="近维港" onchange="filterHotels()">
+        <span>近维多利亚港 (海景漫步)</span>
+        <span class="count" id="count-tag-harbour">(0)</span>
+      </label>
+      <label class="filter-checkbox">
+        <input type="checkbox" name="locationTag" value="近特色景点" onchange="filterHotels()">
+        <span>近特色地标 / 热门景点</span>
+        <span class="count" id="count-tag-attraction">(0)</span>
       </label>
     </div>
 
@@ -1613,7 +1603,7 @@
   </section>
 </main>
 
-<!-- 动态渲染中央推荐弹窗 (Low: 15秒倒数与微小叉号 / High: 无倒数与明显大叉号) -->
+<!-- 动态渲染中央推荐弹窗 -->
 <div class="modal-overlay" id="entryRecommendModal">
   <div class="recommend-modal-card">
     <div class="recommend-modal-header">
@@ -1664,7 +1654,6 @@
 </div>
 
 <!-- 弹窗 1：房型选择与详情 -->
-<!-- 弹窗 1：房型选择 (酒店外观移至客房左侧) -->
 <div class="modal-overlay" id="roomModal">
   <div class="modal-container">
     <div class="modal-header">
@@ -1686,7 +1675,7 @@
           </div>
         </div>
 
-        <!-- 右侧：客房列表 (无客房图片) -->
+        <!-- 右侧：客房列表 -->
         <div class="modal-rooms-col">
           <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;">
             <i class="fa-solid fa-bed"></i> 选择您的入住客房与配置
@@ -1770,8 +1759,6 @@
   <div class="modal-container" style="max-width: 600px;">
     <div class="modal-body" style="padding: 2rem 1.8rem;">
       <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.9rem;">
-
-        <!-- 成功图示 -->
         <div style="width: 64px; height: 64px; border-radius: 50%; background: #e0f2fe; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
           <i class="fa-solid fa-clipboard-check"></i>
         </div>
@@ -1780,7 +1767,6 @@
           模拟预订已成功完成
         </h2>
 
-        <!-- 重要警告横幅 (严格警告) -->
         <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 1rem 1.2rem; text-align: left; width: 100%; box-sizing: border-box;">
           <div style="display: flex; align-items: center; gap: 8px; color: #b91c1c; font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.15rem;"></i>
@@ -1793,7 +1779,6 @@
           </p>
         </div>
 
-        <!-- 32 位 ID 复制展示框 -->
         <div style="width: 100%; text-align: left; margin-top: 4px;">
           <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);">
             您的 32 位个人识别码 (Participant ID)：
@@ -1809,7 +1794,6 @@
           </p>
         </div>
 
-        <!-- 订房决策回执摘要 (供核实) -->
         <div style="background: #f8fafc; border: 1px dashed var(--border); border-radius: 8px; padding: 0.85rem 1rem; width: 100%; text-align: left; font-size: 0.82rem; line-height: 1.6; color: #475569; box-sizing: border-box;">
           <p><strong>最终选定酒店：</strong> <span id="successHotel">--</span></p>
           <p><strong>所选客房类型：</strong> <span id="successRoom">--</span></p>
@@ -1817,17 +1801,16 @@
           <p><strong>模拟实付金额：</strong> <span style="color: var(--accent); font-weight: 800;" id="successPaid">--</span></p>
         </div>
 
-        <!-- 底部静态行动指引提示 (无按钮，指引返回) -->
         <div style="width: 100%; padding: 0.85rem; border-radius: 8px; background: #f1f5f9; color: #334155; font-size: 0.85rem; font-weight: 600; text-align: center; border: 1px solid #cbd5e1;">
           <i class="fa-solid fa-arrow-turn-up" style="transform: rotate(-90deg); margin-right: 4px; color: var(--primary);"></i>
           已复制 ID 后，请在浏览器上方切换回<strong>问卷主页标签页</strong>继续作答。
         </div>
-
       </div>
     </div>
   </div>
 </div>
-<!-- 右下角悬浮推荐卡片 Floating Popup (根据 Autonomy 设定叉键) -->
+
+<!-- 右下角悬浮推荐卡片 Floating Popup -->
 <div class="floating-recommend-popup" id="floatingRecommendPopup">
   <div class="floating-popup-header">
     <span><i class="fa-solid fa-crown"></i> 平台主推特选</span>
@@ -1863,7 +1846,6 @@
 
   // 默认传统推荐 4 星 Eco 酒店：香港东隅酒店 (ID: 21)
   let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId')) || parseInt(localStorage.getItem('recommended_hotel_id')) || 21;
-  const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
 
   let currentHotels = typeof hotelsData !== 'undefined' ? [...hotelsData] : [];
   let recommendedHotelObj = hotelsData.find(h => h.id === RECOMMENDED_HOTEL_ID) || hotelsData.find(h => h.id === 21) || hotelsData[0];
@@ -1891,8 +1873,6 @@
 
   const currentPID = getOrGenerate32PID();
   let hasCopiedPID = false;
-  let exitCountdownFinished = false;
-  let exitCountdownSeconds = 5;
 
   // 渲染中央弹窗与右下角浮动弹窗中的推荐酒店数据
   function populateRecommendationData() {
@@ -1928,15 +1908,12 @@
 
     if (AUTONOMY_MODE === "low") {
       // ================= LOW AUTONOMY =================
-      // 1. 隐藏底部大按钮，显示 15 秒倒计时
       skipBtn.style.display = "none";
       countdownText.style.display = "block";
 
-      // 2. 右上角叉键：低对比度、微小、倒数前隐藏
       topCloseBtn.className = "recommend-top-close-btn autonomy-low";
       topCloseBtn.style.display = "none";
 
-      // 3. 右下角叉键：极小隐蔽
       floatingCloseBtn.className = "floating-popup-close autonomy-low";
 
       let timeLeft = 15;
@@ -1950,25 +1927,24 @@
         } else {
           clearInterval(countdownTimer);
           countdownText.style.display = "none";
-          topCloseBtn.style.display = "block"; // 15秒倒计时结束后显现微小叉号
+          topCloseBtn.style.display = "block";
         }
       }, 1000);
 
     } else {
       // ================= HIGH AUTONOMY =================
-      // 1. 无倒计时，直接提供清晰明确的略过按钮
       if (countdownTimer) clearInterval(countdownTimer);
       countdownText.style.display = "none";
       skipBtn.style.display = "block";
       skipBtn.disabled = false;
       skipBtn.innerText = `略过推荐，浏览全部 ${hotelsData.length} 间酒店`;
 
-      // 2. 右上角叉键：醒目大叉号，背景半透明悬浮框，随时可关
+      // 鲜红大圆底叉号，极致醒目
       topCloseBtn.className = "recommend-top-close-btn autonomy-high";
-      topCloseBtn.style.display = "block";
+      topCloseBtn.style.display = "flex";
 
-      // 3. 右下角叉键：明显易点
       floatingCloseBtn.className = "floating-popup-close autonomy-high";
+      floatingCloseBtn.style.display = "flex";
     }
   }
 
@@ -1980,6 +1956,7 @@
     let r95 = 0, r90 = 0, r85 = 0, r80 = 0;
     let bfast = 0, pBath = 0, pool = 0, cancel = 0, gym = 0;
     let shuttle = 0, parking = 0;
+    let tagTransport = 0, tagMetro = 0, tagHarbour = 0, tagAttraction = 0;
 
     hotelsData.forEach(hotel => {
       if (hotel.region === "港岛") regHK++;
@@ -2003,6 +1980,14 @@
       if (hotel.hasGym) gym++;
       if (hotel.hasAirportShuttle) shuttle++;
       if (hotel.hasFreeParking) parking++;
+
+      // 地理位置标签计数
+      if (hotel.locationTags && Array.isArray(hotel.locationTags)) {
+        if (hotel.locationTags.includes("近机场/高铁站")) tagTransport++;
+        if (hotel.locationTags.includes("近地铁站")) tagMetro++;
+        if (hotel.locationTags.includes("近维港")) tagHarbour++;
+        if (hotel.locationTags.includes("近特色景点")) tagAttraction++;
+      }
     });
 
     document.getElementById("count-region-hk").innerText = `(${regHK})`;
@@ -2032,8 +2017,23 @@
     if (document.getElementById("count-parking")) {
       document.getElementById("count-parking").innerText = `(${parking})`;
     }
+
+    // 地理特色标签计数更新
+    if (document.getElementById("count-tag-transport")) {
+      document.getElementById("count-tag-transport").innerText = `(${tagTransport})`;
+    }
+    if (document.getElementById("count-tag-metro")) {
+      document.getElementById("count-tag-metro").innerText = `(${tagMetro})`;
+    }
+    if (document.getElementById("count-tag-harbour")) {
+      document.getElementById("count-tag-harbour").innerText = `(${tagHarbour})`;
+    }
+    if (document.getElementById("count-tag-attraction")) {
+      document.getElementById("count-tag-attraction").innerText = `(${tagAttraction})`;
+    }
   }
 
+  // 渲染酒店列表 (完全取消推荐酒店置顶，按当前用户排序顺序列出)
   function renderHotelList(hotels) {
     const container = document.getElementById("hotelListContainer");
     document.getElementById("hotelCount").innerText = `${hotels.length} 间香港精选酒店`;
@@ -2050,16 +2050,10 @@
       return;
     }
 
-    // 推荐酒店置顶
-    const sortedList = [...hotels].sort((a, b) => {
-      if (a.id === RECOMMENDED_HOTEL_ID) return -1;
-      if (b.id === RECOMMENDED_HOTEL_ID) return 1;
-      return 0;
-    });
-
-    container.innerHTML = sortedList.map(hotel => {
+    container.innerHTML = hotels.map(hotel => {
       const isTopRecommend = (hotel.id === RECOMMENDED_HOTEL_ID);
       const hasEco = hotel.eco && hotel.eco.trim() !== "";
+      const locTags = hotel.locationTags || [];
 
       return `
         <div class="hotel-card ${isTopRecommend ? 'featured-recommendation' : ''}">
@@ -2071,7 +2065,7 @@
           ` : ''}
 
           <div class="hotel-image-col">
-            <img src="${hotel.images[0]}" alt="${hotel.name}" loading="lazy">
+            <img src="${hotel.images[0]}" alt="${hotel.name}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';">
             ${isTopRecommend ? `
               <div class="tag-deal" style="background:#d97706;">
                 ⭐ 今日主推特选
@@ -2095,6 +2089,7 @@
             <div class="hotel-badges">
               ${isTopRecommend ? '<span class="badge-pill gold-star"><i class="fa-solid fa-crown"></i> 官方主推</span>' : '<span class="badge-pill featured"><i class="fa-solid fa-award"></i> TripStay 优选</span>'}
               ${hasEco ? '<span class="badge-pill eco-pill"><i class="fa-solid fa-leaf"></i> 绿色环保认证</span>' : ''}
+              ${locTags.map(tag => `<span class="badge-pill loc-pill"><i class="fa-solid fa-map-pin"></i> ${tag}</span>`).join('')}
               ${hotel.hasPrivateBath ? '<span class="badge-pill"><i class="fa-solid fa-bath"></i> 独立卫浴/浴缸</span>' : '<span class="badge-pill"><i class="fa-solid fa-shower"></i> 标准淋浴间</span>'}
               ${hotel.hasBreakfast ? '<span class="badge-pill"><i class="fa-solid fa-utensils"></i> 含免费早餐</span>' : ''}
               ${hotel.hasPool ? '<span class="badge-pill"><i class="fa-solid fa-person-swimming"></i> 室外泳池</span>' : ''}
@@ -2196,11 +2191,10 @@
       hotelLocEl.innerHTML = `<i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> ${selectedHotel.location}`;
     }
 
-    // 3. 渲染客房卡片列表（完全移除 room.image 与 room-img-box）
+    // 3. 渲染客房卡片列表
     const roomList = document.getElementById("modalRoomList");
     roomList.innerHTML = selectedHotel.rooms.map(room => `
         <div class="room-card">
-          <!-- 客房信息栏 -->
           <div class="room-info-box">
             <div class="room-title">${room.name}</div>
 
@@ -2237,7 +2231,6 @@
             </div>
           </div>
 
-          <!-- 价格与预订按钮栏 -->
           <div class="room-booking-box">
             <div class="room-price-info">
               <span class="room-orig-price">HK$ ${(room.origPrice * 2).toLocaleString()}</span>
@@ -2284,7 +2277,6 @@
     document.getElementById("checkoutModal").classList.remove("active");
   }
 
-  // 复制个人 ID 功能
   function copyParticipantID() {
     const copyBtn = document.getElementById("btnCopyPID");
     const tip = document.getElementById("copyStatusTip");
@@ -2318,7 +2310,6 @@
     }
   }
 
-  // 确认订单并弹出模态框 (不再包含跳转按钮与倒数计时)
   function confirmBooking() {
     const guestName = document.getElementById("guestName").value.trim();
     const guestEmail = document.getElementById("guestEmail").value.trim();
@@ -2339,14 +2330,12 @@
     const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
     const totalPaidStr = document.getElementById("checkoutTotalPrice").innerText;
 
-    // 填充完成弹窗数据
     if (document.getElementById("finalDisplayPID")) document.getElementById("finalDisplayPID").innerText = currentPID;
     if (document.getElementById("successHotel")) document.getElementById("successHotel").innerText = selectedHotel.name;
     if (document.getElementById("successRoom")) document.getElementById("successRoom").innerText = selectedRoom.name;
     if (document.getElementById("successRef")) document.getElementById("successRef").innerText = refNumber;
     if (document.getElementById("successPaid")) document.getElementById("successPaid").innerText = totalPaidStr;
 
-    // 重置复制按钮状态
     hasCopiedPID = false;
     const copyBtn = document.getElementById("btnCopyPID");
     if (copyBtn) {
@@ -2359,7 +2348,6 @@
       tip.innerText = "* 尚未复制：请先点击上方蓝色「复制ID」按钮";
     }
 
-    // 写入 Firebase 实验数据记录
     try {
       if (typeof firebase !== 'undefined' && firebase.database) {
         firebase.database().ref('bookings/' + currentPID).set({
@@ -2387,13 +2375,7 @@
       console.log("Offline mode, skip db push.", err);
     }
 
-    // 显示弹窗并锁定背景
     document.getElementById("successModal").classList.add("active");
-  }
-
-  function returnToSurvey() {
-    if (!hasCopiedPID || !exitCountdownFinished) return;
-    window.location.href = `${RETURN_SURVEY_URL}?pid=${encodeURIComponent(currentPID)}`;
   }
 
   function updatePriceFilter(val) {
@@ -2405,6 +2387,7 @@
     const maxPrice = parseInt(document.getElementById("priceRange").value);
     const regionCheckboxes = Array.from(document.querySelectorAll('input[name="region"]:checked')).map(cb => cb.value);
     const starCheckboxes = Array.from(document.querySelectorAll('input[name="star"]:checked')).map(cb => parseInt(cb.value));
+    const locationTagCheckboxes = Array.from(document.querySelectorAll('input[name="locationTag"]:checked')).map(cb => cb.value);
     const ratingCheckboxes = Array.from(document.querySelectorAll('input[name="rating"]:checked')).map(cb => parseFloat(cb.value));
 
     const filterBreakfast = document.getElementById("filterBreakfast")?.checked;
@@ -2420,6 +2403,13 @@
       if (regionCheckboxes.length > 0 && !regionCheckboxes.includes(hotel.region)) return false;
       if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
       if (ratingCheckboxes.length > 0 && !ratingCheckboxes.includes(hotel.rating)) return false;
+
+      // 地理位置特色筛选 (需满足所有勾选的特色)
+      if (locationTagCheckboxes.length > 0) {
+        const hotelTags = hotel.locationTags || [];
+        const hasAllSelectedTags = locationTagCheckboxes.every(tag => hotelTags.includes(tag));
+        if (!hasAllSelectedTags) return false;
+      }
 
       if (filterBreakfast && !hotel.hasBreakfast) return false;
       if (filterPrivateBath && !hotel.hasPrivateBath) return false;
@@ -2440,6 +2430,7 @@
     document.getElementById("priceRangeLabel").innerText = "最高 HK$ 5,000";
     document.querySelectorAll('input[name="region"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('input[name="star"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('input[name="locationTag"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('input[name="rating"]').forEach(cb => cb.checked = false);
     document.getElementById("filterBreakfast").checked = false;
     document.getElementById("filterPrivateBath").checked = false;

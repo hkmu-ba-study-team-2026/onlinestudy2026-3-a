@@ -76,9 +76,16 @@
             margin-left: 4px;
         }
 
+        .question-title .optional-badge {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin-left: 6px;
+        }
+
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 10px;
         }
 
@@ -110,7 +117,7 @@
             text-align: center;
             user-select: none;
             height: 100%;
-            gap: 2px;
+            gap: 3px;
         }
 
         .option-card label span.sub-desc {
@@ -134,6 +141,21 @@
 
         .option-card input:checked + label span.sub-desc {
             color: #3b82f6;
+        }
+
+        .clear-choice-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            cursor: pointer;
+            margin-top: 6px;
+            padding: 2px 4px;
+            text-decoration: underline;
+            display: inline-block;
+        }
+        .clear-choice-btn:hover {
+            color: #ef4444;
         }
 
         .submit-btn {
@@ -200,65 +222,40 @@
 
     <form id="surveyForm" onsubmit="handleSubmit(event)">
 
-        <!-- 问题 1: 出行预算取向 (隐蔽映射价格) -->
+        <!-- 问题 1: 出行预算取向 (四个选项：经济、精致、高级、奢侈) -->
         <div class="form-group">
-            <label class="question-title">1. 您的住宿预算倾向于哪种安排？</label>
-            <div class="options-grid">
-                <div class="option-card">
-                    <input type="radio" id="price_budget" name="price_preference" value="经济实惠" required>
-                    <label for="price_budget">
-                        <span>务实精算</span>
-                    </label>
-                </div>
-                <div class="option-card">
-                    <input type="radio" id="price_mid" name="price_preference" value="舒适适中" required>
-                    <label for="price_mid">
-                        <span>舒适自在</span>
-                    </label>
-                </div>
-                <div class="option-card">
-                    <input type="radio" id="price_luxury" name="price_preference" value="尊贵奢华" required>
-                    <label for="price_luxury">
-                        <span>顶级奢享</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <!-- 问题 2: 住宿形态与规格 (隐蔽映射星级) -->
-        <div class="form-group">
-            <label class="question-title">2. 您喜欢入住哪种氛围与环境？</label>
+            <label class="question-title">1. 本次旅程中，您偏好哪种住宿安排与预算风格？<span class="required">*</span></label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
-                    <input type="radio" id="star_2" name="star_preference" value="2星" required>
-                    <label for="star_2">
-                        <span>简朴青年驿站</span>
+                    <input type="radio" id="price_economy" name="price_preference" value="经济" required>
+                    <label for="price_economy">
+                        <span style="font-size: 1rem; font-weight: 800;">经济</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="star_3" name="star_preference" value="3星" required>
-                    <label for="star_3">
-                        <span>经典标准商旅</span>
+                    <input type="radio" id="price_refined" name="price_preference" value="精致" required>
+                    <label for="price_refined">
+                        <span style="font-size: 1rem; font-weight: 800;">精致</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="star_4" name="star_preference" value="4星" required>
-                    <label for="star_4">
-                        <span>雅致精品名店</span>
+                    <input type="radio" id="price_upscale" name="price_preference" value="高级" required>
+                    <label for="price_upscale">
+                        <span style="font-size: 1rem; font-weight: 800;">高级</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="star_5" name="star_preference" value="5星" required>
-                    <label for="star_5">
-                        <span>殿堂级地标</span>
+                    <input type="radio" id="price_luxury" name="price_preference" value="奢侈" required>
+                    <label for="price_luxury">
+                        <span style="font-size: 1rem; font-weight: 800;">奢侈</span>
                     </label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 3: 住客口碑依赖度 (隐蔽映射评分) -->
+        <!-- 问题 2: 住客口碑依赖度 (原第3题顺延) -->
         <div class="form-group">
-            <label class="question-title">3. 翻阅其他住客的体验分享时，您通常的标准是？</label>
+            <label class="question-title">2. 翻阅其他住客的体验评价时，您通常的标准是？<span class="required">*</span></label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="rating_80" name="rating_preference" value="8.0分以上" required>
@@ -281,27 +278,27 @@
                 <div class="option-card">
                     <input type="radio" id="rating_95" name="rating_preference" value="9.5分顶尖" required>
                     <label for="rating_95">
-                        <span>近乎无可挑剔</span>
+                        <span>近乎完美</span>
                     </label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 4: 设施偏好 (直白选项，可多选) -->
+        <!-- 问题 3: 设施偏好 (原第4题顺延，可多选) -->
         <div class="form-group">
-            <label class="question-title">4. 你重视酒店要有以下设施吗？（可多选）</label>
+            <label class="question-title">3. 你重视酒店要有以下设施吗？（可多选）</label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="checkbox" id="facility_breakfast" name="hotel_facilities" value="含免费丰盛早餐">
-                    <label for="facility_breakfast">含免费早餐</label>
+                    <label for="facility_breakfast">含免费丰盛早餐</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_bath" name="hotel_facilities" value="配备独立卫浴/浴缸">
-                    <label for="facility_bath">配备浴缸</label>
+                    <label for="facility_bath">配备独立卫浴/浴缸</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_pool" name="hotel_facilities" value="室外泳池/景观无边际池">
-                    <label for="facility_pool">室外泳池</label>
+                    <label for="facility_pool">室外泳池/无边际池</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_cancel" name="hotel_facilities" value="限时免费取消政策">
@@ -313,7 +310,7 @@
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_shuttle" name="hotel_facilities" value="提供穿梭巴士/机场接送">
-                    <label for="facility_shuttle">机场接送</label>
+                    <label for="facility_shuttle">穿梭巴士/机场接送</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_parking" name="hotel_facilities" value="附设免费住客泊车位">
@@ -322,9 +319,9 @@
             </div>
         </div>
 
-        <!-- 问题 5: 偏好地区 (直白选项) -->
+        <!-- 问题 4: 偏好地区 (原第5题顺延) -->
         <div class="form-group">
-            <label class="question-title">5. 你喜欢住在哪个地区？<span class="required">*</span></label>
+            <label class="question-title">4. 你喜欢住在哪个行政区域？<span class="required">*</span></label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="radio" id="region_hk" name="preferred_region" value="港岛" required>
@@ -341,6 +338,43 @@
             </div>
         </div>
 
+        <!-- 问题 5: 地点特色偏好 (新增：单选或可不选) -->
+        <div class="form-group">
+            <label class="question-title">
+                5. 针对酒店周边的地理位置，您是否有特定的偏好？
+                <span class="optional-badge">(选填，可不选或选 1 项)</span>
+            </label>
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
+                <div class="option-card">
+                    <input type="radio" id="loc_transport" name="location_preference" value="近机场/高铁站" onclick="handleRadioToggle(this)">
+                    <label for="loc_transport">
+                        <span>近机场/高铁站</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="loc_metro" name="location_preference" value="近地铁站" onclick="handleRadioToggle(this)">
+                    <label for="loc_metro">
+                        <span>近地铁站</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="loc_harbour" name="location_preference" value="近维港" onclick="handleRadioToggle(this)">
+                    <label for="loc_harbour">
+                        <span>近维港</span>
+                    </label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="loc_attraction" name="location_preference" value="近特色景点" onclick="handleRadioToggle(this)">
+                    <label for="loc_attraction">
+                        <span>近特色景点</span>
+                    </label>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <button type="button" class="clear-choice-btn" onclick="clearLocationPreference()">清除第 5 题选择 (保持不选)</button>
+            </div>
+        </div>
+
         <button type="submit" id="submitBtn" class="submit-btn">
             提交并进入酒店预订平台
         </button>
@@ -348,6 +382,22 @@
 </div>
 
 <script>
+    // 支持单选可取消选择 (再次点击已选中的 radio 即可取消)
+    let lastCheckedRadio = null;
+    function handleRadioToggle(radio) {
+        if (lastCheckedRadio === radio) {
+            radio.checked = false;
+            lastCheckedRadio = null;
+        } else {
+            lastCheckedRadio = radio;
+        }
+    }
+
+    function clearLocationPreference() {
+        document.querySelectorAll('input[name="location_preference"]').forEach(el => el.checked = false);
+        lastCheckedRadio = null;
+    }
+
     function generate32DigitParticipantID() {
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
@@ -412,19 +462,19 @@
 
         const formData = new FormData(event.target);
 
-        // 收集问卷数据
+        // 收集问卷数据 (已更新为 4 个价格档位，无星级题，并新增地点特色题)
         const pricePref = formData.get("price_preference");
-        const starPref = formData.get("star_preference");
         const ratingPref = formData.get("rating_preference");
         const facilities = formData.getAll("hotel_facilities");
         const preferredRegion = formData.get("preferred_region");
+        const locationPref = formData.get("location_preference") || "无特定偏好";
 
         const surveyResponses = {
             price_preference: pricePref,
-            star_preference: starPref,
             rating_preference: ratingPref,
             hotel_facilities: facilities,
-            preferred_region: preferredRegion
+            preferred_region: preferredRegion,
+            location_preference: locationPref
         };
 
         // 获取分组编号及余数 (grouping % 4)
