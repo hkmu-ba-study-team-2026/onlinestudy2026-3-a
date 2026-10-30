@@ -828,7 +828,7 @@
     .recommend-top-close-btn.autonomy-high {
       color: #ffffff;
       opacity: 0.95;
-      font-size: 1.25rem;
+      font-size: 2rem;
       padding: 6px 10px;
       background: rgba(255, 255, 255, 0.12);
       display: block;
@@ -2315,26 +2315,6 @@
       document.execCommand("copy");
       document.body.removeChild(tempInput);
       setSuccessState();
-    }
-  }
-
-  function updateReturnButtonState() {
-    const returnBtn = document.getElementById("btnReturnSurvey");
-    if (!returnBtn) return;
-
-    if (!exitCountdownFinished) {
-      returnBtn.disabled = true;
-      returnBtn.innerText = hasCopiedPID
-              ? `即将可返回主页 (${exitCountdownSeconds}s)`
-              : `请先复制个人ID并等候 (${exitCountdownSeconds}s)`;
-    } else {
-      if (!hasCopiedPID) {
-        returnBtn.disabled = true;
-        returnBtn.innerText = "必须先点击「复制ID」方可返回";
-      } else {
-        returnBtn.disabled = false;
-        returnBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> 返回问卷主页 (Paste ID on Survey)';
-      }
     }
   }
 
