@@ -284,21 +284,24 @@
             </div>
         </div>
 
-        <!-- 问题 3: 设施偏好 (原第4题顺延，可多选) -->
+        <!-- 问题 3: 设施偏好 (提示词统一，带有一键清空选择) -->
         <div class="form-group">
-            <label class="question-title">3. 你重视酒店要有以下设施吗？（可多选）</label>
+            <label class="question-title">
+                3. 你重视酒店要有以下设施吗？
+                <span class="optional-badge">(选填，可不选或选多项)</span>
+            </label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="checkbox" id="facility_breakfast" name="hotel_facilities" value="含免费丰盛早餐">
-                    <label for="facility_breakfast">含免费丰盛早餐</label>
+                    <label for="facility_breakfast">含免费早餐</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_bath" name="hotel_facilities" value="配备独立卫浴/浴缸">
-                    <label for="facility_bath">配备独立卫浴/浴缸</label>
+                    <label for="facility_bath">配备浴缸</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_pool" name="hotel_facilities" value="室外泳池/景观无边际池">
-                    <label for="facility_pool">室外泳池/无边际池</label>
+                    <label for="facility_pool">室外泳池</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_cancel" name="hotel_facilities" value="限时免费取消政策">
@@ -317,11 +320,14 @@
                     <label for="facility_parking">免费住客泊车位</label>
                 </div>
             </div>
+            <div style="text-align: right;">
+                <button type="button" class="clear-choice-btn" onclick="clearFacilityPreference()">清除第 3 题选择 (保持不选)</button>
+            </div>
         </div>
 
         <!-- 问题 4: 偏好地区 (原第5题顺延) -->
         <div class="form-group">
-            <label class="question-title">4. 你喜欢住在哪个行政区域？<span class="required">*</span></label>
+            <label class="question-title">4. 你喜欢住在哪个区域？<span class="required">*</span></label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="radio" id="region_hk" name="preferred_region" value="港岛" required>
@@ -338,7 +344,7 @@
             </div>
         </div>
 
-        <!-- 问题 5: 地点特色偏好 (新增：单选或可不选) -->
+        <!-- 问题 5: 地点特色偏好 (提示词统一，带有一键清空选择) -->
         <div class="form-group">
             <label class="question-title">
                 5. 针对酒店周边的地理位置，您是否有特定的偏好？
@@ -382,6 +388,11 @@
 </div>
 
 <script>
+    // 清除第 3 题所有已勾选的设施
+    function clearFacilityPreference() {
+        document.querySelectorAll('input[name="hotel_facilities"]').forEach(el => el.checked = false);
+    }
+
     // 支持单选可取消选择 (再次点击已选中的 radio 即可取消)
     let lastCheckedRadio = null;
     function handleRadioToggle(radio) {
@@ -393,6 +404,7 @@
         }
     }
 
+    // 清除第 5 题选择
     function clearLocationPreference() {
         document.querySelectorAll('input[name="location_preference"]').forEach(el => el.checked = false);
         lastCheckedRadio = null;
