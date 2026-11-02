@@ -537,14 +537,14 @@
                     const data = await response.json();
                     if (data.recommendedHotelId) recommendedHotelId = data.recommendedHotelId;
                     if (data.recommendedHotelName) recommendedHotelName = data.recommendedHotelName;
-                    aiNudgeText = data.recommendation || "These items offer premium hospitality and certified eco-friendly living tailored to your stay.";
+                    aiNudgeText = data.recommendation || "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
                 } else {
                     throw new Error("AI service non-200");
                 }
             } catch (err) {
                 console.warn("AI recommendation failed, using fallback:", err);
                 recommendedHotelId = 21;
-                aiNudgeText = "These items feature verified green operations and refined hospitality for your ideal stay.";
+                aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
             }
         } else {
             // Traditional 模式

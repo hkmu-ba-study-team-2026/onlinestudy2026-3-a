@@ -198,7 +198,7 @@
 <div class="export-card">
     <div class="icon">🏨📊</div>
     <h2>TripStay 实验数据导出与管理工具</h2>
-    <p class="subtitle">全面支持最新 2×2 自主性与推荐干预实验架构，一键抓取并导出结构化受试者前测偏好、系统推荐干预及预订决策数据。</p>
+    <p class="subtitle">全面支持最新 2×2 自主性与推荐干预实验架构，一键抓取并导出结构化受试者前测偏好、系统推荐干预、推荐提示语 (Nudge Text) 及预订决策数据。</p>
     
     <!-- 实时数据统计卡片 -->
     <div class="summary-stats">
@@ -302,7 +302,7 @@
 
             const masterDataMap = {};
 
-            // 基于最新问卷与主页架构精确定义 30 个分析列
+            // 基于最新问卷与主页架构精确定义分析列（包含新增的 AI_Nudge_Text）
             allPIDs.forEach(pid => {
                 masterDataMap[pid] = {
                     // 1. 受试者标识
@@ -323,9 +323,10 @@
                     "Survey_Q5_Location_Feature": "",        // 近机场/高铁站 / 近地铁站 / 近维港 / 近特色景点 / 无特定偏好
                     "Survey_Submitted_At": "",
 
-                    // 4. 推荐系统干预内容
+                    // 4. 推荐系统干预内容（含 Nudge Text）
                     "System_Recommended_Hotel_ID": "",
                     "System_Recommended_Hotel_Name": "",
+                    "AI_Nudge_Text": "",                     // 记录系统推荐提示语
 
                     // 5. 酒店预订决策与结果 (核心因变量)
                     "Has_Completed_Booking": "No",
@@ -334,7 +335,7 @@
                     "Selected_Hotel_Region": "",
                     "Is_Recommended_Hotel_Chosen": "",       // 关键因变量：Yes / No
                     "Total_Paid_Amount": "",
-                    "Booking_Created_At": "",
+                    "Booking_Created_At": ""
                 };
             });
 
@@ -345,7 +346,7 @@
                 }
             });
 
-            // 填充 2: survey_responses 节点（前测问卷及分组）
+            // 填充 2: survey_responses 节点（前测问卷、推荐酒店及 Nudge Text）
             Object.entries(surveyObj).forEach(([pid, data]) => {
                 if (masterDataMap[pid]) {
                     masterDataMap[pid]["Grouping_Number"] = data.groupingNumber !== undefined ? data.groupingNumber : "";
@@ -355,6 +356,7 @@
 
                     masterDataMap[pid]["System_Recommended_Hotel_ID"] = data.recommendedHotelId || "";
                     masterDataMap[pid]["System_Recommended_Hotel_Name"] = data.recommendedHotelName || "";
+                    masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText || "";
                     masterDataMap[pid]["Survey_Submitted_At"] = data.submittedAt || "";
 
                     if (data.responses) {
@@ -386,6 +388,11 @@
                     masterDataMap[pid]["Selected_Hotel_Name"] = data.hotelName || "";
                     masterDataMap[pid]["Selected_Hotel_Region"] = data.hotelRegion || "";
                     
+                    // 补充可能保存在 bookings 中的 nudge text
+                    if (!masterDataMap[pid]["AI_Nudge_Text"] && data.aiNudgeText) {
+                        masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText;
+                    }
+
                     // 核心因变量判断
                     if (data.isRecommendedHotelChosen !== undefined) {
                         masterDataMap[pid]["Is_Recommended_Hotel_Chosen"] = data.isRecommendedHotelChosen ? "Yes" : "No";
@@ -401,44 +408,34 @@
             // 使用 SheetJS 生成多工作表 Excel 档案
             const wb = XLSX.utils.book_new();
 
-            // 工作表 1：全量主数据表 (Master Dataset)
+            // 工作表 1：全量主数据表 (Master_Dataset)
             const masterRows = Object.values(masterDataMap);
             const wsMaster = XLSX.utils.json_to_sheet(masterRows);
 
-            // 设定列宽
+            // 设定对应列宽
             wsMaster['!cols'] = [
                 { wch: 34 }, // Participant_ID
-                { wch: 16 }, // PID_Timestamp_Part
-                { wch: 20 }, // PID_Random_Part
                 { wch: 22 }, // Registration_Time
                 { wch: 16 }, // Grouping_Number
                 { wch: 18 }, // Grouping_Modulo_4
                 { wch: 15 }, // Autonomy_Mode
                 { wch: 22 }, // Recommendation_Mode
-                { wch: 24 }, // Q1_Budget_Preference
-                { wch: 24 }, // Q2_Rating_Preference
-                { wch: 36 }, // Q3_Facilities_Preference
-                { wch: 22 }, // Q4_Region_Preference
-                { wch: 22 }, // Q5_Location_Feature
+                { wch: 24 }, // Survey_Q1_Budget_Preference
+                { wch: 24 }, // Survey_Q2_Rating_Preference
+                { wch: 36 }, // Survey_Q3_Facilities_Preference
+                { wch: 22 }, // Survey_Q4_Region_Preference
+                { wch: 22 }, // Survey_Q5_Location_Feature
                 { wch: 22 }, // Survey_Submitted_At
                 { wch: 28 }, // System_Recommended_Hotel_ID
                 { wch: 32 }, // System_Recommended_Hotel_Name
-                { wch: 42 }, // AI_Nudge_Text
+                { wch: 46 }, // AI_Nudge_Text
                 { wch: 22 }, // Has_Completed_Booking
-                { wch: 16 }, // Booking_Ref
                 { wch: 18 }, // Selected_Hotel_ID
                 { wch: 32 }, // Selected_Hotel_Name
                 { wch: 18 }, // Selected_Hotel_Region
                 { wch: 28 }, // Is_Recommended_Hotel_Chosen
-                { wch: 26 }, // Selected_Room_Name
-                { wch: 16 }, // Selected_Room_Size
-                { wch: 24 }, // Selected_Room_Bathroom
-                { wch: 24 }, // Selected_Room_Breakfast
                 { wch: 16 }, // Total_Paid_Amount
-                { wch: 22 }, // Booking_Created_At
-                { wch: 18 }, // Guest_Name
-                { wch: 28 }, // Guest_Email
-                { wch: 18 }  // Guest_Phone
+                { wch: 22 }  // Booking_Created_At
             ];
             XLSX.utils.book_append_sheet(wb, wsMaster, "Master_Dataset");
 
@@ -478,7 +475,7 @@
             const today = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `TripStay_Experiment_Master_${today}.xlsx`);
 
-            status.innerText = `✅ 导出成功！共整合导出 ${masterRows.length} 位受试者的决策全量数据及条件摘要。`;
+            status.innerText = `✅ 导出成功！共整合导出 ${masterRows.length} 位受试者的决策全量数据（含 Nudge Text）及条件摘要。`;
             fetchLiveStats();
         } catch (err) {
             console.error("Export Error:", err);
@@ -494,14 +491,12 @@
         const status = document.getElementById("statusMsg");
 
         // 第一层保护确认
-        const firstConfirm = confirm("⚠️ 警告：您确定要彻底清空 Firebase 数据库中的所有实验记录吗?此操作将永久删除所有受试者登记、问卷答案与订房记录！");
+        const firstConfirm = confirm("⚠️ 警告：您确定要彻底清空 Firebase 数据库中的所有实验记录吗？\n\n此操作将永久删除所有受试者登记、问卷答案与订房记录！");
         if (!firstConfirm) return;
 
         // 第二层保护：文本输入验证
         const VERIFICATION_CODE = "DELETE-ALL-DATA";
-        const userInput = prompt(`🔴 高危操作：为防止误删数据，请输入精确验证码确认执行：
-
-请输入：${VERIFICATION_CODE}`);
+        const userInput = prompt(`🔴 高危操作：为防止误删数据，请输入精确验证码确认执行：\n\n请输入：${VERIFICATION_CODE}`);
 
         if (userInput !== VERIFICATION_CODE) {
             alert("❌ 验证码输入不正确，操作已安全取消。数据库未作任何更改。");

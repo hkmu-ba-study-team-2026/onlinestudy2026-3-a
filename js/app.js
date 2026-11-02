@@ -38,12 +38,15 @@ const currentPID = getOrGenerate32PID();
 let hasCopiedPID = false;
 
 // 渲染中央弹窗与右下角浮动弹窗中的推荐酒店数据
+// 1. 读取问卷/AI推荐阶段存储的 nudge text
+const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "";
+
 function populateRecommendationData() {
   if (!recommendedHotelObj) return;
 
   const starsStr = '⭐'.repeat(recommendedHotelObj.stars);
 
-  // 1. 填充中央弹窗基本数据
+  // 填充基本信息
   document.getElementById("modalRecHeaderTitle").innerText = `为您精心甄选：${recommendedHotelObj.name}`;
   document.getElementById("modalRecHeaderSubtitle").innerText = `坐落${recommendedHotelObj.region}核心地段 • ${recommendedHotelObj.distance}`;
   document.getElementById("modalRecHotelImg").src = recommendedHotelObj.images[0];
@@ -53,7 +56,19 @@ function populateRecommendationData() {
   document.getElementById("modalRecHotelScore").innerText = `${recommendedHotelObj.rating.toFixed(1)}分 ${recommendedHotelObj.verdict}`;
   document.getElementById("modalRecHotelPrice").innerText = recommendedHotelObj.price.toLocaleString();
 
-  // 2. 显示并填充推荐酒店的 eco 环保认证信息
+  // 2. 显示并填充 Nudge Text
+  const nudgeBox = document.getElementById("modalRecNudgeBox");
+  const nudgeText = document.getElementById("modalRecNudgeText");
+  if (nudgeBox && nudgeText) {
+    if (AI_NUDGE_TEXT && AI_NUDGE_TEXT.trim() !== "") {
+      nudgeText.innerText = AI_NUDGE_TEXT;
+      nudgeBox.style.display = "block";
+    } else {
+      nudgeBox.style.display = "none";
+    }
+  }
+
+  // 3. 显示并填充 Eco 信息
   const ecoBox = document.getElementById("modalRecEcoBox");
   const ecoText = document.getElementById("modalRecEcoText");
   if (ecoBox && ecoText) {
@@ -65,7 +80,7 @@ function populateRecommendationData() {
     }
   }
 
-  // 3. 填充右下角悬浮窗
+  // 4. 填充右下角悬浮窗
   document.getElementById("floatingRecHotelImg").src = recommendedHotelObj.images[0];
   document.getElementById("floatingRecHotelStars").innerText = `${starsStr} ${recommendedHotelObj.stars}星`;
   document.getElementById("floatingRecHotelName").innerText = recommendedHotelObj.name;
