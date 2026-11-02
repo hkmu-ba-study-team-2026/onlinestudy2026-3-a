@@ -475,7 +475,7 @@
             const today = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `TripStay_Experiment_Master_${today}.xlsx`);
 
-            status.innerText = `✅ 导出成功！共整合导出 ${masterRows.length} 位受试者的决策全量数据（含 Nudge Text）及条件摘要。`;
+            status.innerText = `✅ 导出成功！`;
             fetchLiveStats();
         } catch (err) {
             console.error("Export Error:", err);
