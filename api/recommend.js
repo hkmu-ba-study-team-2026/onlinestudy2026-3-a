@@ -98,7 +98,7 @@ Requirements:
                     },
                     recommendation: {
                         type: Type.STRING,
-                        description: "A short, persuasive sentence under 30 words starting with 'These items'."
+                        description: "A short, persuasive sentence under 30 words written in Simplified Chinese."
                     }
                 },
                 required: ["recommendedHotelId", "recommendedHotelName", "recommendation"]
@@ -148,7 +148,7 @@ module.exports = async (req, res) => {
                 result = {
                     recommendedHotelId: defaultHotel.id,
                     recommendedHotelName: defaultHotel.name,
-                    recommendation: "These items feature premium amenities and certified green operations tailored to your travel expectations."
+                    recommendation: "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。"
                 };
             }
 
