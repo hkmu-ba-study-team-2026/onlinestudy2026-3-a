@@ -142,18 +142,28 @@ function setupConditionUI() {
 function updateFilterCounts() {
   if (typeof hotelsData === 'undefined' || !hotelsData.length) return;
 
-  let regHK = 0, regKL = 0, regNT = 0;
+  let regTST = 0, regMK = 0, regCentral = 0, regTW = 0, regDisney = 0;
+  let regST = 0, regNP = 0, regCWB = 0, regVic = 0, regKT = 0;
   let star5 = 0, star4 = 0, star3 = 0, star2 = 0;
   let r95 = 0, r90 = 0, r85 = 0, r80 = 0;
   let bfast = 0, pBath = 0, pool = 0, cancel = 0, gym = 0;
   let shuttle = 0, parking = 0;
-  let tagTransport = 0, tagMetro = 0, tagHarbour = 0, tagAttraction = 0;
+  let tagTransport = 0, tagMetro = 0, tagBusiness = 0, tagVenue = 0;
 
   hotelsData.forEach(hotel => {
-    if (hotel.region === "港岛") regHK++;
-    else if (hotel.region === "九龙") regKL++;
-    else if (hotel.region === "新界") regNT++;
+    // 10 大区域统计
+    if (hotel.region === "尖沙咀") regTST++;
+    else if (hotel.region === "旺角") regMK++;
+    else if (hotel.region === "中环") regCentral++;
+    else if (hotel.region === "荃湾") regTW++;
+    else if (hotel.region === "香港迪士尼乐园") regDisney++;
+    else if (hotel.region === "沙田") regST++;
+    else if (hotel.region === "北角") regNP++;
+    else if (hotel.region === "铜锣湾") regCWB++;
+    else if (hotel.region === "维多利亚港") regVic++;
+    else if (hotel.region === "启德体育园") regKT++;
 
+    // 星级与评分
     if (hotel.stars === 5) star5++;
     else if (hotel.stars === 4) star4++;
     else if (hotel.stars === 3) star3++;
@@ -164,6 +174,7 @@ function updateFilterCounts() {
     else if (hotel.rating === 8.5) r85++;
     else if (hotel.rating === 8.0) r80++;
 
+    // 配套设施
     if (hotel.hasBreakfast) bfast++;
     if (hotel.hasPrivateBath) pBath++;
     if (hotel.hasPool) pool++;
@@ -172,24 +183,32 @@ function updateFilterCounts() {
     if (hotel.hasAirportShuttle) shuttle++;
     if (hotel.hasFreeParking) parking++;
 
+    // 4 大地理标签统计
     if (hotel.locationTags && Array.isArray(hotel.locationTags)) {
-      if (hotel.locationTags.includes("近机场/高铁站")) tagTransport++;
-      if (hotel.locationTags.includes("近地铁站")) tagMetro++;
-      if (hotel.locationTags.includes("近维港")) tagHarbour++;
-      if (hotel.locationTags.includes("近特色景点")) tagAttraction++;
+      if (hotel.locationTags.includes("机场/高铁站")) tagTransport++;
+      if (hotel.locationTags.includes("地铁站")) tagMetro++;
+      if (hotel.locationTags.includes("商业区")) tagBusiness++;
+      if (hotel.locationTags.includes("演出场馆")) tagVenue++;
     }
   });
 
-  document.getElementById("count-region-hk").innerText = `(${regHK})`;
-  document.getElementById("count-region-kl").innerText = `(${regKL})`;
-  document.getElementById("count-region-nt").innerText = `(${regNT})`;
+  // 更新各区域数量徽章
+  if (document.getElementById("count-region-tst")) document.getElementById("count-region-tst").innerText = `(${regTST})`;
+  if (document.getElementById("count-region-mk")) document.getElementById("count-region-mk").innerText = `(${regMK})`;
+  if (document.getElementById("count-region-central")) document.getElementById("count-region-central").innerText = `(${regCentral})`;
+  if (document.getElementById("count-region-tw")) document.getElementById("count-region-tw").innerText = `(${regTW})`;
+  if (document.getElementById("count-region-disney")) document.getElementById("count-region-disney").innerText = `(${regDisney})`;
+  if (document.getElementById("count-region-st")) document.getElementById("count-region-st").innerText = `(${regST})`;
+  if (document.getElementById("count-region-np")) document.getElementById("count-region-np").innerText = `(${regNP})`;
+  if (document.getElementById("count-region-cwb")) document.getElementById("count-region-cwb").innerText = `(${regCWB})`;
+  if (document.getElementById("count-region-vic")) document.getElementById("count-region-vic").innerText = `(${regVic})`;
+  if (document.getElementById("count-region-kt")) document.getElementById("count-region-kt").innerText = `(${regKT})`;
 
+  // 更新星级、评分与设施数量
   document.getElementById("count-star-5").innerText = `(${star5})`;
   document.getElementById("count-star-4").innerText = `(${star4})`;
   document.getElementById("count-star-3").innerText = `(${star3})`;
-  if (document.getElementById("count-star-2")) {
-    document.getElementById("count-star-2").innerText = `(${star2})`;
-  }
+  if (document.getElementById("count-star-2")) document.getElementById("count-star-2").innerText = `(${star2})`;
 
   document.getElementById("count-rating-95").innerText = `(${r95})`;
   document.getElementById("count-rating-90").innerText = `(${r90})`;
@@ -201,25 +220,14 @@ function updateFilterCounts() {
   document.getElementById("count-pool").innerText = `(${pool})`;
   document.getElementById("count-cancel").innerText = `(${cancel})`;
   document.getElementById("count-gym").innerText = `(${gym})`;
-  if (document.getElementById("count-shuttle")) {
-    document.getElementById("count-shuttle").innerText = `(${shuttle})`;
-  }
-  if (document.getElementById("count-parking")) {
-    document.getElementById("count-parking").innerText = `(${parking})`;
-  }
+  if (document.getElementById("count-shuttle")) document.getElementById("count-shuttle").innerText = `(${shuttle})`;
+  if (document.getElementById("count-parking")) document.getElementById("count-parking").innerText = `(${parking})`;
 
-  if (document.getElementById("count-tag-transport")) {
-    document.getElementById("count-tag-transport").innerText = `(${tagTransport})`;
-  }
-  if (document.getElementById("count-tag-metro")) {
-    document.getElementById("count-tag-metro").innerText = `(${tagMetro})`;
-  }
-  if (document.getElementById("count-tag-harbour")) {
-    document.getElementById("count-tag-harbour").innerText = `(${tagHarbour})`;
-  }
-  if (document.getElementById("count-tag-attraction")) {
-    document.getElementById("count-tag-attraction").innerText = `(${tagAttraction})`;
-  }
+  // 更新地理标签数量
+  if (document.getElementById("count-tag-transport")) document.getElementById("count-tag-transport").innerText = `(${tagTransport})`;
+  if (document.getElementById("count-tag-metro")) document.getElementById("count-tag-metro").innerText = `(${tagMetro})`;
+  if (document.getElementById("count-tag-business")) document.getElementById("count-tag-business").innerText = `(${tagBusiness})`;
+  if (document.getElementById("count-tag-venue")) document.getElementById("count-tag-venue").innerText = `(${tagVenue})`;
 }
 
 // 渲染酒店列表 (取消推荐酒店置顶，按当前用户排序顺序列出)

@@ -222,7 +222,7 @@
 
     <form id="surveyForm" onsubmit="handleSubmit(event)">
 
-        <!-- 问题 1: 出行预算取向 (四个选项：经济、精致、高级、奢侈) -->
+        <!-- 问题 1: 出行预算取向 -->
         <div class="form-group">
             <label class="question-title">1. 本次旅程中，您偏好哪种住宿安排与预算风格？<span class="required">*</span></label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
@@ -253,7 +253,7 @@
             </div>
         </div>
 
-        <!-- 问题 2: 住客口碑依赖度 (原第3题顺延) -->
+        <!-- 问题 2: 住客口碑依赖度 -->
         <div class="form-group">
             <label class="question-title">2. 翻阅其他住客的体验评价时，您通常的标准是？<span class="required">*</span></label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
@@ -284,7 +284,7 @@
             </div>
         </div>
 
-        <!-- 问题 3: 设施偏好 (提示词统一，带有一键清空选择) -->
+        <!-- 问题 3: 设施偏好 -->
         <div class="form-group">
             <label class="question-title">
                 3. 你重视酒店要有以下设施吗？
@@ -325,21 +325,49 @@
             </div>
         </div>
 
-        <!-- 问题 4: 偏好地区 (原第5题顺延) -->
+        <!-- 问题 4: 偏好地区 (10个区域) -->
         <div class="form-group">
             <label class="question-title">4. 你喜欢住在哪个区域？<span class="required">*</span></label>
-            <div class="options-grid">
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
-                    <input type="radio" id="region_hk" name="preferred_region" value="港岛" required>
-                    <label for="region_hk">港岛 (Hong Kong Island)</label>
+                    <input type="radio" id="region_tst" name="preferred_region" value="尖沙咀" required>
+                    <label for="region_tst">尖沙咀</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="region_kl" name="preferred_region" value="九龙" required>
-                    <label for="region_kl">九龙 (Kowloon)</label>
+                    <input type="radio" id="region_mk" name="preferred_region" value="旺角" required>
+                    <label for="region_mk">旺角</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="region_nt" name="preferred_region" value="新界" required>
-                    <label for="region_nt">新界 (New Territories)</label>
+                    <input type="radio" id="region_central" name="preferred_region" value="中环" required>
+                    <label for="region_central">中环</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_tw" name="preferred_region" value="荃湾" required>
+                    <label for="region_tw">荃湾</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_disney" name="preferred_region" value="香港迪士尼乐园" required>
+                    <label for="region_disney">香港迪士尼乐园</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_st" name="preferred_region" value="沙田" required>
+                    <label for="region_st">沙田</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_np" name="preferred_region" value="北角" required>
+                    <label for="region_np">北角</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_cwb" name="preferred_region" value="铜锣湾" required>
+                    <label for="region_cwb">铜锣湾</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_vic" name="preferred_region" value="维多利亚港" required>
+                    <label for="region_vic">维多利亚港</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="region_kt" name="preferred_region" value="启德体育园" required>
+                    <label for="region_kt">启德体育园</label>
                 </div>
             </div>
         </div>
@@ -352,32 +380,113 @@
             </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
-                    <input type="radio" id="loc_transport" name="location_preference" value="近机场/高铁站" onclick="handleRadioToggle(this)">
+                    <input type="radio" id="loc_transport" name="location_preference" value="机场/高铁站" onclick="handleRadioToggle(this)">
                     <label for="loc_transport">
-                        <span>近机场/高铁站</span>
+                        <span>机场/高铁站</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="loc_metro" name="location_preference" value="近地铁站" onclick="handleRadioToggle(this)">
+                    <input type="radio" id="loc_metro" name="location_preference" value="地铁站" onclick="handleRadioToggle(this)">
                     <label for="loc_metro">
-                        <span>近地铁站</span>
+                        <span>地铁站</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="loc_harbour" name="location_preference" value="近维港" onclick="handleRadioToggle(this)">
-                    <label for="loc_harbour">
-                        <span>近维港</span>
+                    <input type="radio" id="loc_business" name="location_preference" value="商业区" onclick="handleRadioToggle(this)">
+                    <label for="loc_business">
+                        <span>商业区</span>
                     </label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="loc_attraction" name="location_preference" value="近特色景点" onclick="handleRadioToggle(this)">
-                    <label for="loc_attraction">
-                        <span>近特色景点</span>
+                    <input type="radio" id="loc_venue" name="location_preference" value="演出场馆" onclick="handleRadioToggle(this)">
+                    <label for="loc_venue">
+                        <span>演出场馆</span>
                     </label>
                 </div>
             </div>
             <div style="text-align: right;">
                 <button type="button" class="clear-choice-btn" onclick="clearLocationPreference()">清除第 5 题选择 (保持不选)</button>
+            </div>
+        </div>
+
+        <!-- 问题 6: 社交反应/性格态度量表 -->
+        <div class="form-group">
+            <label class="question-title">6. 我总是对他人保持友善与谦逊有礼。<span class="required">*</span></label>
+            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="option-card">
+                    <input type="radio" id="q6_1" name="q6_friendly_courteous" value="非常不同意" required>
+                    <label for="q6_1">非常不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_2" name="q6_friendly_courteous" value="不同意" required>
+                    <label for="q6_2">不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_3" name="q6_friendly_courteous" value="中立" required>
+                    <label for="q6_3">中立</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_4" name="q6_friendly_courteous" value="同意" required>
+                    <label for="q6_4">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_5" name="q6_friendly_courteous" value="非常同意" required>
+                    <label for="q6_5">非常同意</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问题 7: 社交反应/性格态度量表 -->
+        <div class="form-group">
+            <label class="question-title">7. 我始终对人礼貌，且处处为他人着想。<span class="required">*</span></label>
+            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="option-card">
+                    <input type="radio" id="q7_1" name="q7_polite_considerate" value="非常不同意" required>
+                    <label for="q7_1">非常不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_2" name="q7_polite_considerate" value="不同意" required>
+                    <label for="q7_2">不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_3" name="q7_polite_considerate" value="中立" required>
+                    <label for="q7_3">中立</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_4" name="q7_polite_considerate" value="同意" required>
+                    <label for="q7_4">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_5" name="q7_polite_considerate" value="非常同意" required>
+                    <label for="q7_5">非常同意</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问题 8: 社交反应/性格态度量表 -->
+        <div class="form-group">
+            <label class="question-title">8. 对我来说，公开向他人承认自己的错误是很困难的。<span class="required">*</span></label>
+            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="option-card">
+                    <input type="radio" id="q8_1" name="q8_admit_mistakes_difficult" value="非常不同意" required>
+                    <label for="q8_1">非常不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_2" name="q8_admit_mistakes_difficult" value="不同意" required>
+                    <label for="q8_2">不同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_3" name="q8_admit_mistakes_difficult" value="中立" required>
+                    <label for="q8_3">中立</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_4" name="q8_admit_mistakes_difficult" value="同意" required>
+                    <label for="q8_4">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_5" name="q8_admit_mistakes_difficult" value="非常同意" required>
+                    <label for="q8_5">非常同意</label>
+                </div>
             </div>
         </div>
 
@@ -481,12 +590,19 @@
         const preferredRegion = formData.get("preferred_region");
         const locationPref = formData.get("location_preference") || "无特定偏好";
 
+        const q6Response = formData.get("q6_friendly_courteous");
+        const q7Response = formData.get("q7_polite_considerate");
+        const q8Response = formData.get("q8_admit_mistakes_difficult");
+
         const surveyResponses = {
             price_preference: pricePref,
             rating_preference: ratingPref,
             hotel_facilities: facilities,
             preferred_region: preferredRegion,
-            location_preference: locationPref
+            location_preference: locationPref,
+            q6_friendly_courteous: q6Response,
+            q7_polite_considerate: q7Response,
+            q8_admit_mistakes_difficult: q8Response
         };
 
         // 获取分组编号及余数 (grouping % 4)
@@ -510,18 +626,20 @@
             recommendationMode = "ai";
         }
 
-        // 默认 Traditional 推荐：4 星级 Eco 酒店 (香港东隅酒店 ID: 21)
-        let recommendedHotelId = 21;
-        let recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
+        // 筛选所有有 "eco" 纪录的酒店备选
+        const ecoHotels = (typeof hotelsData !== 'undefined' && hotelsData.length > 0)
+            ? hotelsData.filter(h => h.eco && typeof h.eco === 'string' && h.eco.trim() !== "")
+            : [];
+        const randomEcoHotel = ecoHotels.length > 0
+            ? ecoHotels[Math.floor(Math.random() * ecoHotels.length)]
+            : (typeof hotelsData !== 'undefined' ? hotelsData[0] : { id: 1, name: "香港唯港荟酒店 (Hotel ICON)" });
+
+        let recommendedHotelId = randomEcoHotel.id;
+        let recommendedHotelName = randomEcoHotel.name;
         let aiNudgeText = "";
 
         if (recommendationMode === "ai") {
             try {
-                // 仅筛选具有 eco 纪录的候选酒店传递给 AI
-                const ecoHotels = typeof hotelsData !== 'undefined'
-                    ? hotelsData.filter(h => h.eco && h.eco.trim() !== "")
-                    : [];
-
                 const payload = {
                     products: ecoHotels,
                     preferences: surveyResponses
@@ -537,20 +655,21 @@
                     const data = await response.json();
                     if (data.recommendedHotelId) recommendedHotelId = data.recommendedHotelId;
                     if (data.recommendedHotelName) recommendedHotelName = data.recommendedHotelName;
-                    aiNudgeText = data.recommendation || "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
+                    aiNudgeText = data.recommendation || `为您精选平台今日主推特选住宿：${recommendedHotelName}，尽享轻奢设计与可持续发展理念。`;
                 } else {
                     throw new Error("AI service non-200");
                 }
             } catch (err) {
                 console.warn("AI recommendation failed, using fallback:", err);
-                recommendedHotelId = 21;
-                aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
+                recommendedHotelId = randomEcoHotel.id;
+                recommendedHotelName = randomEcoHotel.name;
+                aiNudgeText = `为您精选平台今日主推特选住宿：${randomEcoHotel.name}，尽享轻奢设计与可持续发展理念。`;
             }
         } else {
-            // Traditional 模式
-            recommendedHotelId = 21;
-            recommendedHotelName = "香港东隅酒店 (EAST Hong Kong)";
-            aiNudgeText = "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。";
+            // Traditional 模式：在所有有 "eco" 纪录的酒店中随机选一间做推荐
+            recommendedHotelId = randomEcoHotel.id;
+            recommendedHotelName = randomEcoHotel.name;
+            aiNudgeText = `为您精选平台今日主推特选住宿：${randomEcoHotel.name}，尽享轻奢设计与可持续发展理念。`;
         }
 
         // 保存状态至 localStorage

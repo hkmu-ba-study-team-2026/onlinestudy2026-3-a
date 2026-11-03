@@ -321,6 +321,9 @@
                     "Survey_Q3_Facilities_Preference": "",   // 多选设施 (早餐/独立卫浴/泳池/取消/健身/机场接送/泊车)
                     "Survey_Q4_Region_Preference": "",       // 港岛 / 九龙 / 新界
                     "Survey_Q5_Location_Feature": "",        // 近机场/高铁站 / 近地铁站 / 近维港 / 近特色景点 / 无特定偏好
+                    "Survey_Q6_Friendly_Courteous": "",      // 我总是对他人保持友善与谦逊有礼
+                    "Survey_Q7_Polite_Considerate": "",       // 我始终对人礼貌，且处处为他人着想
+                    "Survey_Q8_Admit_Mistakes_Difficult": "", // 对我来说，公开向他人承认自己的错误是很困难的
                     "Survey_Submitted_At": "",
 
                     // 4. 推荐系统干预内容（含 Nudge Text）
@@ -372,6 +375,9 @@
 
                         masterDataMap[pid]["Survey_Q4_Region_Preference"] = data.responses.preferred_region || "";
                         masterDataMap[pid]["Survey_Q5_Location_Feature"] = data.responses.location_preference || "";
+                        masterDataMap[pid]["Survey_Q6_Friendly_Courteous"] = data.responses.q6_friendly_courteous || "";
+                        masterDataMap[pid]["Survey_Q7_Polite_Considerate"] = data.responses.q7_polite_considerate || "";
+                        masterDataMap[pid]["Survey_Q8_Admit_Mistakes_Difficult"] = data.responses.q8_admit_mistakes_difficult || "";
                     }
                 }
             });
@@ -425,6 +431,9 @@
                 { wch: 36 }, // Survey_Q3_Facilities_Preference
                 { wch: 22 }, // Survey_Q4_Region_Preference
                 { wch: 22 }, // Survey_Q5_Location_Feature
+                { wch: 26 }, // Survey_Q6_Friendly_Courteous
+                { wch: 26 }, // Survey_Q7_Polite_Considerate
+                { wch: 30 }, // Survey_Q8_Admit_Mistakes_Difficult
                 { wch: 22 }, // Survey_Submitted_At
                 { wch: 28 }, // System_Recommended_Hotel_ID
                 { wch: 32 }, // System_Recommended_Hotel_Name

@@ -100,24 +100,19 @@
       </div>
     </div>
 
-    <!-- 所在地区筛选 -->
+    <!-- 所在地区筛选 (10个区域) -->
     <div class="filter-group">
       <div class="filter-title">所在地区</div>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="region" value="港岛" onchange="filterHotels()">
-        <span>港岛 (Hong Kong Island)</span>
-        <span class="count" id="count-region-hk">(0)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="region" value="九龙" onchange="filterHotels()">
-        <span>九龙 (Kowloon)</span>
-        <span class="count" id="count-region-kl">(0)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="region" value="新界" onchange="filterHotels()">
-        <span>新界 (New Territories)</span>
-        <span class="count" id="count-region-nt">(0)</span>
-      </label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="尖沙咀" onchange="filterHotels()"><span>尖沙咀</span><span class="count" id="count-region-tst">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="旺角" onchange="filterHotels()"><span>旺角</span><span class="count" id="count-region-mk">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="中环" onchange="filterHotels()"><span>中环</span><span class="count" id="count-region-central">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="荃湾" onchange="filterHotels()"><span>荃湾</span><span class="count" id="count-region-tw">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="香港迪士尼乐园" onchange="filterHotels()"><span>香港迪士尼乐园</span><span class="count" id="count-region-disney">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="沙田" onchange="filterHotels()"><span>沙田</span><span class="count" id="count-region-st">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="北角" onchange="filterHotels()"><span>北角</span><span class="count" id="count-region-np">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="铜锣湾" onchange="filterHotels()"><span>铜锣湾</span><span class="count" id="count-region-cwb">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="维多利亚港" onchange="filterHotels()"><span>维多利亚港</span><span class="count" id="count-region-vic">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="region" value="启德体育园" onchange="filterHotels()"><span>启德体育园</span><span class="count" id="count-region-kt">(0)</span></label>
     </div>
 
     <!-- 酒店星级 -->
@@ -148,26 +143,10 @@
     <!-- 周边地理特色筛选 -->
     <div class="filter-group">
       <div class="filter-title">地理位置特色</div>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="locationTag" value="近机场/高铁站" onchange="filterHotels()">
-        <span>近机场 / 高铁站</span>
-        <span class="count" id="count-tag-transport">(0)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="locationTag" value="近地铁站" onchange="filterHotels()">
-        <span>近地铁站</span>
-        <span class="count" id="count-tag-metro">(0)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="locationTag" value="近维港" onchange="filterHotels()">
-        <span>近维多利亚港</span>
-        <span class="count" id="count-tag-harbour">(0)</span>
-      </label>
-      <label class="filter-checkbox">
-        <input type="checkbox" name="locationTag" value="近特色景点" onchange="filterHotels()">
-        <span>近特色景点</span>
-        <span class="count" id="count-tag-attraction">(0)</span>
-      </label>
+      <label class="filter-checkbox"><input type="checkbox" name="locationTag" value="机场/高铁站" onchange="filterHotels()"><span>机场/高铁站</span><span class="count" id="count-tag-transport">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="locationTag" value="地铁站" onchange="filterHotels()"><span>地铁站</span><span class="count" id="count-tag-metro">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="locationTag" value="商业区" onchange="filterHotels()"><span>商业区</span><span class="count" id="count-tag-business">(0)</span></label>
+      <label class="filter-checkbox"><input type="checkbox" name="locationTag" value="演出场馆" onchange="filterHotels()"><span>演出场馆</span><span class="count" id="count-tag-venue">(0)</span></label>
     </div>
 
     <!-- 住客评分 -->

@@ -48,6 +48,7 @@ async function getAiRecommendationsFromGemini(hotels, preferences) {
         hasGym: Boolean(h.hasGym),
         hasAirportShuttle: Boolean(h.hasAirportShuttle),
         hasFreeParking: Boolean(h.hasFreeParking),
+        locationTags: h.locationTags || [],
         eco: h.eco
     }));
 
@@ -143,12 +144,13 @@ module.exports = async (req, res) => {
                 result = await getAiRecommendationsFromGemini(products, preferences);
             } catch (aiErr) {
                 console.log(`[AI Model Error/Timeout]: ${aiErr.message}. Switching to Fallback system.`);
-                // 備援：優先推薦 4星 Eco 酒店 (ID 21)
-                const defaultHotel = products.find(h => h.id === 21) || products[0];
+                const ecoPool = products.filter(h => h.eco && typeof h.eco === "string" && h.eco.trim() !== "");
+                const pool = ecoPool.length > 0 ? ecoPool : products;
+                const defaultHotel = pool[Math.floor(Math.random() * pool.length)];
                 result = {
                     recommendedHotelId: defaultHotel.id,
                     recommendedHotelName: defaultHotel.name,
-                    recommendation: "为您精选平台今日主推特选住宿：香港东隅酒店，尽享轻奢设计与可持续发展理念。"
+                    recommendation: `为您精选平台今日主推特选住宿：${defaultHotel.name}，尽享轻奢设计与可持续发展理念。`
                 };
             }
 
