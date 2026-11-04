@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripStay 100人实验行为模拟器 (Participant Simulator)</title>
+
+    <!-- 直接引入真实的酒店数据集 -->
+    <script src="hotels_data.js"></script>
+
+    <!-- 引入 Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
+            authDomain: "online-study-3a.firebaseapp.com",
+            databaseURL: "https://online-study-3a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "online-study-3a",
+            storageBucket: "online-study-3a.firebasestorage.app",
+            messagingSenderId: "641152608367",
+            appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: var(--card);
+            max-width: 820px;
+            width: 100%;
+            border-radius: 14px;
+            padding: 32px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        h1 { font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; }
+        p.desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+
+        .config-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+        .config-item { display: flex; flex-direction: column; gap: 4px; }
+        .config-item label { font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+        .config-item select, .config-item input {
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.88rem;
+        }
+
+        .progress-wrapper {
+            margin: 20px 0;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.2s ease;
+        }
+
+        .btn-row { display: flex; gap: 12px; margin-bottom: 20px; }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .log-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 14px;
+            border-radius: 8px;
+            height: 320px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+        .log-line.success { color: #34d399; }
+        .log-line.info { color: #60a5fa; }
+        .log-line.warn { color: #fbbf24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TripStay 实验参与者行为模拟器</h1>
+
+    <div class="config-box">
+        <div class="config-item">
+            <label>模拟受试者人数 </label>
+            <input type="number" id="simCount" value="100" min="1" max="500">
+        </div>
+        <div class="config-item">
+            <label>AI 推荐模式处理方式</label>
+            <select id="aiModeSelect">
+                <option value="simulated">快速模拟匹配</option>
+                <option value="real_api">真实API请求</option>
+            </select>
+        </div>
+        <div class="config-item">
+            <label>Low Autonomy 推荐采纳率基准 (%)</label>
+            <input type="number" id="probLowAuto" value="45" min="0" max="100">
+        </div>
+        <div class="config-item">
+            <label>High Autonomy 推荐采纳率基准 (%)</label>
+            <input type="number" id="probHighAuto" value="25" min="0" max="100">
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <button id="startBtn" class="btn btn-primary" onclick="startSimulation()">
+            🚀 开始执行模拟
+        </button>
+    </div>
+
+    <div class="progress-wrapper">
+        <div class="progress-header">
+            <span id="progressStatus">就绪</span>
+            <span id="progressPercent">0 / 100 (0%)</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="log-box" id="logBox"></div>
+</div>
+
+<script>
+    // -------------------------------------------------------------
+    // 1. 全局配置与选项常量（置于最顶层，避免暫時死區錯誤）
+    // -------------------------------------------------------------
+    const Q1_OPTIONS = ["经济", "精致", "高级", "奢侈"];
+    const Q2_OPTIONS = ["8.0分以上", "8.5分以上", "9.0分以上", "9.5分顶尖"];
+    const Q3_OPTIONS = [
+        "含免费丰盛早餐",
+        "配备独立卫浴/浴缸",
+        "室外泳池/景观无边际池",
+        "限时免费取消政策",
+        "健身中心/水疗SPA",
+        "提供穿梭巴士/机场接送",
+        "附设免费住客泊车位"
+    ];
+    const Q4_OPTIONS = [
+        "尖沙咀", "旺角", "中环", "荃湾", "香港迪士尼乐园",
+        "沙田", "北角", "铜锣湾", "维多利亚港", "启德体育园"
+    ];
+    const Q5_OPTIONS = ["机场/高铁站", "地铁站", "商业区", "演出场馆", "无特定偏好"];
+    const LIKERT_OPTIONS = ["非常不同意", "不同意", "中立", "同意", "非常同意"];
+
+    // 酒店数据引用
+    const allHotels = (typeof hotelsData !== 'undefined') ? hotelsData : [];
+    const ecoHotels = allHotels.filter(h => h.eco && typeof h.eco === 'string' && h.eco.trim() !== "");
+
+    // 页面加载后更新酒店数量标签
+    window.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("hotelCountLabel").innerText = allHotels.length;
+        document.getElementById("ecoCountLabel").innerText = ecoHotels.length;
+    });
+
+    // -------------------------------------------------------------
+    // 2. 工具辅助函数
+    // -------------------------------------------------------------
+    function appendLog(msg, type = "") {
+        const box = document.getElementById("logBox");
+        const div = document.createElement("div");
+        div.className = `log-line ${type}`;
+        div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function randomChoice(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateSimulatedPID(dateObj) {
+        const pad = (n) => String(n).padStart(2, '0');
+        const timestamp14 = `${dateObj.getFullYear()}${pad(dateObj.getMonth() + 1)}${pad(dateObj.getDate())}${pad(dateObj.getHours())}${pad(dateObj.getMinutes())}${pad(dateObj.getSeconds())}`;
+        let random18 = '';
+        for (let i = 0; i < 18; i++) {
+            random18 += Math.floor(Math.random() * 10);
+        }
+        return timestamp14 + random18;
+    }
+
+    // -------------------------------------------------------------
+    // 3. 模拟逻辑函数
+    // -------------------------------------------------------------
+    function generateSurveyResponses() {
+        const pricePref = randomChoice(Q1_OPTIONS);
+        const ratingPref = randomChoice(Q2_OPTIONS);
+
+        // 随机勾选 0 ~ 3 项设施
+        const numFacilities = Math.floor(Math.random() * 4);
+        const shuffledFac = [...Q3_OPTIONS].sort(() => 0.5 - Math.random());
+        const facilities = shuffledFac.slice(0, numFacilities);
+
+        const preferredRegion = randomChoice(Q4_OPTIONS);
+        const locationPref = randomChoice(Q5_OPTIONS);
+
+        const q6 = randomChoice(LIKERT_OPTIONS);
+        const q7 = randomChoice(LIKERT_OPTIONS);
+        const q8 = randomChoice(LIKERT_OPTIONS);
+
+        return {
+            price_preference: pricePref,
+            rating_preference: ratingPref,
+            hotel_facilities: facilities,
+            preferred_region: preferredRegion,
+            location_preference: locationPref,
+            q6_friendly_courteous: q6,
+            q7_polite_considerate: q7,
+            q8_admit_mistakes_difficult: q8
+        };
+    }
+
+    function matchBestEcoHotel(survey) {
+        let bestHotel = randomChoice(ecoHotels);
+        let maxScore = -1;
+
+        const targetStarMap = { "经济": 2, "精致": 3, "高级": 4, "奢侈": 5 };
+        const targetStars = targetStarMap[survey.price_preference] || 4;
+
+        ecoHotels.forEach(hotel => {
+            let score = 0;
+            if (hotel.region === survey.preferred_region) score += 5;
+            if (hotel.stars === targetStars) score += 3;
+            else if (Math.abs(hotel.stars - targetStars) === 1) score += 1;
+            if (hotel.locationTags && hotel.locationTags.includes(survey.location_preference)) score += 2;
+            score += Math.random();
+
+            if (score > maxScore) {
+                maxScore = score;
+                bestHotel = hotel;
+            }
+        });
+
+        const nudgeText = `为您甄选位于${bestHotel.region}的【${bestHotel.name}】，兼具卓越品质与国际绿色环保认证，完美契合您的出行期待。`;
+        return { hotel: bestHotel, nudgeText };
+    }
+
+    function simulateHotelSelection(recommendedHotel, survey, autonomyMode, recommendationMode, probLow, probHigh) {
+        let adoptProb = (autonomyMode === "low" ? probLow : probHigh) / 100;
+        if (recommendationMode === "ai") adoptProb += 0.12;
+
+        const isRecommendedChosen = Math.random() < adoptProb;
+        if (isRecommendedChosen) {
+            return recommendedHotel;
+        }
+
+        const nonRecHotels = allHotels.filter(h => h.id !== recommendedHotel.id);
+        const sameRegionHotels = nonRecHotels.filter(h => h.region === survey.preferred_region);
+
+        if (sameRegionHotels.length > 0 && Math.random() < 0.75) {
+            return randomChoice(sameRegionHotels);
+        }
+        return randomChoice(nonRecHotels);
+    }
+
+    function getAndAdvanceGrouping(count) {
+        return new Promise((resolve) => {
+            const groupingRef = db.ref('grouping');
+            groupingRef.transaction((currentValue) => {
+                return (currentValue || 0) + count;
+            }, (error, committed, snapshot) => {
+                if (error || !committed) {
+                    resolve(0);
+                } else {
+                    resolve(snapshot.val() - count);
+                }
+            });
+        });
+    }
+
+    // -------------------------------------------------------------
+    // 4. 模拟器主流程
+    // -------------------------------------------------------------
+    async function startSimulation() {
+        if (allHotels.length === 0) {
+            alert("❌ 未能加载 hotels_data.js，请确认文件位于同一目录下！");
+            return;
+        }
+
+        const total = parseInt(document.getElementById("simCount").value) || 100;
+        const aiMode = document.getElementById("aiModeSelect").value;
+        const probLow = parseFloat(document.getElementById("probLowAuto").value) || 45;
+        const probHigh = parseFloat(document.getElementById("probHighAuto").value) || 25;
+
+        const startBtn = document.getElementById("startBtn");
+        startBtn.disabled = true;
+        document.getElementById("logBox").innerHTML = "";
+        appendLog(`开始模拟 ${total} 位受试者完整流程...`, "info");
+
+        const startGroupNum = await getAndAdvanceGrouping(total);
+        const baseTime = new Date(Date.now() - total * 180000);
+
+        for (let i = 0; i < total; i++) {
+            const stepTime = new Date(baseTime.getTime() + i * 180000 + Math.floor(Math.random() * 30000));
+            const pid = generateSimulatedPID(stepTime);
+            const currentGroupNumber = startGroupNum + i;
+            const conditionModulo = currentGroupNumber % 4;
+
+            let autonomyMode = (conditionModulo === 0 || conditionModulo === 1) ? "low" : "high";
+            let recommendationMode = (conditionModulo === 0 || conditionModulo === 2) ? "traditional" : "ai";
+
+            const surveyResponses = generateSurveyResponses();
+
+            let recommendedHotel = randomChoice(ecoHotels);
+            let aiNudgeText = `为您精选平台今日主推特选住宿：${recommendedHotel.name}，尽享轻奢设计与可持续发展理念。`;
+
+            if (recommendationMode === "ai") {
+                if (aiMode === "real_api") {
+                    try {
+                        const res = await fetch("/api/recommend", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ products: ecoHotels, preferences: surveyResponses })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            const found = allHotels.find(h => h.id === data.recommendedHotelId);
+                            if (found) recommendedHotel = found;
+                            if (data.recommendation) aiNudgeText = data.recommendation;
+                        }
+                    } catch (e) {
+                        const matched = matchBestEcoHotel(surveyResponses);
+                        recommendedHotel = matched.hotel;
+                        aiNudgeText = matched.nudgeText;
+                    }
+                } else {
+                    const matched = matchBestEcoHotel(surveyResponses);
+                    recommendedHotel = matched.hotel;
+                    aiNudgeText = matched.nudgeText;
+                }
+            }
+
+            const selectedHotel = simulateHotelSelection(
+                recommendedHotel, surveyResponses, autonomyMode, recommendationMode, probLow, probHigh
+            );
+            const selectedRoom = (selectedHotel.rooms && selectedHotel.rooms.length > 0)
+                ? selectedHotel.rooms[0]
+                : { name: "标准客房", size: "25 平方米", bathroom: "独立卫浴", breakfast: "含早餐", price: selectedHotel.price };
+
+            const isRecommendedChosen = (selectedHotel.id === recommendedHotel.id);
+            const baseTotal = selectedRoom.price * 2;
+            const tax = Math.round(baseTotal * 0.1);
+            const totalPaidStr = `HK$ ${(baseTotal + tax).toLocaleString()}`;
+            const refNumber = "HK-" + Math.floor(100000 + Math.random() * 900000);
+
+            const surveyTimeISO = new Date(stepTime.getTime() + 45000).toISOString();
+            const bookingTimeISO = new Date(stepTime.getTime() + 120000).toISOString();
+
+            const updates = {};
+            updates[`participants/${pid}`] = {
+                participantID: pid,
+                createdAt: stepTime.toISOString()
+            };
+
+            updates[`survey_responses/${pid}`] = {
+                participantID: pid,
+                groupingNumber: currentGroupNumber,
+                conditionModulo: conditionModulo,
+                autonomyMode: autonomyMode,
+                recommendationMode: recommendationMode,
+                recommendedHotelId: recommendedHotel.id,
+                recommendedHotelName: recommendedHotel.name,
+                aiNudgeText: aiNudgeText,
+                submittedAt: surveyTimeISO,
+                responses: surveyResponses
+            };
+
+            updates[`bookings/${pid}`] = {
+                bookingRef: refNumber,
+                participantID: pid,
+                autonomyMode: autonomyMode,
+                recommendationMode: recommendationMode,
+                recommendedHotelId: recommendedHotel.id,
+                isRecommendedHotelChosen: isRecommendedChosen,
+                hotelId: selectedHotel.id,
+                hotelName: selectedHotel.name,
+                hotelRegion: selectedHotel.region,
+                roomName: selectedRoom.name,
+                roomSize: selectedRoom.size,
+                bathroom: selectedRoom.bathroom,
+                breakfast: selectedRoom.breakfast,
+                guestName: `SimUser_${i + 1}`,
+                guestEmail: `sim.user.${i + 1}@example.com`,
+                guestPhone: `+852 6${Math.floor(1000000 + Math.random() * 9000000)}`,
+                totalPaid: totalPaidStr,
+                createdAt: bookingTimeISO
+            };
+
+            await db.ref().update(updates);
+
+            const pct = Math.round(((i + 1) / total) * 100);
+            document.getElementById("progressBar").style.width = `${pct}%`;
+            document.getElementById("progressPercent").innerText = `${i + 1} / ${total} (${pct}%)`;
+            document.getElementById("progressStatus").innerText = `正在写入第 ${i + 1} 位受试者...`;
+
+            appendLog(
+                `#${i + 1} [组别:${conditionModulo} ${autonomyMode}/${recommendationMode}] 偏好:${surveyResponses.preferred_region} | 推荐:${recommendedHotel.name} -> 预订:${selectedHotel.name} (${isRecommendedChosen ? "✓采纳" : "✗未采纳"})`,
+                isRecommendedChosen ? "success" : ""
+            );
+        }
+
+        document.getElementById("progressStatus").innerText = "✅ 模拟全部完成！";
+        appendLog(`🎉 成功完成 ${total} 位受试者完整问卷与订房数据写入`, "info");
+        startBtn.disabled = false;
+    }
+</script>
+</body>
+</html>
