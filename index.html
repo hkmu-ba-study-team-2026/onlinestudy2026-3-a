@@ -228,27 +228,19 @@
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="price_economy" name="price_preference" value="经济" required>
-                    <label for="price_economy">
-                        <span style="font-size: 1rem; font-weight: 800;">经济</span>
-                    </label>
+                    <label for="price_economy"><span style="font-size: 1rem; font-weight: 800;">经济</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_refined" name="price_preference" value="精致" required>
-                    <label for="price_refined">
-                        <span style="font-size: 1rem; font-weight: 800;">舒适</span>
-                    </label>
+                    <label for="price_refined"><span style="font-size: 1rem; font-weight: 800;">舒适</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_upscale" name="price_preference" value="高级" required>
-                    <label for="price_upscale">
-                        <span style="font-size: 1rem; font-weight: 800;">高档</span>
-                    </label>
+                    <label for="price_upscale"><span style="font-size: 1rem; font-weight: 800;">高档</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_luxury" name="price_preference" value="奢侈" required>
-                    <label for="price_luxury">
-                        <span style="font-size: 1rem; font-weight: 800;">奢华</span>
-                    </label>
+                    <label for="price_luxury"><span style="font-size: 1rem; font-weight: 800;">奢华</span></label>
                 </div>
             </div>
         </div>
@@ -259,27 +251,19 @@
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="rating_80" name="rating_preference" value="8.0分以上" required>
-                    <label for="rating_80">
-                        <span>大致好评</span>
-                    </label>
+                    <label for="rating_80"><span>大致好评</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_85" name="rating_preference" value="8.5分以上" required>
-                    <label for="rating_85">
-                        <span>多数肯定</span>
-                    </label>
+                    <label for="rating_85"><span>多数肯定</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_90" name="rating_preference" value="9.0分以上" required>
-                    <label for="rating_90">
-                        <span>广泛盛赞</span>
-                    </label>
+                    <label for="rating_90"><span>广泛盛赞</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_95" name="rating_preference" value="9.5分顶尖" required>
-                    <label for="rating_95">
-                        <span>近乎完美</span>
-                    </label>
+                    <label for="rating_95"><span>近乎完美</span></label>
                 </div>
             </div>
         </div>
@@ -372,7 +356,7 @@
             </div>
         </div>
 
-        <!-- 问题 5: 地点特色偏好 (提示词统一，带有一键清空选择) -->
+        <!-- 问题 5: 地点特色偏好 (支持单选与反选) -->
         <div class="form-group">
             <label class="question-title">
                 5. 针对酒店周边的地理位置，您是否有特定的偏好？
@@ -381,27 +365,19 @@
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="loc_transport" name="location_preference" value="机场/高铁站" onclick="handleRadioToggle(this)">
-                    <label for="loc_transport">
-                        <span>机场/高铁站</span>
-                    </label>
+                    <label for="loc_transport"><span>机场/高铁站</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_metro" name="location_preference" value="地铁站" onclick="handleRadioToggle(this)">
-                    <label for="loc_metro">
-                        <span>地铁站</span>
-                    </label>
+                    <label for="loc_metro"><span>地铁站</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_business" name="location_preference" value="商业区" onclick="handleRadioToggle(this)">
-                    <label for="loc_business">
-                        <span>商业区</span>
-                    </label>
+                    <label for="loc_business"><span>商业区</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_venue" name="location_preference" value="演出场馆" onclick="handleRadioToggle(this)">
-                    <label for="loc_venue">
-                        <span>演出场馆</span>
-                    </label>
+                    <label for="loc_venue"><span>演出场馆</span></label>
                 </div>
             </div>
             <div style="text-align: right;">
@@ -409,10 +385,10 @@
             </div>
         </div>
 
-        <!-- 问题 6: 社交反应/性格态度量表 -->
+        <!-- 问题 6: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
             <label class="question-title">6. 我总是对他人保持友善与谦逊有礼。<span class="required">*</span></label>
-            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q6_1" name="q6_friendly_courteous" value="非常不同意" required>
                     <label for="q6_1">非常不同意</label>
@@ -422,24 +398,32 @@
                     <label for="q6_2">不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q6_3" name="q6_friendly_courteous" value="中立" required>
-                    <label for="q6_3">中立</label>
+                    <input type="radio" id="q6_3" name="q6_friendly_courteous" value="有点不同意" required>
+                    <label for="q6_3">有点不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q6_4" name="q6_friendly_courteous" value="同意" required>
-                    <label for="q6_4">同意</label>
+                    <input type="radio" id="q6_4" name="q6_friendly_courteous" value="中立" required>
+                    <label for="q6_4">中立</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q6_5" name="q6_friendly_courteous" value="非常同意" required>
-                    <label for="q6_5">非常同意</label>
+                    <input type="radio" id="q6_5" name="q6_friendly_courteous" value="有点同意" required>
+                    <label for="q6_5">有点同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_6" name="q6_friendly_courteous" value="同意" required>
+                    <label for="q6_6">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q6_7" name="q6_friendly_courteous" value="非常同意" required>
+                    <label for="q6_7">非常同意</label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 7: 社交反应/性格态度量表 -->
+        <!-- 问题 7: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
             <label class="question-title">7. 我始终对人礼貌，且处处为他人着想。<span class="required">*</span></label>
-            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q7_1" name="q7_polite_considerate" value="非常不同意" required>
                     <label for="q7_1">非常不同意</label>
@@ -449,24 +433,32 @@
                     <label for="q7_2">不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q7_3" name="q7_polite_considerate" value="中立" required>
-                    <label for="q7_3">中立</label>
+                    <input type="radio" id="q7_3" name="q7_polite_considerate" value="有点不同意" required>
+                    <label for="q7_3">有点不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q7_4" name="q7_polite_considerate" value="同意" required>
-                    <label for="q7_4">同意</label>
+                    <input type="radio" id="q7_4" name="q7_polite_considerate" value="中立" required>
+                    <label for="q7_4">中立</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q7_5" name="q7_polite_considerate" value="非常同意" required>
-                    <label for="q7_5">非常同意</label>
+                    <input type="radio" id="q7_5" name="q7_polite_considerate" value="有点同意" required>
+                    <label for="q7_5">有点同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_6" name="q7_polite_considerate" value="同意" required>
+                    <label for="q7_6">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q7_7" name="q7_polite_considerate" value="非常同意" required>
+                    <label for="q7_7">非常同意</label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 8: 社交反应/性格态度量表 -->
+        <!-- 问题 8: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
             <label class="question-title">8. 对我来说，公开向他人承认自己的错误是很困难的。<span class="required">*</span></label>
-            <div class="options-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q8_1" name="q8_admit_mistakes_difficult" value="非常不同意" required>
                     <label for="q8_1">非常不同意</label>
@@ -476,16 +468,24 @@
                     <label for="q8_2">不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q8_3" name="q8_admit_mistakes_difficult" value="中立" required>
-                    <label for="q8_3">中立</label>
+                    <input type="radio" id="q8_3" name="q8_admit_mistakes_difficult" value="有点不同意" required>
+                    <label for="q8_3">有点不同意</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q8_4" name="q8_admit_mistakes_difficult" value="同意" required>
-                    <label for="q8_4">同意</label>
+                    <input type="radio" id="q8_4" name="q8_admit_mistakes_difficult" value="中立" required>
+                    <label for="q8_4">中立</label>
                 </div>
                 <div class="option-card">
-                    <input type="radio" id="q8_5" name="q8_admit_mistakes_difficult" value="非常同意" required>
-                    <label for="q8_5">非常同意</label>
+                    <input type="radio" id="q8_5" name="q8_admit_mistakes_difficult" value="有点同意" required>
+                    <label for="q8_5">有点同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_6" name="q8_admit_mistakes_difficult" value="同意" required>
+                    <label for="q8_6">同意</label>
+                </div>
+                <div class="option-card">
+                    <input type="radio" id="q8_7" name="q8_admit_mistakes_difficult" value="非常同意" required>
+                    <label for="q8_7">非常同意</label>
                 </div>
             </div>
         </div>
@@ -502,21 +502,21 @@
         document.querySelectorAll('input[name="hotel_facilities"]').forEach(el => el.checked = false);
     }
 
-    // 支持单选可取消选择 (再次点击已选中的 radio 即可取消)
-    let lastCheckedRadio = null;
+    // 支持第 5 题单选可取消选择（再次点击已选中的 radio 即可取消）
+    let currentCheckedRadio = null;
     function handleRadioToggle(radio) {
-        if (lastCheckedRadio === radio) {
+        if (currentCheckedRadio === radio) {
             radio.checked = false;
-            lastCheckedRadio = null;
+            currentCheckedRadio = null;
         } else {
-            lastCheckedRadio = radio;
+            currentCheckedRadio = radio;
         }
     }
 
     // 清除第 5 题选择
     function clearLocationPreference() {
         document.querySelectorAll('input[name="location_preference"]').forEach(el => el.checked = false);
-        lastCheckedRadio = null;
+        currentCheckedRadio = null;
     }
 
     function generate32DigitParticipantID() {
@@ -583,7 +583,7 @@
 
         const formData = new FormData(event.target);
 
-        // 收集问卷数据 (已更新为 4 个价格档位，无星级题，并新增地点特色题)
+        // 收集问卷数据
         const pricePref = formData.get("price_preference");
         const ratingPref = formData.get("rating_preference");
         const facilities = formData.getAll("hotel_facilities");
@@ -682,7 +682,6 @@
         localStorage.setItem("ai_nudge_text", aiNudgeText);
         localStorage.setItem("user_preferences", JSON.stringify(surveyResponses));
 
-
         // 写入 Firebase 问卷数据节点
         const firebaseData = {
             participantID: currentParticipantID,
@@ -706,7 +705,7 @@
         }
 
         // 跳转并带上实验组态参数
-        window.location.href = `booking_page.html?r=${recommendedHotelId}&m=${recommendationMode}&a=${autonomyMode}&g=${currentGroupNumber}`;
+        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&autonomy=${autonomyMode}&group=${currentGroupNumber}`;
     }
 </script>
 </body>

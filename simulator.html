@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TripStay 100人实验行为模拟器 (Participant Simulator)</title>
-
+    
     <!-- 直接引入真实的酒店数据集 -->
     <script src="hotels_data.js"></script>
 
@@ -57,7 +57,7 @@
         }
         h1 { font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; }
         p.desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
-
+        
         .config-box {
             background: #f8fafc;
             border: 1px solid var(--border);
@@ -135,18 +135,21 @@
 <body>
 
 <div class="container">
-    <h1>TripStay 实验参与者行为模拟器</h1>
+    <h1>🤖 TripStay 实验参与者行为模拟器</h1>
+    <p class="desc">
+        直接读取本地真实的 <code>hotels_data.js</code>（共 <span id="hotelCountLabel">--</span> 间酒店，含 <span id="ecoCountLabel">--</span> 间 Eco 认证酒店），模拟受试者填写 8 道前测问卷（含 7 点李克特态度量表）、触发 2×2 实验分组推荐、并完成最终房间预订，数据将直接写入 Firebase。
+    </p>
 
     <div class="config-box">
         <div class="config-item">
-            <label>模拟受试者人数 </label>
+            <label>模拟受试者人数 (Participants)</label>
             <input type="number" id="simCount" value="100" min="1" max="500">
         </div>
         <div class="config-item">
-            <label>AI 推荐模式处理方式</label>
+            <label>AI 推荐模式 (Condition 1 & 3) 处理方式</label>
             <select id="aiModeSelect">
-                <option value="simulated">快速模拟匹配</option>
-                <option value="real_api">真实API请求</option>
+                <option value="simulated">快速模拟匹配 (基于问卷偏好选最佳Eco酒店并生成文案)</option>
+                <option value="real_api">真实请求 /api/recommend 接口 (耗时较长，需后端运行)</option>
             </select>
         </div>
         <div class="config-item">
@@ -161,7 +164,7 @@
 
     <div class="btn-row">
         <button id="startBtn" class="btn btn-primary" onclick="startSimulation()">
-            🚀 开始执行模拟
+            🚀 开始执行 100 人模拟并写入 Firebase
         </button>
     </div>
 
@@ -180,7 +183,7 @@
 
 <script>
     // -------------------------------------------------------------
-    // 1. 全局配置与选项常量（置于最顶层，避免暫時死區錯誤）
+    // 1. 全局配置与选项常量（7点李克特量表）
     // -------------------------------------------------------------
     const Q1_OPTIONS = ["经济", "精致", "高级", "奢侈"];
     const Q2_OPTIONS = ["8.0分以上", "8.5分以上", "9.0分以上", "9.5分顶尖"];
@@ -198,7 +201,7 @@
         "沙田", "北角", "铜锣湾", "维多利亚港", "启德体育园"
     ];
     const Q5_OPTIONS = ["机场/高铁站", "地铁站", "商业区", "演出场馆", "无特定偏好"];
-    const LIKERT_OPTIONS = ["非常不同意", "不同意", "中立", "同意", "非常同意"];
+    const LIKERT_OPTIONS = ["非常不同意", "不同意", "有点不同意", "中立", "有点同意", "同意", "非常同意"];
 
     // 酒店数据引用
     const allHotels = (typeof hotelsData !== 'undefined') ? hotelsData : [];
@@ -242,8 +245,7 @@
     function generateSurveyResponses() {
         const pricePref = randomChoice(Q1_OPTIONS);
         const ratingPref = randomChoice(Q2_OPTIONS);
-
-        // 随机勾选 0 ~ 3 项设施
+        
         const numFacilities = Math.floor(Math.random() * 4);
         const shuffledFac = [...Q3_OPTIONS].sort(() => 0.5 - Math.random());
         const facilities = shuffledFac.slice(0, numFacilities);
@@ -457,7 +459,7 @@
         }
 
         document.getElementById("progressStatus").innerText = "✅ 模拟全部完成！";
-        appendLog(`🎉 成功完成 ${total} 位受试者完整问卷与订房数据写入`, "info");
+        appendLog(`🎉 成功完成 ${total} 位受试者完整问卷与订房数据写入！现在可前往 export_tool.html 导出 Excel。`, "info");
         startBtn.disabled = false;
     }
 </script>
