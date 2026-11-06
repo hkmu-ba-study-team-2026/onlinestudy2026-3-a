@@ -1,18 +1,17 @@
 const { GoogleGenAI, Type } = require("@google/genai");
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const MODEL_NAME = "gemini-3.5-flash";
+const MODEL_NAME = "gemini-2.5-flash";
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
 /**
  * 強健的 JSON 擷取器：
- * 自動過濾模型可能附加的 "Here is the JSON..." 前綴或 ```json 標籤
+ * 自動過濾模型可能附加的前綴或 ```json 標籤
  */
 function parseJsonSafely(rawText) {
     if (!rawText) throw new Error("Empty response from AI model");
 
-    // 找出第一個 '{' 與最後一個 '}' 之間的完整 JSON 區塊
     const firstBrace = rawText.indexOf("{");
     const lastBrace = rawText.lastIndexOf("}");
 
@@ -33,10 +32,11 @@ async function getAiRecommendationsFromGemini(hotels, preferences) {
     const ecoHotels = hotels.filter(h => h.eco && typeof h.eco === "string" && h.eco.trim() !== "");
     const candidatePool = ecoHotels.length > 0 ? ecoHotels : hotels;
 
-    // 2. 簡化酒店特徵以降低 Token 消耗並提升匹配精度
+    // 2. 簡化酒店特徵以降低 Token 消耗並提升匹配精度，同時傳入中英文名稱與特色
     const simplifiedHotels = candidatePool.map(h => ({
         id: h.id,
         name: h.name,
+        enName: h.enName || h.name,
         region: h.region,
         stars: h.stars,
         rating: h.rating,
@@ -53,8 +53,9 @@ async function getAiRecommendationsFromGemini(hotels, preferences) {
     }));
 
     const prompt = `
-You are an intelligent hotel concierge and recommender system.
-Evaluate the user's preferences and select the BEST matching hotel from the candidate list, then write an engaging recommendation sentence.
+You are an intelligent hotel concierge and recommender system for a bilingual platform in Hong Kong.
+Evaluate the user's survey preferences and select the SINGLE BEST matching eco-friendly hotel from the candidate list.
+Then write a compelling, tailored recommendation (nudge text) in three languages: Traditional Chinese (zh-TW), Simplified Chinese (zh-CN), and English (en).
 
 User Preferences:
 ${JSON.stringify(preferences)}
@@ -63,11 +64,15 @@ Available Eco-Friendly Hotels:
 ${JSON.stringify(simplifiedHotels)}
 
 Requirements:
-1. Select1 hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
+1. Select 1 hotel that best aligns with the user's booking focus (budget/value/quality), desired region, and requested facilities.
 2. The recommendedHotelId must strictly match the integer 'id' of the chosen hotel.
-3. The recommendation text must be plain text under 30 words, written in Simplified Chinese.
-4. Naturally highlight the sustainable/eco-friendly advantages of the chosen hotel without explicitly saying it was derived from user preferences.
-5. Output ONLY a raw JSON object. Do NOT include any conversational prefix like "Here is the JSON".
+3. Provide the hotel name in Traditional Chinese (zh-TW), Simplified Chinese (zh-CN), and English (en).
+4. Provide the tailored recommendation nudge text in three languages:
+   - recommendation_zh_tw: Traditional Chinese, natural and persuasive, under 35 words.
+   - recommendation_zh_cn: Simplified Chinese, natural and persuasive, under 35 words.
+   - recommendation_en: English, fluent and engaging, under 25 words.
+5. Naturally highlight the sustainable / eco-friendly advantages of the chosen hotel without explicitly mentioning that it was deduced from preferences.
+6. Output ONLY a raw JSON object matching the schema. Do NOT include any conversational preamble or markdown backticks outside.
 `;
 
     const timeoutPromise = new Promise((_, reject) =>
@@ -79,9 +84,8 @@ Requirements:
         contents: prompt,
         config: {
             systemInstruction: "You are a JSON-only API. Output strictly raw JSON matching the schema with zero conversational text.",
-            maxOutputTokens: 500,
+            maxOutputTokens: 600,
             temperature: 0.2,
-            // 關閉內部思考以加速回應並避免擠壓輸出 Token
             thinkingConfig: {
                 thinkingBudget: 0
             },
@@ -93,16 +97,40 @@ Requirements:
                         type: Type.INTEGER,
                         description: "The unique integer ID of the best matched hotel from the provided list."
                     },
-                    recommendedHotelName: {
+                    recommendedHotelName_zh_tw: {
                         type: Type.STRING,
-                        description: "The name of the selected hotel."
+                        description: "The name of the selected hotel in Traditional Chinese."
                     },
-                    recommendation: {
+                    recommendedHotelName_zh_cn: {
                         type: Type.STRING,
-                        description: "A short, persuasive sentence under 30 words written in Simplified Chinese."
+                        description: "The name of the selected hotel in Simplified Chinese."
+                    },
+                    recommendedHotelName_en: {
+                        type: Type.STRING,
+                        description: "The name of the selected hotel in English."
+                    },
+                    recommendation_zh_tw: {
+                        type: Type.STRING,
+                        description: "A short recommendation sentence in Traditional Chinese under 35 words."
+                    },
+                    recommendation_zh_cn: {
+                        type: Type.STRING,
+                        description: "A short recommendation sentence in Simplified Chinese under 35 words."
+                    },
+                    recommendation_en: {
+                        type: Type.STRING,
+                        description: "A short recommendation sentence in English under 25 words."
                     }
                 },
-                required: ["recommendedHotelId", "recommendedHotelName", "recommendation"]
+                required: [
+                    "recommendedHotelId",
+                    "recommendedHotelName_zh_tw",
+                    "recommendedHotelName_zh_cn",
+                    "recommendedHotelName_en",
+                    "recommendation_zh_tw",
+                    "recommendation_zh_cn",
+                    "recommendation_en"
+                ]
             }
         }
     });
@@ -110,8 +138,25 @@ Requirements:
     const response = await Promise.race([apiPromise, timeoutPromise]);
     const rawText = (response.text || "").trim();
 
-    // 使用安全擷取器解析 JSON
-    return parseJsonSafely(rawText);
+    const parsed = parseJsonSafely(rawText);
+
+    // 格式化為結構化三語物件，同時保留傳統單一字串欄位向下相容
+    return {
+        recommendedHotelId: parsed.recommendedHotelId,
+        recommendedHotelName: {
+            "zh-TW": parsed.recommendedHotelName_zh_tw,
+            "zh-CN": parsed.recommendedHotelName_zh_cn,
+            "en": parsed.recommendedHotelName_en
+        },
+        recommendation: {
+            "zh-TW": parsed.recommendation_zh_tw,
+            "zh-CN": parsed.recommendation_zh_cn,
+            "en": parsed.recommendation_en
+        },
+        // 向下相容傳統舊程式碼讀取屬性
+        recommendedHotelName_default: parsed.recommendedHotelName_zh_cn,
+        recommendation_default: parsed.recommendation_zh_cn
+    };
 }
 
 module.exports = async (req, res) => {
@@ -126,7 +171,7 @@ module.exports = async (req, res) => {
     if (req.method === "GET") {
         return res.status(200).json({
             status: "ok",
-            message: "TripStay AI Hotel Match & Recommendation Service Active",
+            message: "TripStay AI Hotel Multilingual Match & Recommendation Service Active",
             has_token: Boolean(GEMINI_API_KEY)
         });
     }
@@ -143,14 +188,29 @@ module.exports = async (req, res) => {
             try {
                 result = await getAiRecommendationsFromGemini(products, preferences);
             } catch (aiErr) {
-                console.log(`[AI Model Error/Timeout]: ${aiErr.message}. Switching to Fallback system.`);
+                console.log(`[AI Model Error/Timeout]: ${aiErr.message}. Switching to multilingual Fallback system.`);
                 const ecoPool = products.filter(h => h.eco && typeof h.eco === "string" && h.eco.trim() !== "");
                 const pool = ecoPool.length > 0 ? ecoPool : products;
                 const defaultHotel = pool[Math.floor(Math.random() * pool.length)];
+
+                const nameTw = (defaultHotel.i18n && defaultHotel.i18n["zh-TW"] && defaultHotel.i18n["zh-TW"].name) || defaultHotel.name;
+                const nameCn = (defaultHotel.i18n && defaultHotel.i18n["zh-CN"] && defaultHotel.i18n["zh-CN"].name) || defaultHotel.name;
+                const nameEn = defaultHotel.enName || (defaultHotel.i18n && defaultHotel.i18n["en"] && defaultHotel.i18n["en"].name) || defaultHotel.name;
+
                 result = {
                     recommendedHotelId: defaultHotel.id,
-                    recommendedHotelName: defaultHotel.name,
-                    recommendation: `为您精选平台今日主推特选住宿：${defaultHotel.name}，尽享轻奢设计与可持续发展理念。`
+                    recommendedHotelName: {
+                        "zh-TW": nameTw,
+                        "zh-CN": nameCn,
+                        "en": nameEn
+                    },
+                    recommendation: {
+                        "zh-TW": `為您精選平台今日主推特選住宿：${nameTw}，盡享輕奢設計與可持續發展理念。`,
+                        "zh-CN": `为您精选平台今日主推特选住宿：${nameCn}，尽享轻奢设计与可持续发展理念。`,
+                        "en": `Featured top pick for your stay: ${nameEn}, combining premier comfort with certified eco-friendly sustainability.`
+                    },
+                    recommendedHotelName_default: nameCn,
+                    recommendation_default: `为您精选平台今日主推特选住宿：${nameCn}，尽享轻奢设计与可持续发展理念。`
                 };
             }
 

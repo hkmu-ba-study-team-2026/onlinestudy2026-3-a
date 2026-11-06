@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TripStay 实验数据导出与管理工具 (Master Dataset Exporter)</title>
-    <!-- SheetJS 与 Firebase SDK -->
+    <title>TripStay 實驗數據管理與導出平台 (Master Dataset Exporter)</title>
+    <!-- SheetJS 與 Font Awesome 圖標庫 -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK (online-study-3a) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
+    <!-- 引入 80 間香港精選酒店數據庫 (含兩文三語 i18n 屬性) -->
+    <script src="hotels_data.js"></script>
+
     <script>
-        // 与 booking_page / index 保持完全一致的 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyCUVqZIgK8YKNAQkZLyA7mHq0qHbPE4RQk",
             authDomain: "online-study-3a.firebaseapp.com",
@@ -20,523 +25,648 @@
             messagingSenderId: "641152608367",
             appId: "1:641152608367:web:c6a1a0920d1988d156c59a"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        try {
+            firebase.initializeApp(firebaseConfig);
+            var db = firebase.database();
+        } catch(e) {
+            console.error("Firebase 初始化失敗:", e);
+        }
     </script>
 
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
             --danger: #dc2626;
             --danger-hover: #b91c1c;
+            --success: #16a34a;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
             --border: #e2e8f0;
-            --success: #10b981;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--bg-color);
+            background-color: var(--bg);
+            color: #1e293b;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
             padding: 24px;
-            box-sizing: border-box;
         }
-        .export-card {
+
+        .main-card {
             background: var(--card-bg);
-            padding: 36px 32px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-            text-align: center;
-            max-width: 620px;
+            max-width: 820px;
             width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.01);
             border: 1px solid var(--border);
+            padding: 36px 32px;
         }
-        .icon {
-            font-size: 44px;
-            margin-bottom: 12px;
+
+        .header-section {
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
         }
-        h2 {
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            font-size: 1.4rem;
+
+        .header-section h1 {
+            font-size: 1.45rem;
             font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        p.subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.6;
+
+        .header-section p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 6px;
+            line-height: 1.5;
         }
-        .summary-stats {
+
+        .stat-banner {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-bottom: 24px;
             background: #f8fafc;
-            padding: 16px;
-            border-radius: 10px;
             border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 24px;
+            text-align: center;
         }
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+
+        .stat-item h4 {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
         }
-        .stat-num {
-            font-size: 1.35rem;
+
+        .stat-item .val {
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary);
+            margin-top: 2px;
         }
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-        .btn-group {
+
+        .action-box {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            margin-bottom: 24px;
         }
+
         .btn {
-            border: none;
-            padding: 14px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s ease;
-            box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
         }
-        .export-btn {
-            background: var(--primary);
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
-        }
-        .export-btn:hover { background: var(--primary-hover); }
-        .export-btn:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none; }
 
-        .refresh-btn {
+        .btn-export {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-export:hover { background: var(--accent-hover); }
+        .btn-export:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .btn-refresh {
             background: #ffffff;
-            color: var(--text-primary);
+            color: var(--primary);
             border: 1.5px solid var(--border);
-            font-size: 14px;
-            padding: 10px 16px;
-        }
-        .refresh-btn:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
+            padding: 10px;
+            font-size: 0.9rem;
         }
 
-        /* 危险区样式 */
-        .danger-zone {
-            margin-top: 28px;
-            padding-top: 22px;
-            border-top: 1.5px dashed var(--border);
-            text-align: left;
+        .btn-refresh:hover {
+            background: #f1f5f9;
         }
+
+        .admin-danger-zone {
+            border: 1.5px dashed #fca5a5;
+            background: #fffaf0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-top: 10px;
+        }
+
         .danger-title {
-            color: var(--danger);
-            font-size: 13px;
+            font-size: 0.92rem;
             font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            color: #991b1b;
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-        .danger-desc {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 14px;
-            line-height: 1.5;
-        }
-        .delete-btn {
-            background: #ffffff;
-            color: var(--danger);
-            border: 1.5px solid #fecaca;
-            font-size: 14px;
-            padding: 11px 16px;
-        }
-        .delete-btn:hover {
-            background: #fee2e2;
-            border-color: var(--danger);
-        }
-        .delete-btn:disabled {
-            background: #f1f5f9;
-            color: #94a3b8;
-            border-color: #cbd5e1;
-            cursor: not-allowed;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        #statusMsg {
-            margin-top: 18px;
-            font-size: 13.5px;
-            font-weight: 600;
-            color: #334155;
-            min-height: 20px;
+        .danger-desc {
+            font-size: 0.82rem;
+            color: #7f1d1d;
             line-height: 1.5;
-            word-break: break-all;
+            margin-bottom: 14px;
         }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover { background: var(--danger-hover); }
+
+        #statusMsg {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px 14px;
+            border-radius: 8px;
+            display: none;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+        .status-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+        .status-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     </style>
 </head>
 <body>
 
-<div class="export-card">
-    <div class="icon">🏨📊</div>
-    <h2>TripStay 实验数据导出与管理工具</h2>
-    <p class="subtitle">全面支持最新 2×2 自主性与推荐干预实验架构，一键抓取并导出结构化受试者前测偏好、系统推荐干预、推荐提示语 (Nudge Text) 及预订决策数据。</p>
-    
-    <!-- 实时数据统计卡片 -->
-    <div class="summary-stats">
+<div class="main-card">
+    <div class="header-section">
+        <h1><i class="fa-solid fa-hotel" style="color:var(--accent);"></i> TripStay 實驗數據導出與管理平台</h1>
+    </div>
+
+    <!-- 即時指標卡 -->
+    <div class="stat-banner">
         <div class="stat-item">
-            <span class="stat-num" id="statParticipants">--</span>
-            <span class="stat-label">已登记参与者</span>
+            <h4>當前 Grouping 計數</h4>
+            <div class="val" id="statGrouping">--</div>
         </div>
         <div class="stat-item">
-            <span class="stat-num" id="statSurveys">--</span>
-            <span class="stat-label">已提交问卷</span>
+            <h4>問卷提交樣本數</h4>
+            <div class="val" id="statSurveys">--</div>
         </div>
         <div class="stat-item">
-            <span class="stat-num" id="statBookings">--</span>
-            <span class="stat-label">已完成预订</span>
+            <h4>完成預訂樣本數</h4>
+            <div class="val" id="statBookings">--</div>
         </div>
     </div>
 
-    <div class="btn-group">
-        <button id="exportBtn" class="btn export-btn" onclick="exportData()">
-            <span>📥</span> 下载完整研究数据总表 (.xlsx)
+    <div class="action-box">
+        <button id="exportBtn" class="btn btn-export" onclick="exportMasterData()">
+            <i class="fa-solid fa-file-excel"></i> 下載完整研究數據
         </button>
-        <button class="btn refresh-btn" onclick="fetchLiveStats()">
-            <span>🔄</span> 刷新数据库实时统计
+        <button class="btn btn-refresh" onclick="fetchLiveStats()">
+            <i class="fa-solid fa-arrows-rotate"></i> 刷新實時統計
+        </button>
+    </div>
+
+    <!-- 管理員高危清空區域 (安全短語驗證保護) -->
+    <div class="admin-danger-zone">
+        <div class="danger-title">
+            <i class="fa-solid fa-triangle-exclamation"></i> 實驗重置與數據清空
+        </div>
+        <div class="danger-desc">
+            此操作將永久抹除資料庫中的記錄，並將 <code>grouping</code> 變量徹底重置歸零為 0。操作前需輸入安全校驗短語。
+        </div>
+        <button id="resetBtn" class="btn btn-danger" onclick="handleSecureReset()">
+            <i class="fa-solid fa-trash-can"></i> 重置資料庫
         </button>
     </div>
 
     <div id="statusMsg"></div>
-
-    <!-- 数据库重置保护区域 (双重验证) -->
-    <div class="danger-zone">
-        <div class="danger-title">⚠️ 危险操作区 (Danger Zone)</div>
-        <div class="danger-desc">
-            清空数据库将永久删除所有受试者登记记录（participants）、前测问卷结果（survey_responses）与模拟订房订单（bookings），并将递增分组编号（grouping）重置为 0。此操作完全不可逆，请在导出备份后再操作。
-        </div>
-        <button id="deleteBtn" class="btn delete-btn" onclick="handleClearDatabase()">
-            <span>🗑️</span> 清空实验数据库 (需二次验证)
-        </button>
-    </div>
 </div>
 
 <script>
-    // 页面载入时自动获取实时状态统计
-    window.addEventListener("DOMContentLoaded", () => {
-        fetchLiveStats();
-    });
+    const REQUIRED_CONFIRM_PHRASE = "DELETE-DATABASE";
+
+    // 依據酒店 ID 提取真實資料集細節 (含兩文三語)
+    function getHotelDetailsById(id) {
+        if (typeof hotelsData !== 'undefined' && Array.isArray(hotelsData)) {
+            const found = hotelsData.find(h => h.id === parseInt(id, 10));
+            if (found) {
+                return {
+                    name_zh_tw: (found.i18n && found.i18n["zh-TW"] && found.i18n["zh-TW"].name) || found.name,
+                    name_zh_cn: (found.i18n && found.i18n["zh-CN"] && found.i18n["zh-CN"].name) || found.name,
+                    name_en: found.enName || (found.i18n && found.i18n["en"] && found.i18n["en"].name) || found.name,
+                    region: found.region,
+                    stars: found.stars,
+                    hasEco: (found.eco && found.eco.trim() !== "") ? "Yes" : "No",
+                    ecoDetails: found.eco || ""
+                };
+            }
+        }
+        return { name_zh_tw: `酒店ID #${id}`, name_zh_cn: `酒店ID #${id}`, name_en: `Hotel #${id}`, region: "", stars: "", hasEco: "No", ecoDetails: "" };
+    }
 
     async function fetchLiveStats() {
-        const status = document.getElementById("statusMsg");
+        if (typeof db === 'undefined') return;
         try {
-            const [participantsSnap, surveySnap, bookingsSnap] = await Promise.all([
-                db.ref('participants').once('value'),
+            const [groupSnap, surveySnap, bookSnap] = await Promise.all([
+                db.ref('grouping').once('value'),
                 db.ref('survey_responses').once('value'),
                 db.ref('bookings').once('value')
             ]);
-
-            const pCount = participantsSnap.exists() ? Object.keys(participantsSnap.val()).length : 0;
-            const sCount = surveySnap.exists() ? Object.keys(surveySnap.val()).length : 0;
-            const bCount = bookingsSnap.exists() ? Object.keys(bookingsSnap.val()).length : 0;
-
-            document.getElementById("statParticipants").innerText = pCount;
-            document.getElementById("statSurveys").innerText = sCount;
-            document.getElementById("statBookings").innerText = bCount;
-
-            status.innerText = `数据统计已于 ${new Date().toLocaleTimeString()} 更新完成。`;
-        } catch (e) {
-            console.warn("获取数据统计失败:", e);
-            status.innerText = "⚠️ 无法获取实时数据统计，请检查网络连接或 Firebase 配置。";
+            document.getElementById("statGrouping").innerText = groupSnap.val() !== null ? groupSnap.val() : 0;
+            document.getElementById("statSurveys").innerText = surveySnap.val() ? Object.keys(surveySnap.val()).length : 0;
+            document.getElementById("statBookings").innerText = bookSnap.val() ? Object.keys(bookSnap.val()).length : 0;
+            showStatus(`數據統計已於 ${new Date().toLocaleTimeString()} 刷新完成。`, "info");
+        } catch(e) {
+            console.warn("讀取統計信息失敗:", e);
+            showStatus("⚠️ 無法獲取即時統計數據，請檢查網絡連接或 Firebase 配置。", "error");
         }
     }
 
-    async function exportData() {
+    function showStatus(text, type = "info") {
+        const el = document.getElementById("statusMsg");
+        el.className = `status-${type}`;
+        el.innerHTML = text;
+        el.style.display = "block";
+    }
+
+    // ==========================================
+    // 導出數據：Sheet 1 (Master_Dataset) + Sheet 2 (Condition_Summary)
+    // ==========================================
+    async function exportMasterData() {
         const btn = document.getElementById("exportBtn");
-        const status = document.getElementById("statusMsg");
         btn.disabled = true;
-        status.innerText = "⏳ 正在连接 Firebase 并提取最新实验数据...";
+        showStatus("<i class='fa-solid fa-spinner fa-spin'></i> 正在讀取 Firebase 資料庫並提取實驗數據...", "info");
 
         try {
-            // 同步并行读取本实验的三大主要数据节点
-            const [participantsSnap, surveySnap, bookingsSnap] = await Promise.all([
+            const [groupSnap, partSnap, surveySnap, bookingsSnap] = await Promise.all([
+                db.ref('grouping').once('value'),
                 db.ref('participants').once('value'),
                 db.ref('survey_responses').once('value'),
                 db.ref('bookings').once('value')
             ]);
 
-            const participantsObj = participantsSnap.val() || {};
+            const currentGroupingCounter = groupSnap.val() !== null ? groupSnap.val() : 0;
+            const participantsObj = partSnap.val() || {};
             const surveyObj = surveySnap.val() || {};
             const bookingsObj = bookingsSnap.val() || {};
 
-            // 提取所有唯一受试者 ID (32位 Participant ID)
+            const surveys = Object.values(surveyObj);
+            const bookings = Object.values(bookingsObj);
+
+            // 搜集所有唯一 32 位受試者 Participant ID
             const allPIDs = new Set([
                 ...Object.keys(participantsObj),
-                ...Object.keys(surveyObj),
-                ...Object.keys(bookingsObj)
-            ].filter(pid => pid && pid.trim() !== ""));
+                ...surveys.map(s => s.participantID),
+                ...bookings.map(b => b.participantID)
+            ].filter(pid => pid && String(pid).trim() !== ""));
 
             if (allPIDs.size === 0) {
-                status.innerText = "ℹ️ 数据库目前为空，未找到任何受试者数据记录。";
+                showStatus("ℹ️ 資料庫目前為空，未找到任何受試者數據記錄。", "info");
                 btn.disabled = false;
                 return;
             }
 
             const masterDataMap = {};
 
-            // 基于最新问卷与主页架构精确定义分析列（包含新增的 AI_Nudge_Text）
+            // 定義 Sheet 1: Master_Dataset 每行完整結構 (含兩文三語 Nudge 與 7 點李克特量表)
             allPIDs.forEach(pid => {
                 masterDataMap[pid] = {
-                    // 1. 受试者标识
+                    // 1. 受試者基本資訊與語言
                     "Participant_ID": pid,
+                    "Participant_Language": "",
                     "Registration_Time": "",
 
-                    // 2. 实验分组与自变量 (2x2 Design)
+                    // 2. 實驗組別與自變量 (2x2 Design)
                     "Grouping_Number": "",
-                    "Grouping_Modulo_4": "",     // 0: Low-Trad, 1: Low-AI, 2: High-Trad, 3: High-AI
-                    "Autonomy_Mode": "",         // 'low' | 'high'
-                    "Recommendation_Mode": "",   // 'traditional' | 'ai'
+                    "Grouping_Modulo_4": "",
+                    "Autonomy_Mode": "",
+                    "Recommendation_Mode": "",
+                    "Condition_Label": "",
 
-                    // 3. 最新前测问卷各题回答 (index_2.html 架构)
-                    "Survey_Q1_Budget_Preference": "",       // 经济 / 精致 / 高级 / 奢侈
-                    "Survey_Q2_Rating_Preference": "",       // 8.0分以上 / 8.5分以上 / 9.0分以上 / 9.5分顶尖
-                    "Survey_Q3_Facilities_Preference": "",   // 多选设施 (早餐/独立卫浴/泳池/取消/健身/机场接送/泊车)
-                    "Survey_Q4_Region_Preference": "",       // 港岛 / 九龙 / 新界
-                    "Survey_Q5_Location_Feature": "",        // 近机场/高铁站 / 近地铁站 / 近维港 / 近特色景点 / 无特定偏好
-                    "Survey_Q6_Friendly_Courteous": "",      // 我总是对他人保持友善与谦逊有礼
-                    "Survey_Q7_Polite_Considerate": "",       // 我始终对人礼貌，且处处为他人着想
-                    "Survey_Q8_Admit_Mistakes_Difficult": "", // 对我来说，公开向他人承认自己的错误是很困难的
+                    // 3. 時間與問卷時長分析
+                    "Survey_Entry_Time": "",
                     "Survey_Submitted_At": "",
+                    "Survey_Duration_Seconds": "",
 
-                    // 4. 推荐系统干预内容（含 Nudge Text）
+                    // 4. 前測問卷各題偏好 (Q1 ~ Q8)
+                    "Survey_Q1_Budget_Preference": "",
+                    "Survey_Q2_Rating_Preference": "",
+                    "Survey_Q3_Facilities_Preference": "",
+                    "Survey_Q4_Region_Preference": "",
+                    "Survey_Q5_Location_Feature": "",
+                    "Survey_Q6_Friendly_Courteous": "",
+                    "Survey_Q7_Polite_Considerate": "",
+                    "Survey_Q8_Admit_Mistakes_Difficult": "",
+
+                    // 5. 推薦系統介入內容與兩文三語 Nudge Text
                     "System_Recommended_Hotel_ID": "",
-                    "System_Recommended_Hotel_Name": "",
-                    "AI_Nudge_Text": "",                     // 记录系统推荐提示语
+                    "System_Recommended_Hotel_Name_ZH_TW": "",
+                    "System_Recommended_Hotel_Name_ZH_CN": "",
+                    "System_Recommended_Hotel_Name_EN": "",
+                    "System_Recommended_Hotel_Has_Eco": "",
+                    "AI_Nudge_Text_ZH_TW": "",
+                    "AI_Nudge_Text_ZH_CN": "",
+                    "AI_Nudge_Text_EN": "",
+                    "AI_Nudge_Text_Active": "",
 
-                    // 5. 酒店预订决策与结果 (核心因变量)
+                    // 6. 最終酒店預訂決策 (核心因變量)
                     "Has_Completed_Booking": "No",
                     "Selected_Hotel_ID": "",
                     "Selected_Hotel_Name": "",
                     "Selected_Hotel_Region": "",
-                    "Is_Recommended_Hotel_Chosen": "",       // 关键因变量：Yes / No
+                    "Selected_Room_Name": "",
+                    "Selected_Room_Size": "",
+                    "Selected_Room_Bathroom": "",
+                    "Selected_Room_Breakfast": "",
                     "Total_Paid_Amount": "",
-                    "Booking_Created_At": ""
+                    "Is_Recommended_Hotel_Chosen": "No",
+                    "Booking_Confirmed_At": "",
                 };
             });
 
-            // 填充 1: participants 节点登记时间
+            // 填充 1: participants 節點
             Object.entries(participantsObj).forEach(([pid, data]) => {
                 if (masterDataMap[pid]) {
                     masterDataMap[pid]["Registration_Time"] = data.createdAt || "";
                 }
             });
 
-            // 填充 2: survey_responses 节点（前测问卷、推荐酒店及 Nudge Text）
-            Object.entries(surveyObj).forEach(([pid, data]) => {
+            // 填充 2: survey_responses 節點
+            surveys.forEach(s => {
+                const pid = s.participantID;
                 if (masterDataMap[pid]) {
-                    masterDataMap[pid]["Grouping_Number"] = data.groupingNumber !== undefined ? data.groupingNumber : "";
-                    masterDataMap[pid]["Grouping_Modulo_4"] = data.conditionModulo !== undefined ? data.conditionModulo : "";
-                    masterDataMap[pid]["Autonomy_Mode"] = data.autonomyMode || "";
-                    masterDataMap[pid]["Recommendation_Mode"] = data.recommendationMode || "";
+                    const row = masterDataMap[pid];
+                    const entryTime = s.entryAt || row["Registration_Time"] || "";
+                    const submitTime = s.submittedAt || "";
 
-                    masterDataMap[pid]["System_Recommended_Hotel_ID"] = data.recommendedHotelId || "";
-                    masterDataMap[pid]["System_Recommended_Hotel_Name"] = data.recommendedHotelName || "";
-                    masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText || "";
-                    masterDataMap[pid]["Survey_Submitted_At"] = data.submittedAt || "";
+                    row["Survey_Entry_Time"] = entryTime;
+                    row["Survey_Submitted_At"] = submitTime;
 
-                    if (data.responses) {
-                        masterDataMap[pid]["Survey_Q1_Budget_Preference"] = data.responses.price_preference || "";
-                        masterDataMap[pid]["Survey_Q2_Rating_Preference"] = data.responses.rating_preference || "";
+                    if (entryTime && submitTime) {
+                        const diffMs = new Date(submitTime) - new Date(entryTime);
+                        row["Survey_Duration_Seconds"] = Math.max(0, Math.round(diffMs / 1000));
+                    }
 
-                        // 多选设施以管道符拼接
-                        if (Array.isArray(data.responses.hotel_facilities)) {
-                            masterDataMap[pid]["Survey_Q3_Facilities_Preference"] = data.responses.hotel_facilities.join(" | ");
-                        } else {
-                            masterDataMap[pid]["Survey_Q3_Facilities_Preference"] = data.responses.hotel_facilities || "";
-                        }
+                    row["Grouping_Number"] = s.groupingNumber !== undefined ? s.groupingNumber : "";
+                    const mod = s.conditionModulo !== undefined ? s.conditionModulo : (s.groupingNumber !== undefined ? (s.groupingNumber % 4) : "");
+                    row["Grouping_Modulo_4"] = mod;
 
-                        masterDataMap[pid]["Survey_Q4_Region_Preference"] = data.responses.preferred_region || "";
-                        masterDataMap[pid]["Survey_Q5_Location_Feature"] = data.responses.location_preference || "";
-                        masterDataMap[pid]["Survey_Q6_Friendly_Courteous"] = data.responses.q6_friendly_courteous || "";
-                        masterDataMap[pid]["Survey_Q7_Polite_Considerate"] = data.responses.q7_polite_considerate || "";
-                        masterDataMap[pid]["Survey_Q8_Admit_Mistakes_Difficult"] = data.responses.q8_admit_mistakes_difficult || "";
+                    const groupConditions = [
+                        "Group 0 (Low Autonomy + Traditional)",
+                        "Group 1 (Low Autonomy + AI Nudge)",
+                        "Group 2 (High Autonomy + Traditional)",
+                        "Group 3 (High Autonomy + AI Nudge)"
+                    ];
+                    row["Condition_Label"] = groupConditions[mod] || `Group ${mod}`;
+                    row["Autonomy_Mode"] = s.autonomyMode || (mod === 0 || mod === 1 ? "low" : "high");
+                    row["Recommendation_Mode"] = s.recommendationMode || (mod === 0 || mod === 2 ? "traditional" : "ai");
+
+                    if (s.responses) {
+                        row["Survey_Q1_Budget_Preference"] = s.responses.price_preference || "";
+                        row["Survey_Q2_Rating_Preference"] = s.responses.rating_preference || "";
+                        row["Survey_Q3_Facilities_Preference"] = Array.isArray(s.responses.hotel_facilities)
+                            ? s.responses.hotel_facilities.join(" | ")
+                            : (s.responses.hotel_facilities || "");
+                        row["Survey_Q4_Region_Preference"] = s.responses.preferred_region || "";
+                        row["Survey_Q5_Location_Feature"] = s.responses.location_preference || "";
+                        row["Survey_Q6_Friendly_Courteous"] = s.responses.q6_friendly_courteous || "";
+                        row["Survey_Q7_Polite_Considerate"] = s.responses.q7_polite_considerate || "";
+                        row["Survey_Q8_Admit_Mistakes_Difficult"] = s.responses.q8_admit_mistakes_difficult || "";
+                    }
+
+                    // 推薦酒店 ID 與酒店三語名稱
+                    const recId = s.recommendedHotelId;
+                    row["System_Recommended_Hotel_ID"] = recId || "";
+                    const hotelDetails = getHotelDetailsById(recId);
+                    row["System_Recommended_Hotel_Has_Eco"] = hotelDetails.hasEco;
+
+                    if (s.recommendedHotelName && typeof s.recommendedHotelName === "object") {
+                        row["System_Recommended_Hotel_Name_ZH_TW"] = s.recommendedHotelName["zh-TW"] || hotelDetails.name_zh_tw;
+                        row["System_Recommended_Hotel_Name_ZH_CN"] = s.recommendedHotelName["zh-CN"] || hotelDetails.name_zh_cn;
+                        row["System_Recommended_Hotel_Name_EN"] = s.recommendedHotelName["en"] || hotelDetails.name_en;
+                    } else {
+                        row["System_Recommended_Hotel_Name_ZH_TW"] = hotelDetails.name_zh_tw;
+                        row["System_Recommended_Hotel_Name_ZH_CN"] = s.recommendedHotelName || hotelDetails.name_zh_cn;
+                        row["System_Recommended_Hotel_Name_EN"] = hotelDetails.name_en;
+                    }
+
+                    // 處理兩文三語 Nudge Text
+                    if (s.aiNudgeText && typeof s.aiNudgeText === "object") {
+                        row["AI_Nudge_Text_ZH_TW"] = s.aiNudgeText["zh-TW"] || "";
+                        row["AI_Nudge_Text_ZH_CN"] = s.aiNudgeText["zh-CN"] || "";
+                        row["AI_Nudge_Text_EN"] = s.aiNudgeText["en"] || "";
+                        row["AI_Nudge_Text_Active"] = s.aiNudgeText["zh-CN"] || s.aiNudgeText["zh-TW"] || s.aiNudgeText["en"] || "";
+                    } else if (typeof s.aiNudgeText === "string") {
+                        row["AI_Nudge_Text_Active"] = s.aiNudgeText;
+                        row["AI_Nudge_Text_ZH_CN"] = s.aiNudgeText;
                     }
                 }
             });
 
-            // 填充 3: bookings 节点（模拟订房决策数据）
-            Object.entries(bookingsObj).forEach(([key, data]) => {
-                const pid = data.participantID || key;
+            // 填充 3: bookings 節點
+            bookings.forEach(b => {
+                const pid = b.participantID;
                 if (masterDataMap[pid]) {
-                    masterDataMap[pid]["Has_Completed_Booking"] = "Yes";
-                    masterDataMap[pid]["Autonomy_Mode"] = data.autonomyMode || masterDataMap[pid]["Autonomy_Mode"];
-                    masterDataMap[pid]["Recommendation_Mode"] = data.recommendationMode || masterDataMap[pid]["Recommendation_Mode"];
-                    
-                    masterDataMap[pid]["Selected_Hotel_ID"] = data.hotelId || "";
-                    masterDataMap[pid]["Selected_Hotel_Name"] = data.hotelName || "";
-                    masterDataMap[pid]["Selected_Hotel_Region"] = data.hotelRegion || "";
-                    
-                    // 补充可能保存在 bookings 中的 nudge text
-                    if (!masterDataMap[pid]["AI_Nudge_Text"] && data.aiNudgeText) {
-                        masterDataMap[pid]["AI_Nudge_Text"] = data.aiNudgeText;
+                    const row = masterDataMap[pid];
+                    row["Has_Completed_Booking"] = "Yes";
+                    row["Selected_Hotel_ID"] = b.hotelId || "";
+                    row["Selected_Hotel_Name"] = b.hotelName || "";
+                    row["Selected_Hotel_Region"] = b.hotelRegion || "";
+                    row["Selected_Room_Name"] = b.roomName || "";
+                    row["Selected_Room_Size"] = b.roomSize || "";
+                    row["Selected_Room_Bathroom"] = b.bathroom || "";
+                    row["Selected_Room_Breakfast"] = b.breakfast || "";
+                    row["Total_Paid_Amount"] = b.totalPaid || "";
+                    row["Booking_Confirmed_At"] = b.createdAt || "";
+
+                    if (b.selectedLanguage) {
+                        row["Participant_Language"] = b.selectedLanguage;
                     }
 
-                    // 核心因变量判断
-                    if (data.isRecommendedHotelChosen !== undefined) {
-                        masterDataMap[pid]["Is_Recommended_Hotel_Chosen"] = data.isRecommendedHotelChosen ? "Yes" : "No";
-                    } else if (masterDataMap[pid]["System_Recommended_Hotel_ID"]) {
-                        masterDataMap[pid]["Is_Recommended_Hotel_Chosen"] = (String(data.hotelId) === String(masterDataMap[pid]["System_Recommended_Hotel_ID"])) ? "Yes" : "No";
+                    // 關鍵因變量判斷
+                    if (b.isRecommendedHotelChosen !== undefined) {
+                        row["Is_Recommended_Hotel_Chosen"] = b.isRecommendedHotelChosen ? "Yes" : "No";
+                    } else if (row["System_Recommended_Hotel_ID"]) {
+                        row["Is_Recommended_Hotel_Chosen"] = (String(b.hotelId) === String(row["System_Recommended_Hotel_ID"])) ? "Yes" : "No";
                     }
 
-                    masterDataMap[pid]["Total_Paid_Amount"] = data.totalPaid || "";
-                    masterDataMap[pid]["Booking_Created_At"] = data.createdAt || "";
+                    if (!row["AI_Nudge_Text_Active"] && b.aiNudgeText) {
+                        row["AI_Nudge_Text_Active"] = b.aiNudgeText;
+                    }
                 }
             });
 
-            // 使用 SheetJS 生成多工作表 Excel 档案
+            const rowsArray = Object.values(masterDataMap);
+
+            // ==========================================
+            // 建立 Sheet 2: Condition_Summary 分組統計總表
+            // ==========================================
+            const conditionsConfig = [
+                { groupIndex: 0, label: "Group 0: Low Autonomy + Traditional", autonomy: "Low", rec: "Traditional" },
+                { groupIndex: 1, label: "Group 1: Low Autonomy + AI Nudge", autonomy: "Low", rec: "AI" },
+                { groupIndex: 2, label: "Group 2: High Autonomy + Traditional", autonomy: "High", rec: "Traditional" },
+                { groupIndex: 3, label: "Group 3: High Autonomy + AI Nudge", autonomy: "High", rec: "AI" }
+            ];
+
+            const summaryRows = conditionsConfig.map(cond => {
+                const groupRows = rowsArray.filter(r => Number(r.Grouping_Modulo_4) === cond.groupIndex);
+                const totalAssigned = groupRows.length;
+                const surveyCompleted = groupRows.filter(r => r.Survey_Submitted_At && r.Survey_Submitted_At.trim() !== "").length;
+                const bookingCompleted = groupRows.filter(r => r.Has_Completed_Booking === "Yes").length;
+                const bookingRate = surveyCompleted > 0 ? ((bookingCompleted / surveyCompleted) * 100).toFixed(1) + "%" : "0.0%";
+
+                const recAdoptedCount = groupRows.filter(r => r.Is_Recommended_Hotel_Chosen === "Yes").length;
+                const adoptionRateOfBookers = bookingCompleted > 0 ? ((recAdoptedCount / bookingCompleted) * 100).toFixed(1) + "%" : "0.0%";
+                const adoptionRateOfTotal = surveyCompleted > 0 ? ((recAdoptedCount / surveyCompleted) * 100).toFixed(1) + "%" : "0.0%";
+
+                const amounts = groupRows
+                    .filter(r => r.Has_Completed_Booking === "Yes" && r.Total_Paid_Amount)
+                    .map(r => {
+                        const num = parseFloat(String(r.Total_Paid_Amount).replace(/[^0-9.]/g, ""));
+                        return isNaN(num) ? 0 : num;
+                    })
+                    .filter(num => num > 0);
+
+                const avgAmount = amounts.length > 0 ? (amounts.reduce((a, b) => a + b, 0) / amounts.length).toFixed(0) : "N/A";
+
+                return {
+                    "Condition": cond.label,
+                    "Grouping_Modulo": cond.groupIndex,
+                    "Autonomy_Mode": cond.autonomy,
+                    "Recommendation_Mode": cond.rec,
+                    "Total_Participants": totalAssigned,
+                    "Survey_Completed": surveyCompleted,
+                    "Booking_Completed": bookingCompleted,
+                    "Booking_Conversion_Rate": bookingRate,
+                    "Adopted_Rec_Count": recAdoptedCount,
+                    "Rec_Adoption_Rate_of_Bookers": adoptionRateOfBookers,
+                    "Rec_Adoption_Rate_of_All_Surveys": adoptionRateOfTotal,
+                    "Avg_Booking_Amount_HK$": avgAmount
+                };
+            });
+
+            // 添加 Total 綜合行
+            const totalSurvey = rowsArray.filter(r => r.Survey_Submitted_At && r.Survey_Submitted_At.trim() !== "").length;
+            const totalBook = rowsArray.filter(r => r.Has_Completed_Booking === "Yes").length;
+            const totalAdopt = rowsArray.filter(r => r.Is_Recommended_Hotel_Chosen === "Yes").length;
+            const allAmounts = rowsArray
+                .filter(r => r.Has_Completed_Booking === "Yes" && r.Total_Paid_Amount)
+                .map(r => {
+                    const num = parseFloat(String(r.Total_Paid_Amount).replace(/[^0-9.]/g, ""));
+                    return isNaN(num) ? 0 : num;
+                })
+                .filter(num => num > 0);
+            const overallAvgAmount = allAmounts.length > 0 ? (allAmounts.reduce((a, b) => a + b, 0) / allAmounts.length).toFixed(0) : "N/A";
+
+            summaryRows.push({
+                "Condition": "Overall Total",
+                "Grouping_Modulo": "ALL",
+                "Autonomy_Mode": "Mixed",
+                "Recommendation_Mode": "Mixed",
+                "Total_Participants": rowsArray.length,
+                "Survey_Completed": totalSurvey,
+                "Booking_Completed": totalBook,
+                "Booking_Conversion_Rate": totalSurvey > 0 ? ((totalBook / totalSurvey) * 100).toFixed(1) + "%" : "0.0%",
+                "Adopted_Rec_Count": totalAdopt,
+                "Rec_Adoption_Rate_of_Bookers": totalBook > 0 ? ((totalAdopt / totalBook) * 100).toFixed(1) + "%" : "0.0%",
+                "Rec_Adoption_Rate_of_All_Surveys": totalSurvey > 0 ? ((totalAdopt / totalSurvey) * 100).toFixed(1) + "%" : "0.0%",
+                "Avg_Booking_Amount_HK$": overallAvgAmount
+            });
+
+            // 建立多工作表工作簿
             const wb = XLSX.utils.book_new();
 
-            // 工作表 1：全量主数据表 (Master_Dataset)
-            const masterRows = Object.values(masterDataMap);
-            const wsMaster = XLSX.utils.json_to_sheet(masterRows);
-
-            // 设定对应列宽
+            // Sheet 1: Master_Dataset
+            const wsMaster = XLSX.utils.json_to_sheet(rowsArray);
             wsMaster['!cols'] = [
-                { wch: 34 }, // Participant_ID
-                { wch: 22 }, // Registration_Time
-                { wch: 16 }, // Grouping_Number
-                { wch: 18 }, // Grouping_Modulo_4
-                { wch: 15 }, // Autonomy_Mode
-                { wch: 22 }, // Recommendation_Mode
-                { wch: 24 }, // Survey_Q1_Budget_Preference
-                { wch: 24 }, // Survey_Q2_Rating_Preference
-                { wch: 36 }, // Survey_Q3_Facilities_Preference
-                { wch: 22 }, // Survey_Q4_Region_Preference
-                { wch: 22 }, // Survey_Q5_Location_Feature
-                { wch: 26 }, // Survey_Q6_Friendly_Courteous
-                { wch: 26 }, // Survey_Q7_Polite_Considerate
-                { wch: 30 }, // Survey_Q8_Admit_Mistakes_Difficult
-                { wch: 22 }, // Survey_Submitted_At
-                { wch: 28 }, // System_Recommended_Hotel_ID
-                { wch: 32 }, // System_Recommended_Hotel_Name
-                { wch: 46 }, // AI_Nudge_Text
-                { wch: 22 }, // Has_Completed_Booking
-                { wch: 18 }, // Selected_Hotel_ID
-                { wch: 32 }, // Selected_Hotel_Name
-                { wch: 18 }, // Selected_Hotel_Region
-                { wch: 28 }, // Is_Recommended_Hotel_Chosen
-                { wch: 16 }, // Total_Paid_Amount
-                { wch: 22 }  // Booking_Created_At
+                { wch: 34 }, { wch: 20 }, { wch: 22 },
+                { wch: 16 }, { wch: 18 }, { wch: 15 }, { wch: 22 }, { wch: 36 },
+                { wch: 24 }, { wch: 24 }, { wch: 22 },
+                { wch: 26 }, { wch: 26 }, { wch: 36 }, { wch: 22 }, { wch: 22 },
+                { wch: 26 }, { wch: 26 }, { wch: 30 },
+                { wch: 28 }, { wch: 32 }, { wch: 32 }, { wch: 32 }, { wch: 24 },
+                { wch: 40 }, { wch: 40 }, { wch: 40 }, { wch: 40 },
+                { wch: 22 }, { wch: 18 }, { wch: 18 }, { wch: 32 }, { wch: 18 },
+                { wch: 28 }, { wch: 18 }, { wch: 24 }, { wch: 24 }, { wch: 18 }, { wch: 26 }, { wch: 24 },
+                { wch: 18 }, { wch: 28 }, { wch: 18 }
             ];
             XLSX.utils.book_append_sheet(wb, wsMaster, "Master_Dataset");
 
-            // 工作表 2：统计摘要 (Condition_Summary)
-            const conditionSummary = [
-                { "Condition_Modulo": 0, "Autonomy": "Low",  "Recommendation": "Traditional", "Total_Participants": 0, "Completed_Bookings": 0, "Recommended_Chosen_Count": 0, "Adoption_Rate": "0%" },
-                { "Condition_Modulo": 1, "Autonomy": "Low",  "Recommendation": "AI",          "Total_Participants": 0, "Completed_Bookings": 0, "Recommended_Chosen_Count": 0, "Adoption_Rate": "0%" },
-                { "Condition_Modulo": 2, "Autonomy": "High", "Recommendation": "Traditional", "Total_Participants": 0, "Completed_Bookings": 0, "Recommended_Chosen_Count": 0, "Adoption_Rate": "0%" },
-                { "Condition_Modulo": 3, "Autonomy": "High", "Recommendation": "AI",          "Total_Participants": 0, "Completed_Bookings": 0, "Recommended_Chosen_Count": 0, "Adoption_Rate": "0%" }
-            ];
-
-            masterRows.forEach(row => {
-                const mod = parseInt(row["Grouping_Modulo_4"]);
-                if (!isNaN(mod) && conditionSummary[mod]) {
-                    conditionSummary[mod]["Total_Participants"]++;
-                    if (row["Has_Completed_Booking"] === "Yes") {
-                        conditionSummary[mod]["Completed_Bookings"]++;
-                        if (row["Is_Recommended_Hotel_Chosen"] === "Yes") {
-                            conditionSummary[mod]["Recommended_Chosen_Count"]++;
-                        }
-                    }
-                }
-            });
-
-            conditionSummary.forEach(c => {
-                c["Adoption_Rate"] = c["Completed_Bookings"] > 0
-                    ? ((c["Recommended_Chosen_Count"] / c["Completed_Bookings"]) * 100).toFixed(1) + "%"
-                    : "0%";
-            });
-
-            const wsSummary = XLSX.utils.json_to_sheet(conditionSummary);
+            // Sheet 2: Condition_Summary
+            const wsSummary = XLSX.utils.json_to_sheet(summaryRows);
             wsSummary['!cols'] = [
-                { wch: 18 }, { wch: 14 }, { wch: 18 }, { wch: 18 }, { wch: 20 }, { wch: 26 }, { wch: 16 }
+                { wch: 36 }, { wch: 18 }, { wch: 16 }, { wch: 22 },
+                { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 24 },
+                { wch: 18 }, { wch: 28 }, { wch: 32 }, { wch: 24 }
             ];
             XLSX.utils.book_append_sheet(wb, wsSummary, "Condition_Summary");
 
-            const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
             XLSX.writeFile(wb, `TripStay_Experiment_Master_${today}.xlsx`);
 
-            status.innerText = `✅ 导出成功！`;
+            showStatus(`✅ 導出成功！已包含兩文三語 Nudge Text、作答時長與 <strong>Condition_Summary</strong> 統計總表（共 ${rowsArray.length} 行被試數據）。當前 Grouping 累計值為: <strong>${currentGroupingCounter}</strong>`, "success");
             fetchLiveStats();
         } catch (err) {
             console.error("Export Error:", err);
-            status.innerText = "❌ 导出失败，请检查网络连接或按 F12 打开开发者控制台查看报错日志。";
+            showStatus(`❌ 導出失敗: ${err.message}`, "error");
         } finally {
             btn.disabled = false;
         }
     }
 
-    // 清空数据库逻辑（双重确认安全保护）
-    async function handleClearDatabase() {
-        const deleteBtn = document.getElementById("deleteBtn");
-        const status = document.getElementById("statusMsg");
+    // 清空資料庫邏輯（安全短語雙重驗證保護）
+    async function handleSecureReset() {
+        const promptMsg = `⚠️【高危操作警告】\n\n此操作將永久抹除資料庫中的所有被試記錄、問卷答卷與預訂訂單，並將 grouping 重置為 0！\n\n如確認執行，請在下方輸入框精確輸入提示短語：\n${REQUIRED_CONFIRM_PHRASE}`;
+        const userInput = prompt(promptMsg);
 
-        // 第一层保护确认
-        const firstConfirm = confirm("⚠️ 警告：您确定要彻底清空 Firebase 数据库中的所有实验记录吗？\n\n此操作将永久删除所有受试者登记、问卷答案与订房记录！");
-        if (!firstConfirm) return;
+        if (userInput === null) return;
 
-        // 第二层保护：文本输入验证
-        const VERIFICATION_CODE = "DELETE-ALL-DATA";
-        const userInput = prompt(`🔴 高危操作：为防止误删数据，请输入精确验证码确认执行：\n\n请输入：${VERIFICATION_CODE}`);
-
-        if (userInput !== VERIFICATION_CODE) {
-            alert("❌ 验证码输入不正确，操作已安全取消。数据库未作任何更改。");
+        if (userInput.trim() !== REQUIRED_CONFIRM_PHRASE) {
+            alert(`輸入錯誤！您輸入的短語不匹配，操作已安全取消。\n要求短語為: ${REQUIRED_CONFIRM_PHRASE}`);
             return;
         }
 
-        deleteBtn.disabled = true;
-        status.innerText = "⏳ 正在清空数据库实验数据与重置计数器...";
+        const resetBtn = document.getElementById("resetBtn");
+        resetBtn.disabled = true;
+        showStatus("<i class='fa-solid fa-spinner fa-spin'></i> 正在清空節點並將 grouping 計數歸零...", "info");
 
         try {
-            // 执行原子批量清除并重置分组计数器
-            const updates = {
-                'participants': null,
-                'survey_responses': null,
-                'bookings': null,
-                'grouping': 0 // 重置分组递增计数
-            };
+            await Promise.all([
+                db.ref('participants').remove(),
+                db.ref('survey_responses').remove(),
+                db.ref('bookings').remove(),
+                db.ref('grouping').set(0)
+            ]);
 
-            await db.ref().update(updates);
-
-            status.innerText = "🗑️ 数据库已彻底清空，实验分组序号已重置为 0。";
-            alert("✅ 数据库清空成功！可以开始新一批次的受试者实验。");
+            showStatus("🎉 資料庫重置完畢！所有受試者數據已清空，<code>grouping</code> 變量已重置歸零為 <strong>0</strong>。", "success");
+            alert("重置完成！grouping 計數器已歸零為 0。");
             fetchLiveStats();
         } catch (err) {
-            console.error("Clear DB Error:", err);
-            status.innerText = `❌ 清空数据库失败: ${err.message}`;
-            alert(`清空失败: ${err.message}`);
+            console.error("Reset Failed:", err);
+            showStatus(`❌ 重置失敗: ${err.message}`, "error");
         } finally {
-            deleteBtn.disabled = false;
+            resetBtn.disabled = false;
         }
     }
+
+    window.addEventListener("DOMContentLoaded", fetchLiveStats);
 </script>
 </body>
 </html>

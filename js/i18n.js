@@ -82,6 +82,7 @@ const I18N_RESOURCES = {
         search_val_date: "2027年8月20日 - 8月22日 (共2晚)",
         search_lbl_guest: "客房及入住人數",
         search_val_guest: "1 間客房, 2 位成人",
+        search_val_dest: "中國香港 (Hong Kong)",
         btn_search_text: "搜尋酒店",
 
         // 左側篩選面板
@@ -154,6 +155,8 @@ const I18N_RESOURCES = {
         checkout_tax_service: "政府稅項與服務費 (10%)",
         checkout_final_total: "實付總額 (含稅)",
         btn_confirm_pay: "確認並模擬支付",
+        pay_method_card: "銀聯 / Visa / MasterCard",
+        pay_method_wallet: "支付寶 / 微信支付",
         checkout_simulation_note: "此頁面為實驗模擬環境，不會產生任何真實銀行扣款。",
 
         // 完成彈窗
@@ -254,6 +257,7 @@ const I18N_RESOURCES = {
         search_val_date: "2027年8月20日 - 8月22日 (共2晚)",
         search_lbl_guest: "客房及入住人数",
         search_val_guest: "1 间客房, 2 位成人",
+        search_val_dest: "中国香港 (Hong Kong)",
         btn_search_text: "搜索酒店",
 
         // 左侧筛选面板
@@ -326,6 +330,8 @@ const I18N_RESOURCES = {
         checkout_tax_service: "政府税项与服务费 (10%)",
         checkout_final_total: "实付总额 (含税)",
         btn_confirm_pay: "确认并模拟支付",
+        pay_method_card: "银联 / Visa / MasterCard",
+        pay_method_wallet: "支付宝 / 微信支付",
         checkout_simulation_note: "此页面为实验模拟环境，不会产生任何真实银行扣款。",
 
         // 完成弹窗
@@ -427,6 +433,7 @@ const I18N_RESOURCES = {
         search_lbl_guest: "Rooms & Guests",
         search_val_guest: "1 Room, 2 Adults",
         btn_search_text: "Search Hotels",
+        search_val_dest: "Hong Kong, China",
 
         // Sidebar
         filter_heading: "Filter Results",
@@ -498,6 +505,8 @@ const I18N_RESOURCES = {
         checkout_tax_service: "Taxes & Service Fees (10%)",
         checkout_final_total: "Total Amount (Taxes incl.)",
         btn_confirm_pay: "Confirm & Simulate Payment",
+        pay_method_card: "UnionPay / Visa / MasterCard",
+        pay_method_wallet: "Alipay / WeChat Pay",
         checkout_simulation_note: "This is a simulated experiment. No actual bank charges will occur.",
 
         // Success Modal
@@ -521,11 +530,11 @@ const I18N_RESOURCES = {
 
 class I18nManager {
     constructor() {
-        this.currentLang = localStorage.getItem("tripstay_lang") || "zh-TW";
+        this.currentLang = localStorage.getItem("tripstay_lang") || "en";
     }
 
     t(key) {
-        const dict = I18N_RESOURCES[this.currentLang] || I18N_RESOURCES["zh-TW"];
+        const dict = I18N_RESOURCES[this.currentLang] || I18N_RESOURCES["en"];
         return dict[key] || key;
     }
 
@@ -544,7 +553,7 @@ class I18nManager {
     applyTranslations() {
         document.documentElement.lang = this.currentLang;
 
-        // 1. 一般文字元素替換 data-i18n
+        // 1. 一般文字元素替換 innerHTML
         document.querySelectorAll("[data-i18n]").forEach(el => {
             const key = el.getAttribute("data-i18n");
             const translation = this.t(key);
@@ -553,7 +562,7 @@ class I18nManager {
             }
         });
 
-        // 2. 輸入框 placeholder 替換 data-i18n-ph
+        // 2. 輸入框 placeholder 替換
         document.querySelectorAll("[data-i18n-ph]").forEach(el => {
             const key = el.getAttribute("data-i18n-ph");
             const translation = this.t(key);
@@ -562,7 +571,16 @@ class I18nManager {
             }
         });
 
-        // 3. 更新語言選單的選中狀態
+        // 3. 輸入框預設值 value 替換 (新增支援)
+        document.querySelectorAll("[data-i18n-val]").forEach(el => {
+            const key = el.getAttribute("data-i18n-val");
+            const translation = this.t(key);
+            if (translation) {
+                el.value = translation;
+            }
+        });
+
+        // 4. 更新語言選單的選中狀態
         const langSelect = document.getElementById("langSwitcher");
         if (langSelect) {
             langSelect.value = this.currentLang;
