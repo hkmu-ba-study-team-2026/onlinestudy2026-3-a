@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>酒店预订前测问卷</title>
-    <!-- 引入酒店数据集供候选用 -->
+    <title data-i18n="doc_title">酒店预订前测问卷</title>
+    <!-- 引入酒店数据集 -->
     <script src="hotels_data.js"></script>
     <style>
         :root {
@@ -51,12 +51,37 @@
             border-bottom: 2px solid var(--bg-color);
             margin-bottom: 24px;
             padding-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header-title {
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--text-primary);
+        }
+
+        .lang-select-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-select-box select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .lang-select-box select:focus {
+            border-color: var(--accent-color);
         }
 
         .form-group {
@@ -120,12 +145,6 @@
             gap: 3px;
         }
 
-        .option-card label span.sub-desc {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
         .option-card label:hover {
             border-color: #cbd5e1;
             background-color: #f8fafc;
@@ -137,10 +156,6 @@
             color: var(--accent-color);
             font-weight: 700;
             box-shadow: 0 0 0 1px var(--accent-color);
-        }
-
-        .option-card input:checked + label span.sub-desc {
-            color: #3b82f6;
         }
 
         .clear-choice-btn {
@@ -189,6 +204,11 @@
             .container {
                 padding: 20px;
             }
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
             .options-grid {
                 grid-template-columns: 1fr;
             }
@@ -217,53 +237,67 @@
 
 <div class="container">
     <div class="header-section">
-        <h1 class="header-title">请继续以下问卷内容</h1>
+        <h1 class="header-title" data-i18n="header_title">请继续以下问卷内容</h1>
+        <div class="lang-select-box">
+            <span style="font-size:0.85rem; color:var(--text-secondary);">🌐</span>
+            <select id="langSwitcher" onchange="changeLanguage(this.value)">
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="en">English</option>
+            </select>
+        </div>
     </div>
 
     <form id="surveyForm" onsubmit="handleSubmit(event)">
 
-        <!-- 问题 1: 出行预算取向 -->
+        <!-- 问题 1: 出行预算取向 (四个选项：经济、舒适、高档、奢华) -->
         <div class="form-group">
-            <label class="question-title">1. 本次旅程中，您偏好哪种住宿安排与预算风格？<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q1_title">1. 本次旅程中，您偏好哪种住宿安排与预算风格？</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="price_economy" name="price_preference" value="经济" required>
-                    <label for="price_economy"><span style="font-size: 1rem; font-weight: 800;">经济</span></label>
+                    <label for="price_economy"><span style="font-size: 1rem; font-weight: 800;" data-i18n="q1_opt_economy">经济</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_refined" name="price_preference" value="精致" required>
-                    <label for="price_refined"><span style="font-size: 1rem; font-weight: 800;">舒适</span></label>
+                    <label for="price_refined"><span style="font-size: 1rem; font-weight: 800;" data-i18n="q1_opt_refined">舒适</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_upscale" name="price_preference" value="高级" required>
-                    <label for="price_upscale"><span style="font-size: 1rem; font-weight: 800;">高档</span></label>
+                    <label for="price_upscale"><span style="font-size: 1rem; font-weight: 800;" data-i18n="q1_opt_upscale">高档</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="price_luxury" name="price_preference" value="奢侈" required>
-                    <label for="price_luxury"><span style="font-size: 1rem; font-weight: 800;">奢华</span></label>
+                    <label for="price_luxury"><span style="font-size: 1rem; font-weight: 800;" data-i18n="q1_opt_luxury">奢华</span></label>
                 </div>
             </div>
         </div>
 
         <!-- 问题 2: 住客口碑依赖度 -->
         <div class="form-group">
-            <label class="question-title">2. 翻阅其他住客的体验评价时，您通常的标准是？<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q2_title">2. 翻阅其他住客的体验评价时，您通常的标准是？</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="rating_80" name="rating_preference" value="8.0分以上" required>
-                    <label for="rating_80"><span>大致好评</span></label>
+                    <label for="rating_80"><span data-i18n="q2_opt_80">大致好评</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_85" name="rating_preference" value="8.5分以上" required>
-                    <label for="rating_85"><span>多数肯定</span></label>
+                    <label for="rating_85"><span data-i18n="q2_opt_85">多数肯定</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_90" name="rating_preference" value="9.0分以上" required>
-                    <label for="rating_90"><span>广泛盛赞</span></label>
+                    <label for="rating_90"><span data-i18n="q2_opt_90">广泛盛赞</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="rating_95" name="rating_preference" value="9.5分顶尖" required>
-                    <label for="rating_95"><span>近乎完美</span></label>
+                    <label for="rating_95"><span data-i18n="q2_opt_95">近乎完美</span></label>
                 </div>
             </div>
         </div>
@@ -271,238 +305,448 @@
         <!-- 问题 3: 设施偏好 -->
         <div class="form-group">
             <label class="question-title">
-                3. 你重视酒店要有以下设施吗？
-                <span class="optional-badge">(选填，可不选或选多项)</span>
+                <span data-i18n="q3_title">3. 你重视酒店要有以下设施吗？</span>
+                <span class="optional-badge" data-i18n="q3_optional_badge">(选填，可不选或选多项)</span>
             </label>
             <div class="options-grid">
                 <div class="option-card">
                     <input type="checkbox" id="facility_breakfast" name="hotel_facilities" value="含免费丰盛早餐">
-                    <label for="facility_breakfast">含免费早餐</label>
+                    <label for="facility_breakfast" data-i18n="q3_fac_breakfast">含免费早餐</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_bath" name="hotel_facilities" value="配备独立卫浴/浴缸">
-                    <label for="facility_bath">配备浴缸</label>
+                    <label for="facility_bath" data-i18n="q3_fac_bath">配备浴缸</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_pool" name="hotel_facilities" value="室外泳池/景观无边际池">
-                    <label for="facility_pool">室外泳池</label>
+                    <label for="facility_pool" data-i18n="q3_fac_pool">室外泳池</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_cancel" name="hotel_facilities" value="限时免费取消政策">
-                    <label for="facility_cancel">限时免费取消政策</label>
+                    <label for="facility_cancel" data-i18n="q3_fac_cancel">限时免费取消政策</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_gym" name="hotel_facilities" value="健身中心/水疗SPA">
-                    <label for="facility_gym">健身中心/水疗SPA</label>
+                    <label for="facility_gym" data-i18n="q3_fac_gym">健身中心/水疗SPA</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_shuttle" name="hotel_facilities" value="提供穿梭巴士/机场接送">
-                    <label for="facility_shuttle">穿梭巴士/机场接送</label>
+                    <label for="facility_shuttle" data-i18n="q3_fac_shuttle">穿梭巴士/机场接送</label>
                 </div>
                 <div class="option-card">
                     <input type="checkbox" id="facility_parking" name="hotel_facilities" value="附设免费住客泊车位">
-                    <label for="facility_parking">免费住客泊车位</label>
+                    <label for="facility_parking" data-i18n="q3_fac_parking">免费住客泊车位</label>
                 </div>
             </div>
             <div style="text-align: right;">
-                <button type="button" class="clear-choice-btn" onclick="clearFacilityPreference()">清除第 3 题选择 (保持不选)</button>
+                <button type="button" class="clear-choice-btn" onclick="clearFacilityPreference()" data-i18n="q3_clear_btn">清除第 3 题选择 (保持不选)</button>
             </div>
         </div>
 
         <!-- 问题 4: 偏好地区 (10个区域) -->
         <div class="form-group">
-            <label class="question-title">4. 你喜欢住在哪个区域？<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q4_title">4. 你喜欢住在哪个区域？</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="region_tst" name="preferred_region" value="尖沙咀" required>
-                    <label for="region_tst">尖沙咀</label>
+                    <label for="region_tst" data-i18n="q4_reg_tst">尖沙咀</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_mk" name="preferred_region" value="旺角" required>
-                    <label for="region_mk">旺角</label>
+                    <label for="region_mk" data-i18n="q4_reg_mk">旺角</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_central" name="preferred_region" value="中环" required>
-                    <label for="region_central">中环</label>
+                    <label for="region_central" data-i18n="q4_reg_central">中环</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_tw" name="preferred_region" value="荃湾" required>
-                    <label for="region_tw">荃湾</label>
+                    <label for="region_tw" data-i18n="q4_reg_tw">荃湾</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_disney" name="preferred_region" value="香港迪士尼乐园" required>
-                    <label for="region_disney">香港迪士尼乐园</label>
+                    <label for="region_disney" data-i18n="q4_reg_disney">香港迪士尼乐园</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_st" name="preferred_region" value="沙田" required>
-                    <label for="region_st">沙田</label>
+                    <label for="region_st" data-i18n="q4_reg_st">沙田</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_np" name="preferred_region" value="北角" required>
-                    <label for="region_np">北角</label>
+                    <label for="region_np" data-i18n="q4_reg_np">北角</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_cwb" name="preferred_region" value="铜锣湾" required>
-                    <label for="region_cwb">铜锣湾</label>
+                    <label for="region_cwb" data-i18n="q4_reg_cwb">铜锣湾</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_vic" name="preferred_region" value="维多利亚港" required>
-                    <label for="region_vic">维多利亚港</label>
+                    <label for="region_vic" data-i18n="q4_reg_vic">维多利亚港</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="region_kt" name="preferred_region" value="启德体育园" required>
-                    <label for="region_kt">启德体育园</label>
+                    <label for="region_kt" data-i18n="q4_reg_kt">启德体育园</label>
                 </div>
             </div>
         </div>
 
-        <!-- 问题 5: 地点特色偏好 (支持单选与反选) -->
+        <!-- 问题 5: 地点特色偏好 (支持单选与取消反选) -->
         <div class="form-group">
             <label class="question-title">
-                5. 针对酒店周边的地理位置，您是否有特定的偏好？
-                <span class="optional-badge">(选填，可不选或选 1 项)</span>
+                <span data-i18n="q5_title">5. 针对酒店周边的地理位置，您是否有特定的偏好？</span>
+                <span class="optional-badge" data-i18n="q5_optional_badge">(选填，可不选或选 1 项)</span>
             </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="loc_transport" name="location_preference" value="机场/高铁站" onclick="handleRadioToggle(this)">
-                    <label for="loc_transport"><span>机场/高铁站</span></label>
+                    <label for="loc_transport"><span data-i18n="q5_tag_transport">机场/高铁站</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_metro" name="location_preference" value="地铁站" onclick="handleRadioToggle(this)">
-                    <label for="loc_metro"><span>地铁站</span></label>
+                    <label for="loc_metro"><span data-i18n="q5_tag_metro">地铁站</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_business" name="location_preference" value="商业区" onclick="handleRadioToggle(this)">
-                    <label for="loc_business"><span>商业区</span></label>
+                    <label for="loc_business"><span data-i18n="q5_tag_business">商业区</span></label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="loc_venue" name="location_preference" value="演出场馆" onclick="handleRadioToggle(this)">
-                    <label for="loc_venue"><span>演出场馆</span></label>
+                    <label for="loc_venue"><span data-i18n="q5_tag_venue">演出场馆</span></label>
                 </div>
             </div>
             <div style="text-align: right;">
-                <button type="button" class="clear-choice-btn" onclick="clearLocationPreference()">清除第 5 题选择 (保持不选)</button>
+                <button type="button" class="clear-choice-btn" onclick="clearLocationPreference()" data-i18n="q5_clear_btn">清除第 5 题选择 (保持不选)</button>
             </div>
         </div>
 
         <!-- 问题 6: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
-            <label class="question-title">6. 我总是对他人保持友善与谦逊有礼。<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q6_title">6. 我总是对他人保持友善与谦逊有礼。</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q6_1" name="q6_friendly_courteous" value="非常不同意" required>
-                    <label for="q6_1">非常不同意</label>
+                    <label for="q6_1" data-i18n="likert_7_1">非常不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_2" name="q6_friendly_courteous" value="不同意" required>
-                    <label for="q6_2">不同意</label>
+                    <label for="q6_2" data-i18n="likert_7_2">不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_3" name="q6_friendly_courteous" value="有点不同意" required>
-                    <label for="q6_3">有点不同意</label>
+                    <label for="q6_3" data-i18n="likert_7_3">有点不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_4" name="q6_friendly_courteous" value="中立" required>
-                    <label for="q6_4">中立</label>
+                    <label for="q6_4" data-i18n="likert_7_4">中立</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_5" name="q6_friendly_courteous" value="有点同意" required>
-                    <label for="q6_5">有点同意</label>
+                    <label for="q6_5" data-i18n="likert_7_5">有点同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_6" name="q6_friendly_courteous" value="同意" required>
-                    <label for="q6_6">同意</label>
+                    <label for="q6_6" data-i18n="likert_7_6">同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q6_7" name="q6_friendly_courteous" value="非常同意" required>
-                    <label for="q6_7">非常同意</label>
+                    <label for="q6_7" data-i18n="likert_7_7">非常同意</label>
                 </div>
             </div>
         </div>
 
         <!-- 问题 7: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
-            <label class="question-title">7. 我始终对人礼貌，且处处为他人着想。<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q7_title">7. 我始终对人礼貌，且处处为他人着想。</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q7_1" name="q7_polite_considerate" value="非常不同意" required>
-                    <label for="q7_1">非常不同意</label>
+                    <label for="q7_1" data-i18n="likert_7_1">非常不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_2" name="q7_polite_considerate" value="不同意" required>
-                    <label for="q7_2">不同意</label>
+                    <label for="q7_2" data-i18n="likert_7_2">不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_3" name="q7_polite_considerate" value="有点不同意" required>
-                    <label for="q7_3">有点不同意</label>
+                    <label for="q7_3" data-i18n="likert_7_3">有点不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_4" name="q7_polite_considerate" value="中立" required>
-                    <label for="q7_4">中立</label>
+                    <label for="q7_4" data-i18n="likert_7_4">中立</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_5" name="q7_polite_considerate" value="有点同意" required>
-                    <label for="q7_5">有点同意</label>
+                    <label for="q7_5" data-i18n="likert_7_5">有点同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_6" name="q7_polite_considerate" value="同意" required>
-                    <label for="q7_6">同意</label>
+                    <label for="q7_6" data-i18n="likert_7_6">同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q7_7" name="q7_polite_considerate" value="非常同意" required>
-                    <label for="q7_7">非常同意</label>
+                    <label for="q7_7" data-i18n="likert_7_7">非常同意</label>
                 </div>
             </div>
         </div>
 
         <!-- 问题 8: 社交反应量表 (7点李克特量表) -->
         <div class="form-group">
-            <label class="question-title">8. 对我来说，公开向他人承认自己的错误是很困难的。<span class="required">*</span></label>
+            <label class="question-title">
+                <span data-i18n="q8_title">8. 对我来说，公开向他人承认自己的错误是很困难的。</span>
+                <span class="required">*</span>
+            </label>
             <div class="options-grid" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
                 <div class="option-card">
                     <input type="radio" id="q8_1" name="q8_admit_mistakes_difficult" value="非常不同意" required>
-                    <label for="q8_1">非常不同意</label>
+                    <label for="q8_1" data-i18n="likert_7_1">非常不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_2" name="q8_admit_mistakes_difficult" value="不同意" required>
-                    <label for="q8_2">不同意</label>
+                    <label for="q8_2" data-i18n="likert_7_2">不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_3" name="q8_admit_mistakes_difficult" value="有点不同意" required>
-                    <label for="q8_3">有点不同意</label>
+                    <label for="q8_3" data-i18n="likert_7_3">有点不同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_4" name="q8_admit_mistakes_difficult" value="中立" required>
-                    <label for="q8_4">中立</label>
+                    <label for="q8_4" data-i18n="likert_7_4">中立</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_5" name="q8_admit_mistakes_difficult" value="有点同意" required>
-                    <label for="q8_5">有点同意</label>
+                    <label for="q8_5" data-i18n="likert_7_5">有点同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_6" name="q8_admit_mistakes_difficult" value="同意" required>
-                    <label for="q8_6">同意</label>
+                    <label for="q8_6" data-i18n="likert_7_6">同意</label>
                 </div>
                 <div class="option-card">
                     <input type="radio" id="q8_7" name="q8_admit_mistakes_difficult" value="非常同意" required>
-                    <label for="q8_7">非常同意</label>
+                    <label for="q8_7" data-i18n="likert_7_7">非常同意</label>
                 </div>
             </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="submit-btn">
+        <button type="submit" id="submitBtn" class="submit-btn" data-i18n="submit_btn_text">
             提交并进入酒店预订平台
         </button>
     </form>
 </div>
 
 <script>
+    // -------------------------------------------------------------------------
+    // 1. 多语言国际化 (i18n) 字典配置 (zh-CN / zh-TW / en)
+    // -------------------------------------------------------------------------
+    const SURVEY_I18N = {
+        "zh-CN": {
+            doc_title: "酒店预订前测问卷",
+            header_title: "请继续以下问卷内容",
+            submit_btn_text: "提交并进入酒店预订平台",
+            submitting_text: "正在分析偏好并分配模式...",
+            q1_title: "1. 本次旅程中，您偏好哪种住宿安排与预算风格？",
+            q1_opt_economy: "经济",
+            q1_opt_refined: "舒适",
+            q1_opt_upscale: "高档",
+            q1_opt_luxury: "奢华",
+            q2_title: "2. 翻阅其他住客的体验评价时，您通常的标准是？",
+            q2_opt_80: "大致好评",
+            q2_opt_85: "多数肯定",
+            q2_opt_90: "广泛盛赞",
+            q2_opt_95: "近乎完美",
+            q3_title: "3. 你重视酒店要有以下设施吗？",
+            q3_optional_badge: "(选填，可不选或选多项)",
+            q3_fac_breakfast: "含免费早餐",
+            q3_fac_bath: "配备浴缸",
+            q3_fac_pool: "室外泳池",
+            q3_fac_cancel: "限时免费取消政策",
+            q3_fac_gym: "健身中心/水疗SPA",
+            q3_fac_shuttle: "穿梭巴士/机场接送",
+            q3_fac_parking: "免费住客泊车位",
+            q3_clear_btn: "清除第 3 题选择 (保持不选)",
+            q4_title: "4. 你喜欢住在哪个区域？",
+            q4_reg_tst: "尖沙咀",
+            q4_reg_mk: "旺角",
+            q4_reg_central: "中环",
+            q4_reg_tw: "荃湾",
+            q4_reg_disney: "香港迪士尼乐园",
+            q4_reg_st: "沙田",
+            q4_reg_np: "北角",
+            q4_reg_cwb: "铜锣湾",
+            q4_reg_vic: "维多利亚港",
+            q4_reg_kt: "启德体育园",
+            q5_title: "5. 针对酒店周边的地理位置，您是否有特定的偏好？",
+            q5_optional_badge: "(选填，可不选或选 1 项)",
+            q5_tag_transport: "机场/高铁站",
+            q5_tag_metro: "地铁站",
+            q5_tag_business: "商业区",
+            q5_tag_venue: "演出场馆",
+            q5_clear_btn: "清除第 5 题选择 (保持不选)",
+            q6_title: "6. 我总是对他人保持友善与谦逊有礼。",
+            q7_title: "7. 我始终对人礼貌，且处处为他人着想。",
+            q8_title: "8. 对我来说，公开向他人承认自己的错误是很困难的。",
+            likert_7_1: "非常不同意",
+            likert_7_2: "不同意",
+            likert_7_3: "有点不同意",
+            likert_7_4: "中立",
+            likert_7_5: "有点同意",
+            likert_7_6: "同意",
+            likert_7_7: "非常同意"
+        },
+        "zh-TW": {
+            doc_title: "酒店預訂前測問卷",
+            header_title: "請繼續以下問卷內容",
+            submit_btn_text: "提交並進入酒店預訂平台",
+            submitting_text: "正在分析偏好並分配模式...",
+            q1_title: "1. 本次旅程中，您偏好哪種住宿安排與預算風格？",
+            q1_opt_economy: "經濟",
+            q1_opt_refined: "舒適",
+            q1_opt_upscale: "高檔",
+            q1_opt_luxury: "奢華",
+            q2_title: "2. 翻閱其他住客的體驗評價時，您通常的標準是？",
+            q2_opt_80: "大致好評",
+            q2_opt_85: "多數肯定",
+            q2_opt_90: "廣泛盛讚",
+            q2_opt_95: "近乎完美",
+            q3_title: "3. 你重視酒店要有以下設施嗎？",
+            q3_optional_badge: "(選填，可不選或選多項)",
+            q3_fac_breakfast: "含免費早餐",
+            q3_fac_bath: "配備浴缸",
+            q3_fac_pool: "室外泳池",
+            q3_fac_cancel: "限時免費取消政策",
+            q3_fac_gym: "健身中心/水療SPA",
+            q3_fac_shuttle: "穿梭巴士/機場接送",
+            q3_fac_parking: "免費住客泊車位",
+            q3_clear_btn: "清除第 3 題選擇 (保持不選)",
+            q4_title: "4. 你喜歡住在哪個區域？",
+            q4_reg_tst: "尖沙咀",
+            q4_reg_mk: "旺角",
+            q4_reg_central: "中環",
+            q4_reg_tw: "荃灣",
+            q4_reg_disney: "香港迪士尼樂園",
+            q4_reg_st: "沙田",
+            q4_reg_np: "北角",
+            q4_reg_cwb: "銅鑼灣",
+            q4_reg_vic: "維多利亞港",
+            q4_reg_kt: "啟德體育園",
+            q5_title: "5. 針對酒店周邊的地理位置，您是否有特定的偏好？",
+            q5_optional_badge: "(選填，可不選或選 1 項)",
+            q5_tag_transport: "機場/高鐵站",
+            q5_tag_metro: "地鐵站",
+            q5_tag_business: "商業區",
+            q5_tag_venue: "演出場館",
+            q5_clear_btn: "清除第 5 題選擇 (保持不選)",
+            q6_title: "6. 我總是對他人保持友善與謙遜有禮。",
+            q7_title: "7. 我始終對人禮貌，且處處為他人著想。",
+            q8_title: "8. 對我來說，公開向他人承認自己的錯誤是很困難的。",
+            likert_7_1: "非常不同意",
+            likert_7_2: "不同意",
+            likert_7_3: "有點不同意",
+            likert_7_4: "中立",
+            likert_7_5: "有點同意",
+            likert_7_6: "同意",
+            likert_7_7: "非常同意"
+        },
+        "en": {
+            doc_title: "Hotel Booking Pre-Study Questionnaire",
+            header_title: "Please complete the survey below",
+            submit_btn_text: "Submit & Enter Booking Platform",
+            submitting_text: "Analyzing preferences & assigning condition...",
+            q1_title: "1. Which accommodation budget style do you prefer for this trip?",
+            q1_opt_economy: "Economy",
+            q1_opt_refined: "Comfortable",
+            q1_opt_upscale: "Upscale",
+            q1_opt_luxury: "Luxury",
+            q2_title: "2. When reading guest reviews, what is your typical standard?",
+            q2_opt_80: "Generally Good (8.0+)",
+            q2_opt_85: "Mostly Positive (8.5+)",
+            q2_opt_90: "Widely Praised (9.0+)",
+            q2_opt_95: "Near Perfect (9.5+)",
+            q3_title: "3. Do you value the following hotel amenities?",
+            q3_optional_badge: "(Optional, multiple choices allowed)",
+            q3_fac_breakfast: "Free Breakfast",
+            q3_fac_bath: "Bathtub equipped",
+            q3_fac_pool: "Outdoor Pool",
+            q3_fac_cancel: "Free Cancellation Policy",
+            q3_fac_gym: "Fitness Center / Spa",
+            q3_fac_shuttle: "Shuttle Bus / Airport Transfer",
+            q3_fac_parking: "Free Guest Parking",
+            q3_clear_btn: "Clear Q3 selection (Keep unselected)",
+            q4_title: "4. Which area do you prefer to stay in?",
+            q4_reg_tst: "Tsim Sha Tsui",
+            q4_reg_mk: "Mong Kok",
+            q4_reg_central: "Central",
+            q4_reg_tw: "Tsuen Wan",
+            q4_reg_disney: "Hong Kong Disneyland",
+            q4_reg_st: "Sha Tin",
+            q4_reg_np: "North Point",
+            q4_reg_cwb: "Causeway Bay",
+            q4_reg_vic: "Victoria Harbour",
+            q4_reg_kt: "Kai Tak Sports Park",
+            q5_title: "5. Do you have specific location feature preferences?",
+            q5_optional_badge: "(Optional, choose at most 1)",
+            q5_tag_transport: "Airport / High Speed Rail",
+            q5_tag_metro: "MTR Station (Close Walk)",
+            q5_tag_business: "Commercial District",
+            q5_tag_venue: "Performance & Sports Venue",
+            q5_clear_btn: "Clear Q5 selection (Keep unselected)",
+            q6_title: "6. I always stay friendly and courteous with other people.",
+            q7_title: "7. I am always polite and considerate of others.",
+            q8_title: "8. It is difficult to admit my mistakes openly to others.",
+            likert_7_1: "Strongly disagree",
+            likert_7_2: "Disagree",
+            likert_7_3: "Somewhat disagree",
+            likert_7_4: "Neutral",
+            likert_7_5: "Somewhat agree",
+            likert_7_6: "Agree",
+            likert_7_7: "Strongly agree"
+        }
+    };
+
+    let currentLanguage = localStorage.getItem("tripstay_lang") || "zh-CN";
+
+    function changeLanguage(lang) {
+        if (!SURVEY_I18N[lang]) return;
+        currentLanguage = lang;
+        localStorage.setItem("tripstay_lang", lang);
+        applySurveyTranslations();
+    }
+
+    function applySurveyTranslations() {
+        const dict = SURVEY_I18N[currentLanguage] || SURVEY_I18N["zh-CN"];
+        document.documentElement.lang = currentLanguage;
+
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+            const key = el.getAttribute("data-i18n");
+            if (dict[key]) {
+                el.innerText = dict[key];
+            }
+        });
+
+        const langSwitcher = document.getElementById("langSwitcher");
+        if (langSwitcher) langSwitcher.value = currentLanguage;
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. 问卷事件与时间戳记录
+    // -------------------------------------------------------------------------
+    // 记录受试者初次进入问卷页面的精确时间戳
+    const surveyEntryTime = new Date().toISOString();
+
     // 清除第 3 题所有已勾选的设施
     function clearFacilityPreference() {
         document.querySelectorAll('input[name="hotel_facilities"]').forEach(el => el.checked = false);
     }
 
-    // 支持第 5 题单选可取消选择（再次点击已选中的 radio 即可取消）
+    // 支持第 5 题单选可取消反选（再次点击已选中的 radio 即可取消）
     let currentCheckedRadio = null;
     function handleRadioToggle(radio) {
         if (currentCheckedRadio === radio) {
@@ -538,11 +782,13 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+        applySurveyTranslations();
+
         try {
             if (typeof db !== 'undefined') {
                 db.ref('participants/' + currentParticipantID).update({
                     participantID: currentParticipantID,
-                    createdAt: new Date().toISOString()
+                    createdAt: surveyEntryTime
                 });
             }
         } catch(e) {
@@ -574,16 +820,21 @@
         });
     }
 
+    // -------------------------------------------------------------------------
+    // 3. 表单提交与实验条件分派
+    // -------------------------------------------------------------------------
     async function handleSubmit(event) {
         event.preventDefault();
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.textContent = '正在分析偏好并分配模式...';
+        const dict = SURVEY_I18N[currentLanguage] || SURVEY_I18N["zh-CN"];
+        submitBtn.textContent = dict["submitting_text"] || '正在分析偏好并分配模式...';
 
+        const surveySubmitTime = new Date().toISOString();
         const formData = new FormData(event.target);
 
-        // 收集问卷数据
+        // 收集问卷数据 (值保持标准统一，确保与后排分析及导出工具严格对应)
         const pricePref = formData.get("price_preference");
         const ratingPref = formData.get("rating_preference");
         const facilities = formData.getAll("hotel_facilities");
@@ -630,8 +881,8 @@
         const ecoHotels = (typeof hotelsData !== 'undefined' && hotelsData.length > 0)
             ? hotelsData.filter(h => h.eco && typeof h.eco === 'string' && h.eco.trim() !== "")
             : [];
-        const randomEcoHotel = ecoHotels.length > 0
-            ? ecoHotels[Math.floor(Math.random() * ecoHotels.length)]
+        const randomEcoHotel = ecoHotels.length > 0 
+            ? ecoHotels[Math.floor(Math.random() * ecoHotels.length)] 
             : (typeof hotelsData !== 'undefined' ? hotelsData[0] : { id: 1, name: "香港唯港荟酒店 (Hotel ICON)" });
 
         let recommendedHotelId = randomEcoHotel.id;
@@ -680,9 +931,10 @@
         localStorage.setItem("recommended_hotel_id", recommendedHotelId);
         localStorage.setItem("recommended_hotel_name", recommendedHotelName);
         localStorage.setItem("ai_nudge_text", aiNudgeText);
+        localStorage.setItem("survey_entry_time", surveyEntryTime);
         localStorage.setItem("user_preferences", JSON.stringify(surveyResponses));
 
-        // 写入 Firebase 问卷数据节点
+        // 写入 Firebase 问卷数据节点（包含 entryAt 与 submittedAt）
         const firebaseData = {
             participantID: currentParticipantID,
             groupingNumber: currentGroupNumber,
@@ -692,7 +944,8 @@
             recommendedHotelId: recommendedHotelId,
             recommendedHotelName: recommendedHotelName,
             aiNudgeText: aiNudgeText,
-            submittedAt: new Date().toISOString(),
+            entryAt: surveyEntryTime,
+            submittedAt: surveySubmitTime,
             responses: surveyResponses
         };
 
@@ -704,8 +957,8 @@
             console.error('保存至 Firebase 失败:', dbError);
         }
 
-        // 跳转并带上实验组态参数
-        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&autonomy=${autonomyMode}&group=${currentGroupNumber}`;
+        // 跳转并带上实验组态参数与当前语言参数
+        window.location.href = `booking_page.html?recId=${recommendedHotelId}&mode=${recommendationMode}&autonomy=${autonomyMode}&group=${currentGroupNumber}&lang=${currentLanguage}`;
     }
 </script>
 </body>
