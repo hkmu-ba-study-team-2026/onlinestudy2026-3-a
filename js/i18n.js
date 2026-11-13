@@ -11,7 +11,7 @@ const I18N_RESOURCES = {
         // index.html 前測問卷
         survey_header_title: "請繼續以下問卷內容",
         submit_btn_text: "提交並進入酒店預訂平台",
-        submitting_text: "正在分析偏好並分配模式...",
+        submitting_text: "正在分析偏好並分配模式 (此步驟需要約1-2分鐘)...",
 
         // Q1
         q1_title: "1. 本次旅程中，您偏好哪種住宿安排與預算風格？",
@@ -140,7 +140,7 @@ const I18N_RESOURCES = {
         room_meta_free: "免費提供",
         room_meta_region: "地區：",
         room_late_checkout: "視房態可享延遲至下午 14:00 退房",
-        room_total_two_nights: "2晚總價 (含稅費)",
+        room_total_two_nights: "2晚總價",
         btn_book_now: "立即預訂",
 
         // 結帳彈窗
@@ -153,7 +153,7 @@ const I18N_RESOURCES = {
         checkout_nights_text: "2027年8月20日 - 8月22日 (2晚)",
         checkout_base_price: "客房總額 (2 晚)",
         checkout_tax_service: "政府稅項與服務費 (10%)",
-        checkout_final_total: "實付總額 (含稅)",
+        checkout_final_total: "總額",
         btn_confirm_pay: "確認並模擬支付",
         pay_method_card: "銀聯 / Visa / MasterCard",
         pay_method_wallet: "支付寶 / 微信支付",
@@ -186,7 +186,7 @@ const I18N_RESOURCES = {
         // index.html 前测问卷
         survey_header_title: "请继续以下问卷内容",
         submit_btn_text: "提交并进入酒店预订平台",
-        submitting_text: "正在分析偏好并分配模式...",
+        submitting_text: "正在分析偏好并分配模式 (此步骤需要约1-2分钟)...",
 
         // Q1
         q1_title: "1. 本次旅程中，您偏好哪种住宿安排与预算风格？",
@@ -315,7 +315,7 @@ const I18N_RESOURCES = {
         room_meta_free: "免费提供",
         room_meta_region: "地区：",
         room_late_checkout: "视房态可享延迟至下午 14:00 退房",
-        room_total_two_nights: "2晚总价 (含税费)",
+        room_total_two_nights: "2晚总价",
         btn_book_now: "立即预订",
 
         // 结账弹窗
@@ -328,7 +328,7 @@ const I18N_RESOURCES = {
         checkout_nights_text: "2027年8月20日 - 8月22日 (2晚)",
         checkout_base_price: "客房总额 (2 晚)",
         checkout_tax_service: "政府税项与服务费 (10%)",
-        checkout_final_total: "实付总额 (含税)",
+        checkout_final_total: "总额",
         btn_confirm_pay: "确认并模拟支付",
         pay_method_card: "银联 / Visa / MasterCard",
         pay_method_wallet: "支付宝 / 微信支付",
@@ -361,7 +361,7 @@ const I18N_RESOURCES = {
         // index.html Survey
         survey_header_title: "Please complete the survey below",
         submit_btn_text: "Submit & Enter Booking Platform",
-        submitting_text: "Analyzing preferences & assigning condition...",
+        submitting_text: "Analyzing preferences & assigning condition (This may take 1-2 minutes)...",
 
         // Q1
         q1_title: "1. Which accommodation budget style do you prefer for this trip?",
@@ -490,7 +490,7 @@ const I18N_RESOURCES = {
         room_meta_free: "Free",
         room_meta_region: "District: ",
         room_late_checkout: "Late check-out until 14:00 subject to availability",
-        room_total_two_nights: "2-Night Total (Taxes incl.)",
+        room_total_two_nights: "2-Night Total",
         btn_book_now: "Book Now",
 
         // Checkout Modal
@@ -503,7 +503,7 @@ const I18N_RESOURCES = {
         checkout_nights_text: "Aug 20, 2027 - Aug 22, 2027 (2 Nights)",
         checkout_base_price: "Room Charges (2 Nights)",
         checkout_tax_service: "Taxes & Service Fees (10%)",
-        checkout_final_total: "Total Amount (Taxes incl.)",
+        checkout_final_total: "Total Amount",
         btn_confirm_pay: "Confirm & Simulate Payment",
         pay_method_card: "UnionPay / Visa / MasterCard",
         pay_method_wallet: "Alipay / WeChat Pay",
