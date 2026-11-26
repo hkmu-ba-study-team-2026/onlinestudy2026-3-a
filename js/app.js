@@ -1,4 +1,4 @@
-// TripStay 平台交互與預訂核心邏輯 app.js (全量兩文三語深度支援版)
+// TripStay 平台交互與預訂核心邏輯 app.js (全量兩文三語深度支援 + Filter 追蹤完整版)
 const RETURN_SURVEY_URL = "index.html";
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -24,7 +24,6 @@ window.onLanguageChange = function(lang) {
 const AUTONOMY_MODE = urlParams.get('autonomy') || localStorage.getItem('autonomy_mode') || 'low';
 const RECOMMENDATION_MODE = urlParams.get('mode') || localStorage.getItem('recommendation_mode') || 'traditional';
 
-// 預設推薦酒店 ID (若無則取 21: 香港東隅酒店)
 let RECOMMENDED_HOTEL_ID = parseInt(urlParams.get('recId'), 10) || parseInt(localStorage.getItem('recommended_hotel_id'), 10) || 21;
 
 let currentHotels = (typeof hotelsData !== 'undefined' && Array.isArray(hotelsData)) ? [...hotelsData] : [];
@@ -39,7 +38,7 @@ let selectedRoom = null;
 let countdownTimer = null;
 
 // -----------------------------------------------------------------------------
-// 3. 通用輔助函式：翻譯與 32 位 Participant ID 管理
+// 3. 通用輔助函式：翻譯、多語言 Nudge 讀取與 32 位 Participant ID 管理
 // -----------------------------------------------------------------------------
 function t(key, fallback = "") {
   if (window.i18n && typeof window.i18n.t === "function") {
@@ -51,6 +50,17 @@ function t(key, fallback = "") {
 
 function getCurLang() {
   return (window.i18n ? window.i18n.currentLang : localStorage.getItem("tripstay_lang")) || "zh-TW";
+}
+
+function getNudgeTextByLang(curLang) {
+  try {
+    const raw = localStorage.getItem("ai_nudge_text_multilingual");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return parsed[curLang] || parsed["zh-TW"] || parsed["zh-CN"] || parsed["en"] || "";
+    }
+  } catch (e) {}
+  return localStorage.getItem("ai_nudge_text") || "";
 }
 
 function getOrGenerate32PID() {
@@ -71,9 +81,6 @@ function getOrGenerate32PID() {
 
 const currentPID = getOrGenerate32PID();
 let hasCopiedPID = false;
-
-// 讀取問卷階段或 AI 推薦生成的 Nudge Text
-const AI_NUDGE_TEXT = localStorage.getItem('ai_nudge_text') || "";
 
 // -----------------------------------------------------------------------------
 // 4. 推薦彈窗與浮動窗數據填充
@@ -125,12 +132,13 @@ function populateRecommendationData() {
   const priceEl = document.getElementById("modalRecHotelPrice");
   if (priceEl) priceEl.innerText = recommendedHotelObj.price.toLocaleString();
 
-  // Nudge Text
+  // 動態讀取當前語系的 Nudge Text
+  const activeNudge = getNudgeTextByLang(curLang);
   const nudgeBox = document.getElementById("modalRecNudgeBox");
   const nudgeText = document.getElementById("modalRecNudgeText");
   if (nudgeBox && nudgeText) {
-    if (AI_NUDGE_TEXT && AI_NUDGE_TEXT.trim() !== "") {
-      nudgeText.innerText = AI_NUDGE_TEXT;
+    if (activeNudge && activeNudge.trim() !== "") {
+      nudgeText.innerText = activeNudge;
       nudgeBox.style.display = "block";
     } else {
       nudgeBox.style.display = "none";
@@ -189,7 +197,6 @@ function setupConditionUI() {
   const curLang = getCurLang();
 
   if (AUTONOMY_MODE === "low") {
-    // ================= LOW AUTONOMY =================
     if (skipBtn) skipBtn.style.display = "none";
     if (countdownText) countdownText.style.display = "block";
 
@@ -223,7 +230,6 @@ function setupConditionUI() {
     }, 1000);
 
   } else {
-    // ================= HIGH AUTONOMY =================
     if (countdownTimer) clearInterval(countdownTimer);
     if (countdownText) countdownText.style.display = "none";
 
@@ -266,7 +272,6 @@ function updateFilterCounts() {
   let tagTransport = 0, tagMetro = 0, tagBusiness = 0, tagVenue = 0;
 
   hotelsData.forEach(hotel => {
-    // 10 大區域統計
     const r = hotel.region;
     if (r === "尖沙咀") regTST++;
     else if (r === "旺角") regMK++;
@@ -279,7 +284,6 @@ function updateFilterCounts() {
     else if (r === "维多利亚港" || r === "維多利亞港") regVic++;
     else if (r === "启德体育园" || r === "啟德體育園") regKT++;
 
-    // 星級與評分
     if (hotel.stars === 5) star5++;
     else if (hotel.stars === 4) star4++;
     else if (hotel.stars === 3) star3++;
@@ -290,7 +294,6 @@ function updateFilterCounts() {
     else if (hotel.rating === 8.5) r85++;
     else if (hotel.rating === 8.0) r80++;
 
-    // 設施
     if (hotel.hasBreakfast) bfast++;
     if (hotel.hasPrivateBath) pBath++;
     if (hotel.hasPool) pool++;
@@ -299,7 +302,6 @@ function updateFilterCounts() {
     if (hotel.hasAirportShuttle) shuttle++;
     if (hotel.hasFreeParking) parking++;
 
-    // 地理特色標籤
     if (hotel.locationTags && Array.isArray(hotel.locationTags)) {
       if (hotel.locationTags.includes("机场/高铁站") || hotel.locationTags.includes("機場/高鐵站")) tagTransport++;
       if (hotel.locationTags.includes("地铁站") || hotel.locationTags.includes("地鐵站")) tagMetro++;
@@ -308,7 +310,6 @@ function updateFilterCounts() {
     }
   });
 
-  // 更新區域計數徽章
   if (document.getElementById("count-region-tst")) document.getElementById("count-region-tst").innerText = `(${regTST})`;
   if (document.getElementById("count-region-mk")) document.getElementById("count-region-mk").innerText = `(${regMK})`;
   if (document.getElementById("count-region-central")) document.getElementById("count-region-central").innerText = `(${regCentral})`;
@@ -320,7 +321,6 @@ function updateFilterCounts() {
   if (document.getElementById("count-region-vic")) document.getElementById("count-region-vic").innerText = `(${regVic})`;
   if (document.getElementById("count-region-kt")) document.getElementById("count-region-kt").innerText = `(${regKT})`;
 
-  // 更新星級與評分
   if (document.getElementById("count-star-5")) document.getElementById("count-star-5").innerText = `(${star5})`;
   if (document.getElementById("count-star-4")) document.getElementById("count-star-4").innerText = `(${star4})`;
   if (document.getElementById("count-star-3")) document.getElementById("count-star-3").innerText = `(${star3})`;
@@ -331,7 +331,6 @@ function updateFilterCounts() {
   if (document.getElementById("count-rating-85")) document.getElementById("count-rating-85").innerText = `(${r85})`;
   if (document.getElementById("count-rating-80")) document.getElementById("count-rating-80").innerText = `(${r80})`;
 
-  // 更新設施
   if (document.getElementById("count-breakfast")) document.getElementById("count-breakfast").innerText = `(${bfast})`;
   if (document.getElementById("count-privateBath")) document.getElementById("count-privateBath").innerText = `(${pBath})`;
   if (document.getElementById("count-pool")) document.getElementById("count-pool").innerText = `(${pool})`;
@@ -340,7 +339,6 @@ function updateFilterCounts() {
   if (document.getElementById("count-shuttle")) document.getElementById("count-shuttle").innerText = `(${shuttle})`;
   if (document.getElementById("count-parking")) document.getElementById("count-parking").innerText = `(${parking})`;
 
-  // 更新標籤
   if (document.getElementById("count-tag-transport")) document.getElementById("count-tag-transport").innerText = `(${tagTransport})`;
   if (document.getElementById("count-tag-metro")) document.getElementById("count-tag-metro").innerText = `(${tagMetro})`;
   if (document.getElementById("count-tag-business")) document.getElementById("count-tag-business").innerText = `(${tagBusiness})`;
@@ -392,7 +390,6 @@ function renderHotelList(hotels) {
         ? hotel.i18n[curLang].locationTags
         : (hotel.locationTags || []);
 
-    // 多語言徽章
     const badgeStarLabel = curLang === 'en' ? `${hotel.stars}-Star Hotel • ${hotelRegion} (${hotelDistrict})` : `${hotel.stars} 星級酒店 • ${hotelRegion} (${hotelDistrict})`;
     const topPickBadge = curLang === 'en' ? "Today's Top Choice" : (curLang === 'zh-CN' ? '⭐ 今日主推特选' : '⭐ 今日主推特選');
     const officialRecBadge = curLang === 'en' ? 'Official Top Pick' : (curLang === 'zh-CN' ? '官方主推' : '官方主推');
@@ -406,13 +403,11 @@ function renderHotelList(hotels) {
     const shuttlePill = curLang === 'en' ? 'Shuttle / Airport Transfer' : (curLang === 'zh-CN' ? '机场接送/穿梭巴' : '機場接送/穿梭巴');
     const parkingPill = curLang === 'en' ? 'Free Guest Parking' : (curLang === 'zh-CN' ? '免费泊车' : '免費泊車');
 
-    // 政策特色
     const cancelPerk = hotel.hasCancel
         ? `<i class="fa-solid fa-circle-check"></i> ${curLang === 'en' ? 'Free Cancellation Available' : (curLang === 'zh-CN' ? '提供限时免费取消政策' : '提供限時免費取消政策')}`
         : `<i class="fa-solid fa-circle-info"></i> ${curLang === 'en' ? 'Special Non-Refundable Rate' : (curLang === 'zh-CN' ? '特惠不可退订房型' : '特惠不可退訂房型')}`;
     const instantPerk = t('instant_confirm', '即時出票確認 • 無跨境交易手續費');
 
-    // 價格與評分
     const reviewSuffix = t('reviews_count_suffix', ' 則真實住客評價');
     const taxNote = t('tax_service_included', '包含稅費與服務附加費');
     const perNight = t('per_night_suffix', ' /每晚起');
@@ -523,7 +518,7 @@ function closeFloatingPopup() {
 }
 
 // -----------------------------------------------------------------------------
-// 8. 展開房型彈窗 (兩文三語支援)
+// 8. 展開房型彈窗
 // -----------------------------------------------------------------------------
 function openRoomModal(hotelId) {
   selectedHotel = hotelsData.find(h => h.id === hotelId);
@@ -567,7 +562,6 @@ function openRoomModal(hotelId) {
     hotelLocEl.innerHTML = `<i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> ${hotelLoc}`;
   }
 
-  // 渲染房型列表
   const roomList = document.getElementById("modalRoomList");
   if (roomList) {
     roomList.innerHTML = selectedHotel.rooms.map(room => {
@@ -804,6 +798,7 @@ function confirmBooking() {
         guestPhone: guestPhone,
         totalPaid: totalPaidStr,
         selectedLanguage: curLang,
+        filterInteractions: filterClickTracker,
         createdAt: new Date().toISOString()
       }).catch(err => console.log("Firebase sync skipped:", err));
     }
@@ -843,7 +838,6 @@ function filterHotels() {
   currentHotels = hotelsData.filter(hotel => {
     if (hotel.price > maxPrice) return false;
 
-    // 區域匹配 (支援繁簡英各套地區名稱精準比對)
     if (regionCheckboxes.length > 0) {
       const matchRegion = regionCheckboxes.some(cbVal => {
         return hotel.region === cbVal ||
@@ -855,7 +849,6 @@ function filterHotels() {
     if (starCheckboxes.length > 0 && !starCheckboxes.includes(hotel.stars)) return false;
     if (ratingCheckboxes.length > 0 && !ratingCheckboxes.includes(hotel.rating)) return false;
 
-    // 地理標籤匹配
     if (locationTagCheckboxes.length > 0) {
       const hotelTags = hotel.locationTags || [];
       const allTagsInHotel = [
@@ -880,17 +873,6 @@ function filterHotels() {
   });
 
   renderHotelList(currentHotels);
-}
-
-function getNudgeTextByLang(curLang) {
-  try {
-    const raw = localStorage.getItem("ai_nudge_text_multilingual");
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return parsed[curLang] || parsed["zh-CN"] || parsed["zh-TW"] || parsed["en"] || "";
-    }
-  } catch (e) {}
-  return localStorage.getItem("ai_nudge_text") || "";
 }
 
 function resetFilters() {
@@ -936,7 +918,140 @@ function sortHotels(type, btnElement) {
 }
 
 // -----------------------------------------------------------------------------
-// 13. 頁面初始化
+// 13. 篩選器互動行為追蹤器
+// -----------------------------------------------------------------------------
+const filterClickTracker = {
+  price_slider: false,
+  reset_all_btn: false,
+  region_tst: false,
+  region_mk: false,
+  region_central: false,
+  region_tw: false,
+  region_disney: false,
+  region_st: false,
+  region_np: false,
+  region_cwb: false,
+  region_vic: false,
+  region_kt: false,
+  star_5: false,
+  star_4: false,
+  star_3: false,
+  star_2: false,
+  loc_transport: false,
+  loc_metro: false,
+  loc_business: false,
+  loc_venue: false,
+  rating_95: false,
+  rating_90: false,
+  rating_85: false,
+  rating_80: false,
+  amenity_breakfast: false,
+  amenity_privateBath: false,
+  amenity_pool: false,
+  amenity_cancel: false,
+  amenity_gym: false,
+  amenity_shuttle: false,
+  amenity_parking: false,
+  total_filter_clicks: 0,
+  unique_filters_used_count: 0
+};
+
+function recordFilterInteraction(key) {
+  if (key in filterClickTracker && typeof filterClickTracker[key] === 'boolean') {
+    filterClickTracker[key] = true;
+  }
+  filterClickTracker.total_filter_clicks += 1;
+
+  const booleanKeys = Object.keys(filterClickTracker).filter(k => typeof filterClickTracker[k] === 'boolean');
+  filterClickTracker.unique_filters_used_count = booleanKeys.filter(k => filterClickTracker[k] === true).length;
+
+  localStorage.setItem('filter_click_tracker', JSON.stringify(filterClickTracker));
+}
+
+function initFilterTrackingListeners() {
+  const sidebar = document.querySelector('.filters-sidebar');
+  if (!sidebar) return;
+
+  const priceSlider = document.getElementById('priceRange');
+  if (priceSlider) {
+    priceSlider.addEventListener('change', () => recordFilterInteraction('price_slider'));
+  }
+
+  const resetBtn = sidebar.querySelector('.btn-reset-filters');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => recordFilterInteraction('reset_all_btn'));
+  }
+
+  const regionKeyMap = {
+    '尖沙咀': 'region_tst',
+    '旺角': 'region_mk',
+    '中環': 'region_central',
+    '荃灣': 'region_tw',
+    '香港迪士尼樂園': 'region_disney',
+    '沙田': 'region_st',
+    '北角': 'region_np',
+    '銅鑼灣': 'region_cwb',
+    '維多利亞港': 'region_vic',
+    '啟德體育園': 'region_kt'
+  };
+  sidebar.querySelectorAll('input[name="region"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const mappedKey = regionKeyMap[cb.value];
+      if (mappedKey) recordFilterInteraction(mappedKey);
+    });
+  });
+
+  sidebar.querySelectorAll('input[name="star"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      recordFilterInteraction(`star_${cb.value}`);
+    });
+  });
+
+  const locKeyMap = {
+    '機場/高鐵站': 'loc_transport',
+    '地鐵站': 'loc_metro',
+    '商業區': 'loc_business',
+    '演出場館': 'loc_venue'
+  };
+  sidebar.querySelectorAll('input[name="locationTag"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const mappedKey = locKeyMap[cb.value];
+      if (mappedKey) recordFilterInteraction(mappedKey);
+    });
+  });
+
+  const ratingKeyMap = {
+    '9.5': 'rating_95',
+    '9.0': 'rating_90',
+    '8.5': 'rating_85',
+    '8.0': 'rating_80'
+  };
+  sidebar.querySelectorAll('input[name="rating"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const mappedKey = ratingKeyMap[cb.value];
+      if (mappedKey) recordFilterInteraction(mappedKey);
+    });
+  });
+
+  const amenityIdMap = {
+    'filterBreakfast': 'amenity_breakfast',
+    'filterPrivateBath': 'amenity_privateBath',
+    'filterPool': 'amenity_pool',
+    'filterCancel': 'amenity_cancel',
+    'filterGym': 'amenity_gym',
+    'filterShuttle': 'amenity_shuttle',
+    'filterParking': 'amenity_parking'
+  };
+  Object.entries(amenityIdMap).forEach(([elId, trackerKey]) => {
+    const el = document.getElementById(elId);
+    if (el) {
+      el.addEventListener('change', () => recordFilterInteraction(trackerKey));
+    }
+  });
+}
+
+// -----------------------------------------------------------------------------
+// 14. 頁面初始化 (已補齊啟動 initFilterTrackingListeners)
 // -----------------------------------------------------------------------------
 window.addEventListener("DOMContentLoaded", () => {
   if (window.i18n && typeof window.i18n.applyTranslations === "function") {
@@ -946,6 +1061,7 @@ window.addEventListener("DOMContentLoaded", () => {
   updateFilterCounts();
   renderHotelList(currentHotels);
   setupConditionUI();
+  initFilterTrackingListeners(); // ✅ 啟動 Filter 點擊監聽器
 
   setTimeout(() => {
     const entryModal = document.getElementById("entryRecommendModal");
